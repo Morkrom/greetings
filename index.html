@@ -8,6 +8,12 @@
     <link rel="stylesheet" href="index.css">
   </head>
   <body>
-    <p>Greetings, <span class="name">Traveller</span>!</p>
+    <div id="app"></div>
+    <script src="app.js"></script>
+    <script>
+      Elm.Main.init({
+        node: document.getElementById("app")
+      });
+    </script>
   </body>
 </html>
