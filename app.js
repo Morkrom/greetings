@@ -4454,7 +4454,7 @@ var $author$project$Main$main = A2(
 				]),
 			_List_fromArray(
 				[
-					$elm$html$Html$text('Dwayne')
+					$elm$html$Html$text('User')
 				])),
 			$elm$html$Html$text('!')
 		]));
