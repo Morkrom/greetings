@@ -1,92 +1,69 @@
-module Main exposing (..)
+module Main exposing (main)
+
 import Browser
-import Browser.Navigation as Nav
-import Html exposing (..)
-import Html.Attributes exposing (..)
-import Url
+import Html exposing (Html, button, div, text)
+import Html.Attributes exposing (style)
+import Html.Events exposing (onClick)
 
-
+menuButton : Msg -> String -> Html Msg
+menuButton msg title =
+  button [onClick msg, 
+          style "padding" "19px"] 
+         [text title]
 
 main : Program () Model Msg
 main =
-  Browser.application
-    { init = init
-    , view = view
-    , update = update
-    , subscriptions = subscriptions
-    , onUrlChange = UrlChanged
-    , onUrlRequest = LinkClicked
-    }
-
-
+    Browser.sandbox
+        { init = init
+        , view = view
+        , update = update
+        }
 
 -- MODEL
 
+sections = ["greetings", "worksample"]
 
 type alias Model =
-  { key : Nav.Key
-  , url : Url.Url
-  }
+    { appSections: List String, 
+      selectedSection: Int
+    }
 
-
-init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
-init flags url key =
-  ( Model key url, Cmd.none )
-
-
+init : Model
+init =
+    { appSections = sections,
+      selectedSection = 0
+    }
 
 -- UPDATE
 
-
 type Msg
-  = LinkClicked Browser.UrlRequest
-  | UrlChanged Url.Url
+    = Greetings | Work
 
-
-update : Msg -> Model -> ( Model, Cmd Msg )
+update : Msg -> Model -> Model
 update msg model =
-  case msg of
-    LinkClicked urlRequest ->
-      case urlRequest of
-        Browser.Internal url ->
-          ( model, Nav.pushUrl model.key (Url.toString url) )
-
-        Browser.External href ->
-          ( model, Nav.load href )
-
-    UrlChanged url ->
-      ( { model | url = url }
-      , Cmd.none
-      )
-
-
-
--- SUBSCRIPTIONS
-
-
-subscriptions : Model -> Sub Msg
-subscriptions _ =
-  Sub.none
-
-
+    case msg of
+        Greetings ->
+            { model | selectedSection = 0 }
+        Work -> 
+            { model | selectedSection = 1 }
 
 -- VIEW
 
-
-view : Model -> Browser.Document Msg
+view : Model -> Html Msg
 view model =
-  { title = "URL Interceptor"
-  , body =
-      [ text "The current URL is: "
-      , b [] [ text (Url.toString model.url) ]
-      , ul []
-          [ viewLink "/hello!"
-          , viewLink "/projects"
-          ]
+  div [style "position" "absolute", 
+       style "background" "gold", 
+       style "top" "0%",
+       style "width" "100%"] [ 
+    div [
+         style "background" "blue",
+         style "display" "flex",
+         style "justify-content" "center",
+         style "gap" "10px"
       ]
-  }
-
-
-viewLink : String -> Html msg
-viewLink path =
-  li [] [ a [ href path ] [ text path ] ]
+      [
+        menuButton Greetings "Greetings!",
+        menuButton Work "Work"
+      ],
+    div [style "background" "red"] [text (String.fromInt model.selectedSection)]
+  ]
