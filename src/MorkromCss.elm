@@ -59,6 +59,13 @@ buttonBackgroundColorString style =
             "transparent"
 
 
+technologyULStyle : List (Attribute msg)
+technologyULStyle =
+    technologyStyleW
+        ++ [ style "padding-inline-start" "10px"
+           ]
+
+
 technologyStyleW : List (Attribute msg)
 technologyStyleW =
     [ style "font-family" "Arial"
@@ -148,6 +155,7 @@ blockContentsR =
     , style "flex-direction" "row"
     , style "flex-wrap" "wrap"
     , style "margin-top" "20px"
+    , style "align-items" "flex-start"
     ]
 
 
@@ -155,6 +163,7 @@ expBoxStyle : List (Attribute msg)
 expBoxStyle =
     [ style "background" "#1D1D1F"
     , style "border-radius" "20px"
+    , style "margin-bottom" "10px"
     ]
         ++ smallBlockW 260
 

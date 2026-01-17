@@ -210,7 +210,7 @@ languageGnostic =
 exp : Html Msg
 exp =
     div introSectionDivStyle
-        (titleText "Exp" "\"Experience is the teacher of all things.\" - Julius Caesar"
+        (titleText "Exp" "\"Experience is the teacher of all things.\""
             ++ [ roundedButtons ]
             ++ [ div blockContents
                     [ thriveMarketExp
@@ -224,10 +224,10 @@ thriveMarketExp : Html Msg
 thriveMarketExp =
     expBox "6 yr"
         (linkedExperience
-            "Senior iOS Engineer (Core, Verticals, Specialist)⇗"
+            "Senior iOS Engineer (Performance, Features, Verticals, Specialist)⇗"
             "https://thrivemarket.com"
         )
-        "Main contributor and stability & performance lead. Satisfied KPIs: Reduce app load time by over 1 second - Eliminate app memory leaks - Own UI performance (scroll). Ads with Instacart - “Fresh” vertical main contributor - Implement Ai chat bot - Main contributor role to Webby winner “Sahara” product release, resulting in roughly 6% increase in sales for more than 1 million user base. Ownership of home screen. Implement Shopping List feature set. Contribute to every section: Autoship, quiz, PLP, PDP, review orders, cart. Deliver weekly for a growing platform of over a million users. Modernize legacy sections. Increase UI & Unit coverage to ~40%. Horiziontal Screen and app load research and solutions using Instruments + New Relic."
+        tmBodyText
         [ "SwiftUI", "UIKit", "Objective-C", "Swift", "Xcode Instruments", "XCTest", "NewRelic", "MVVM" ]
         [ referenceQuote "Michael’s promotion to Senior Engineer is long overdue and well-deserved"
             "Karan Shah, iOS Supervisor"
@@ -241,10 +241,65 @@ fitplanExp =
             "Senior iOS Engineer ⇗"
             "https://www.fitplanapp.com"
         )
-        "Guide growth to over 60000 iOS users from 35000. Zumba brand long-format workout experience, Apple Watch experience, a/b funnel growth strategies, lead the remote team to triage pre-existing tech debt, architectural improvements. Fitplan iOS took in ~80% of revenue. App’s improvement half a year after my start allowed us to secure our first outside investment. The pertinent features I implemented were:\n        Before/after collage experience, exercise rest timer, Airplay video experience in partnership with Zumba adapted to digest Fitplan’s long-format video experience, Audio Session management, Apple Watch extension, Stabilize and maintain app crashes from less\n\n        than 98% to within 0.1 of 100%. Deliver innovative custom animations."
+        fitplanBodyText
         [ "WatchKit", "Core Data", "VIPER", "Core Animation", "AVFoundation", "Airplay", "Lottie", "Swift 5.x", "Objective-C", "Scrum\\Agile" ]
         [ referenceQuote "Michael was able to quickly refactor major parts of our iOS project under a minimal amount of time and planning. He has deep knowledge of best coding practices using apple’s internal libraries as well as 3rd party SDKs. His ability to code review and offer insight to less senior engineers and ability to drive them to the next level was something I’ll miss."
             "- Dan Patey (Mobile Lead Engineer)"
+        ]
+
+
+tmBodyText : Html Msg
+tmBodyText =
+    div technologyStyleW
+        [ p technologyStyleW
+            [ text
+                "Stability & performance lead:"
+            ]
+        , ul technologyULStyle
+            [ text "Reduce app load time by over 1 second"
+            , text "Eliminate app memory leaks"
+            , text "Own UI performance."
+            ]
+        , p technologyStyleW
+            [ text
+                "Features:"
+            ]
+        , ul technologyULStyle
+            [ text "Ads with Instacart"
+            , text "\"Fresh\" vertical main contributor"
+            , text "Ai chat bot"
+            , text "Ownership of home screen"
+            , text "Shopping List feature set"
+            ]
+        , p technologyStyleW
+            [ text "Main contributor: Webby winner “Sahara” product release ( 6% increase in sales). Contribute to every section: Autoship, quiz, PLP, PDP, review orders, cart. Deliver weekly for a growing platform of over a million users. Modernize legacy sections. Increase UI & Unit coverage from 0 to 40%."
+            ]
+        ]
+
+
+fitplanBodyText : Html Msg
+fitplanBodyText =
+    div technologyStyleW
+        [ p technologyStyleW
+            [ text
+                "Guide iOS growth nearly 100% to 60000 users from 35000."
+            ]
+        , p technologyStyleW
+            [ text
+                "Features:"
+            ]
+        , ul technologyULStyle
+            [ text "\"Zumba\" long-format (Apple TV) workout experience"
+            , text "Apple Watch experience"
+            , text "Before/after collage"
+            , text "Exercise rest timer"
+            , text "Audio Session management (Integration with Spotify)"
+            , text "custom animations"
+            ]
+        , p technologyStyleW
+            [ text
+                "Iterate on Funnel for growth. Lead the remote team to streamline architecture. App’s improvement half a year after my start allowed us to secure our first outside investment. Stabilize and maintain app crashes from less than 98% to within 0.1 of 100%."
+            ]
         ]
 
 
@@ -290,7 +345,7 @@ technologiesHtml techs =
         (List.map technologyHtml techs)
 
 
-expBox : String -> LinkedExperienceTitle -> String -> List String -> List ReferenceQuote -> Html Msg
+expBox : String -> LinkedExperienceTitle -> Html Msg -> List String -> List ReferenceQuote -> Html Msg
 expBox duration titleAndLink bodyText technologies references =
     div
         expBoxStyle
@@ -298,7 +353,7 @@ expBox duration titleAndLink bodyText technologies references =
             ([ titleAndLink
              , br [ style "margin-top" "10px" ] []
              , p technologyStyleW [ text duration ]
-             , p technologyStyleW [ text bodyText ]
+             , bodyText --p technologyStyleW [ text bodyText ]
              ]
                 ++ [ technologiesHtml technologies ]
                 ++ references
