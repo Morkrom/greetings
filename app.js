@@ -5232,7 +5232,8 @@ var $author$project$MorkromCss$smallBlockW = function (w) {
 			A2(
 			$elm$html$Html$Attributes$style,
 			'width',
-			$elm$core$String$fromFloat(w) + 'px')
+			$elm$core$String$fromFloat(w) + 'px'),
+			A2($elm$html$Html$Attributes$style, 'margin-bottom', '15px')
 		]);
 };
 var $author$project$MorkromCss$expBoxStyle = _Utils_ap(
@@ -5468,7 +5469,10 @@ var $author$project$Main$referenceQuote = F2(
 			$author$project$MorkromCss$referenceStyle,
 			_List_fromArray(
 				[
-					$elm$html$Html$text(quote + ('\n-' + referee))
+					$elm$html$Html$text(quote),
+					A2($elm$html$Html$br, _List_Nil, _List_Nil),
+					A2($elm$html$Html$br, _List_Nil, _List_Nil),
+					$elm$html$Html$text(referee)
 				]));
 	});
 var $author$project$Main$fitplanExp = A5(
@@ -5624,7 +5628,7 @@ var $author$project$Main$thriveMarketExp = A5(
 		['SwiftUI', 'UIKit', 'Objective-C', 'Swift', 'Xcode Instruments', 'XCTest', 'NewRelic', 'MVVM']),
 	_List_fromArray(
 		[
-			A2($author$project$Main$referenceQuote, 'Michael’s promotion to Senior Engineer is long overdue and well-deserved', 'Karan Shah, iOS Supervisor')
+			A2($author$project$Main$referenceQuote, 'Michael’s promotion to Senior Engineer is long overdue and well-deserved', '- Karan Shah, iOS Supervisor')
 		]));
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
 var $author$project$MorkromCss$titleTextStyle = _List_fromArray(
@@ -6132,10 +6136,7 @@ var $author$project$Main$languageGnostic = A2(
 						[
 							A2(
 							$elm$html$Html$div,
-							_List_fromArray(
-								[
-									A2($elm$html$Html$Attributes$style, 'width', '200px')
-								]),
+							$author$project$MorkromCss$smallBlockW(195.0),
 							_List_fromArray(
 								[
 									$author$project$SwiftIcon$swift(_List_Nil)
@@ -6152,7 +6153,12 @@ var $author$project$Main$languageGnostic = A2(
 								])),
 							A2(
 							$elm$html$Html$div,
-							$author$project$MorkromCss$smallBlockW(190.0),
+							_Utils_ap(
+								$author$project$MorkromCss$smallBlockW(190.0),
+								_List_fromArray(
+									[
+										A2($elm$html$Html$Attributes$style, 'margin-top', '4px')
+									])),
 							_List_fromArray(
 								[$author$project$Logo$main]))
 						]))
