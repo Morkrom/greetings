@@ -5208,30 +5208,211 @@ var $author$project$Main$Work = {$: 'Work'};
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
 var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
-var $author$project$Main$introSectionDivStyle = _List_fromArray(
+var $author$project$MorkromCss$blockContentsR = _List_fromArray(
 	[
 		A2($elm$html$Html$Attributes$style, 'justify-content', 'center'),
 		A2($elm$html$Html$Attributes$style, 'display', 'flex'),
-		A2($elm$html$Html$Attributes$style, 'gap', '0px'),
-		A2($elm$html$Html$Attributes$style, 'flex-direction', 'column'),
-		A2($elm$html$Html$Attributes$style, 'background', 'rgb(243, 243, 246)')
+		A2($elm$html$Html$Attributes$style, 'gap', '10px'),
+		A2($elm$html$Html$Attributes$style, 'flex-direction', 'row'),
+		A2($elm$html$Html$Attributes$style, 'flex-wrap', 'wrap'),
+		A2($elm$html$Html$Attributes$style, 'margin-top', '20px'),
+		A2($elm$html$Html$Attributes$style, 'align-items', 'flex-start')
 	]);
-var $author$project$Main$Lowlighted = {$: 'Lowlighted'};
+var $author$project$MorkromCss$blockContents = _Utils_ap(
+	$author$project$MorkromCss$blockContentsR,
+	_List_fromArray(
+		[
+			A2($elm$html$Html$Attributes$style, 'background', 'rgb(243, 243, 246)')
+		]));
+var $elm$html$Html$br = _VirtualDom_node('br');
+var $elm$core$String$fromFloat = _String_fromNumber;
+var $author$project$MorkromCss$smallBlockW = function (w) {
+	return _List_fromArray(
+		[
+			A2(
+			$elm$html$Html$Attributes$style,
+			'width',
+			$elm$core$String$fromFloat(w) + 'px')
+		]);
+};
+var $author$project$MorkromCss$expBoxStyle = _Utils_ap(
+	_List_fromArray(
+		[
+			A2($elm$html$Html$Attributes$style, 'background', '#1D1D1F'),
+			A2($elm$html$Html$Attributes$style, 'border-radius', '20px'),
+			A2($elm$html$Html$Attributes$style, 'margin-bottom', '10px')
+		]),
+	$author$project$MorkromCss$smallBlockW(260));
+var $elm$html$Html$p = _VirtualDom_node('p');
+var $author$project$MorkromCss$LightBlue = {$: 'LightBlue'};
+var $author$project$MorkromCss$buttonColor = function (color) {
+	switch (color.$) {
+		case 'LightBlue':
+			return 'rgb(120, 197, 239)';
+		case 'LightestGray':
+			return 'rgb(229, 229, 234)';
+		default:
+			return 'rgb(2, 102, 223)';
+	}
+};
+var $author$project$MorkromCss$technologyBorderedInset = _List_fromArray(
+	[
+		A2($elm$html$Html$Attributes$style, 'margin', '0px'),
+		A2(
+		$elm$html$Html$Attributes$style,
+		'border-color',
+		$author$project$MorkromCss$buttonColor($author$project$MorkromCss$LightBlue)),
+		A2($elm$html$Html$Attributes$style, 'border-style', 'solid'),
+		A2($elm$html$Html$Attributes$style, 'border-radius', '15px'),
+		A2($elm$html$Html$Attributes$style, 'border-width', '1px')
+	]);
+var $author$project$MorkromCss$technologyStyle = _List_fromArray(
+	[
+		A2($elm$html$Html$Attributes$style, 'font-family', 'Arial'),
+		A2(
+		$elm$html$Html$Attributes$style,
+		'color',
+		$author$project$MorkromCss$buttonColor($author$project$MorkromCss$LightBlue)),
+		A2($elm$html$Html$Attributes$style, 'font-size', '12px')
+	]);
+var $author$project$MorkromCss$technologyStyleBordered = _Utils_ap(
+	_List_fromArray(
+		[
+			A2($elm$html$Html$Attributes$style, 'text-shadow', '0px 0px 10px rgba(255, 255, 255, 0.5)'),
+			A2($elm$html$Html$Attributes$style, 'margin', '10px')
+		]),
+	$author$project$MorkromCss$technologyStyle);
+var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
+var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $author$project$Main$technologyHtml = function (technology) {
+	return A2(
+		$elm$html$Html$div,
+		$author$project$MorkromCss$technologyBorderedInset,
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$div,
+				$author$project$MorkromCss$technologyStyleBordered,
+				_List_fromArray(
+					[
+						$elm$html$Html$text(technology)
+					]))
+			]));
+};
+var $author$project$Main$technologiesHtml = function (techs) {
+	return A2(
+		$elm$html$Html$div,
+		$author$project$MorkromCss$blockContentsR,
+		A2($elm$core$List$map, $author$project$Main$technologyHtml, techs));
+};
+var $author$project$MorkromCss$LightestGray = {$: 'LightestGray'};
+var $author$project$MorkromCss$technologyStyleW = _List_fromArray(
+	[
+		A2($elm$html$Html$Attributes$style, 'font-family', 'Arial'),
+		A2(
+		$elm$html$Html$Attributes$style,
+		'color',
+		$author$project$MorkromCss$buttonColor($author$project$MorkromCss$LightestGray)),
+		A2($elm$html$Html$Attributes$style, 'font-size', '12px'),
+		A2($elm$html$Html$Attributes$style, 'text-align', 'left'),
+		A2($elm$html$Html$Attributes$style, 'margin-top', '10px')
+	]);
+var $author$project$Main$expBox = F5(
+	function (duration, titleAndLink, bodyText, technologies, references) {
+		return A2(
+			$elm$html$Html$div,
+			$author$project$MorkromCss$expBoxStyle,
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							A2($elm$html$Html$Attributes$style, 'margin', '10px')
+						]),
+					_Utils_ap(
+						_List_fromArray(
+							[
+								titleAndLink,
+								A2(
+								$elm$html$Html$br,
+								_List_fromArray(
+									[
+										A2($elm$html$Html$Attributes$style, 'margin-top', '10px')
+									]),
+								_List_Nil),
+								A2(
+								$elm$html$Html$p,
+								$author$project$MorkromCss$technologyStyleW,
+								_List_fromArray(
+									[
+										$elm$html$Html$text(duration)
+									])),
+								bodyText
+							]),
+						_Utils_ap(
+							_List_fromArray(
+								[
+									$author$project$Main$technologiesHtml(technologies)
+								]),
+							references)))
+				]));
+	});
+var $author$project$MorkromCss$technologyULStyle = _Utils_ap(
+	$author$project$MorkromCss$technologyStyleW,
+	_List_fromArray(
+		[
+			A2($elm$html$Html$Attributes$style, 'padding-inline-start', '10px')
+		]));
+var $elm$html$Html$ul = _VirtualDom_node('ul');
+var $author$project$Main$fitplanBodyText = A2(
+	$elm$html$Html$div,
+	$author$project$MorkromCss$technologyStyleW,
+	_List_fromArray(
+		[
+			A2(
+			$elm$html$Html$p,
+			$author$project$MorkromCss$technologyStyleW,
+			_List_fromArray(
+				[
+					$elm$html$Html$text('Guide iOS growth nearly 100% to 60000 users from 35000.')
+				])),
+			A2(
+			$elm$html$Html$p,
+			$author$project$MorkromCss$technologyStyleW,
+			_List_fromArray(
+				[
+					$elm$html$Html$text('Features:')
+				])),
+			A2(
+			$elm$html$Html$ul,
+			$author$project$MorkromCss$technologyULStyle,
+			_List_fromArray(
+				[
+					$elm$html$Html$text('\"Zumba\" long-format (Apple TV) workout experience'),
+					$elm$html$Html$text('Apple Watch experience'),
+					$elm$html$Html$text('Before/after collage'),
+					$elm$html$Html$text('Exercise rest timer'),
+					$elm$html$Html$text('Audio Session management (Integration with Spotify)'),
+					$elm$html$Html$text('custom animations')
+				])),
+			A2(
+			$elm$html$Html$p,
+			$author$project$MorkromCss$technologyStyleW,
+			_List_fromArray(
+				[
+					$elm$html$Html$text('Iterate on Funnel for growth. Lead the remote team to streamline architecture. App’s improvement half a year after my start allowed us to secure our first outside investment. Stabilize and maintain app crashes from less than 98% to within 0.1 of 100%.')
+				]))
+		]));
 var $elm$html$Html$a = _VirtualDom_node('a');
-var $author$project$Main$buttonBackgroundColorString = function (style) {
-	if (style.$ === 'Highlighted') {
-		return 'rgb(2, 102, 223)';
-	} else {
-		return 'transparent';
-	}
-};
-var $author$project$Main$buttonBackgroundColorTitleString = function (style) {
-	if (style.$ === 'Highlighted') {
-		return 'white';
-	} else {
-		return 'rgb(2, 102, 223)';
-	}
-};
+var $elm$virtual_dom$VirtualDom$attribute = F2(
+	function (key, value) {
+		return A2(
+			_VirtualDom_attribute,
+			_VirtualDom_noOnOrFormAction(key),
+			_VirtualDom_noJavaScriptOrHtmlUri(value));
+	});
+var $elm$html$Html$Attributes$attribute = $elm$virtual_dom$VirtualDom$attribute;
 var $elm$json$Json$Encode$string = _Json_wrap;
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
@@ -5246,23 +5427,114 @@ var $elm$html$Html$Attributes$href = function (url) {
 		'href',
 		_VirtualDom_noJavaScriptUri(url));
 };
-var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
-var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $author$project$MorkromCss$myExperienceLinkCSS = _List_fromArray(
+	[
+		A2($elm$html$Html$Attributes$style, 'font-family', 'Arial'),
+		A2($elm$html$Html$Attributes$style, 'text-decoration', 'none'),
+		A2($elm$html$Html$Attributes$style, 'font-size', '14px'),
+		A2($elm$html$Html$Attributes$style, 'display', 'inlineBlock'),
+		A2(
+		$elm$html$Html$Attributes$style,
+		'color',
+		$author$project$MorkromCss$buttonColor($author$project$MorkromCss$LightBlue)),
+		A2($elm$html$Html$Attributes$style, 'text-shadow', '0px 0px 10px rgba(255, 255, 255, 0.5)')
+	]);
+var $author$project$Main$linkedExperience = F2(
+	function (title, link) {
+		return A2(
+			$elm$html$Html$a,
+			_Utils_ap(
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$href(link),
+						A2($elm$html$Html$Attributes$attribute, 'target', '_blank')
+					]),
+				$author$project$MorkromCss$myExperienceLinkCSS),
+			_List_fromArray(
+				[
+					$elm$html$Html$text(title)
+				]));
+	});
+var $author$project$MorkromCss$referenceStyle = _Utils_ap(
+	$author$project$MorkromCss$technologyStyle,
+	_List_fromArray(
+		[
+			A2($elm$html$Html$Attributes$style, 'margin-top', '5px')
+		]));
+var $author$project$Main$referenceQuote = F2(
+	function (quote, referee) {
+		return A2(
+			$elm$html$Html$p,
+			$author$project$MorkromCss$referenceStyle,
+			_List_fromArray(
+				[
+					$elm$html$Html$text(quote + ('\n-' + referee))
+				]));
+	});
+var $author$project$Main$fitplanExp = A5(
+	$author$project$Main$expBox,
+	'3 yr',
+	A2($author$project$Main$linkedExperience, 'Senior iOS Engineer ⇗', 'https://www.fitplanapp.com'),
+	$author$project$Main$fitplanBodyText,
+	_List_fromArray(
+		['WatchKit', 'Core Data', 'VIPER', 'Core Animation', 'AVFoundation', 'Airplay', 'Lottie', 'Swift 5.x', 'Objective-C', 'Scrum\\Agile']),
+	_List_fromArray(
+		[
+			A2($author$project$Main$referenceQuote, 'Michael was able to quickly refactor major parts of our iOS project under a minimal amount of time and planning. He has deep knowledge of best coding practices using apple’s internal libraries as well as 3rd party SDKs. His ability to code review and offer insight to less senior engineers and ability to drive them to the next level was something I’ll miss.', '- Dan Patey (Mobile Lead Engineer)')
+		]));
+var $author$project$MorkromCss$introSectionDivStyle = _List_fromArray(
+	[
+		A2($elm$html$Html$Attributes$style, 'justify-content', 'center'),
+		A2($elm$html$Html$Attributes$style, 'display', 'flex'),
+		A2($elm$html$Html$Attributes$style, 'gap', '0px'),
+		A2($elm$html$Html$Attributes$style, 'flex-direction', 'column'),
+		A2($elm$html$Html$Attributes$style, 'background', 'rgb(243, 243, 246)')
+	]);
+var $author$project$MorkromCss$Lowlighted = {$: 'Lowlighted'};
+var $author$project$MorkromCss$mainRoundedButtonsStyle = _List_fromArray(
+	[
+		A2($elm$html$Html$Attributes$style, 'justify-content', 'center'),
+		A2($elm$html$Html$Attributes$style, 'display', 'flex'),
+		A2($elm$html$Html$Attributes$style, 'gap', '10px'),
+		A2($elm$html$Html$Attributes$style, 'flex-direction', 'row'),
+		A2($elm$html$Html$Attributes$style, 'background', 'rgb(243, 243, 246)')
+	]);
+var $author$project$MorkromCss$buttonBackgroundColorTitleString = function (style) {
+	if (style.$ === 'Highlighted') {
+		return 'white';
+	} else {
+		return 'rgb(2, 102, 223)';
+	}
+};
+var $author$project$MorkromCss$AppleBlue = {$: 'AppleBlue'};
+var $author$project$MorkromCss$buttonBackgroundColorString = function (style) {
+	if (style.$ === 'Highlighted') {
+		return 'rgb(2, 102, 223)';
+	} else {
+		return 'transparent';
+	}
+};
+var $author$project$MorkromCss$roundButtonStyle = function (buttonStyle) {
+	return _List_fromArray(
+		[
+			A2($elm$html$Html$Attributes$style, 'border-width', '1px'),
+			A2(
+			$elm$html$Html$Attributes$style,
+			'border-color',
+			$author$project$MorkromCss$buttonColor($author$project$MorkromCss$AppleBlue)),
+			A2($elm$html$Html$Attributes$style, 'border-style', 'solid'),
+			A2($elm$html$Html$Attributes$style, 'border-radius', '30px'),
+			A2(
+			$elm$html$Html$Attributes$style,
+			'background-color',
+			$author$project$MorkromCss$buttonBackgroundColorString(buttonStyle))
+		]);
+};
 var $author$project$Main$roundedButton = F3(
 	function (title, link, buttonStyle) {
 		return A2(
 			$elm$html$Html$div,
-			_List_fromArray(
-				[
-					A2($elm$html$Html$Attributes$style, 'border-width', '1px'),
-					A2($elm$html$Html$Attributes$style, 'border-color', 'rgb(2, 102, 223)'),
-					A2($elm$html$Html$Attributes$style, 'border-style', 'solid'),
-					A2($elm$html$Html$Attributes$style, 'border-radius', '30px'),
-					A2(
-					$elm$html$Html$Attributes$style,
-					'background-color',
-					$author$project$Main$buttonBackgroundColorString(buttonStyle))
-				]),
+			$author$project$MorkromCss$roundButtonStyle(buttonStyle),
 			_List_fromArray(
 				[
 					A2(
@@ -5278,7 +5550,7 @@ var $author$project$Main$roundedButton = F3(
 							A2(
 							$elm$html$Html$Attributes$style,
 							'color',
-							$author$project$Main$buttonBackgroundColorTitleString(buttonStyle)),
+							$author$project$MorkromCss$buttonBackgroundColorTitleString(buttonStyle)),
 							A2($elm$html$Html$Attributes$style, 'display', 'inline-block'),
 							A2($elm$html$Html$Attributes$style, 'text-decoration', 'none'),
 							A2($elm$html$Html$Attributes$style, 'font-size', '12px')
@@ -5291,18 +5563,127 @@ var $author$project$Main$roundedButton = F3(
 	});
 var $author$project$Main$roundedButtons = A2(
 	$elm$html$Html$div,
+	$author$project$MorkromCss$mainRoundedButtonsStyle,
 	_List_fromArray(
 		[
-			A2($elm$html$Html$Attributes$style, 'justify-content', 'center'),
-			A2($elm$html$Html$Attributes$style, 'display', 'flex'),
-			A2($elm$html$Html$Attributes$style, 'gap', '10px'),
-			A2($elm$html$Html$Attributes$style, 'flex-direction', 'row'),
-			A2($elm$html$Html$Attributes$style, 'background', 'rgb(243, 243, 246)')
-		]),
-	_List_fromArray(
-		[
-			A3($author$project$Main$roundedButton, 'Contact', 'mailto:morkrom@icloud.com', $author$project$Main$Lowlighted)
+			A3($author$project$Main$roundedButton, 'Contact', 'mailto:morkrom@icloud.com', $author$project$MorkromCss$Lowlighted)
 		]));
+var $author$project$Main$tmBodyText = A2(
+	$elm$html$Html$div,
+	$author$project$MorkromCss$technologyStyleW,
+	_List_fromArray(
+		[
+			A2(
+			$elm$html$Html$p,
+			$author$project$MorkromCss$technologyStyleW,
+			_List_fromArray(
+				[
+					$elm$html$Html$text('Stability & performance lead:')
+				])),
+			A2(
+			$elm$html$Html$ul,
+			$author$project$MorkromCss$technologyULStyle,
+			_List_fromArray(
+				[
+					$elm$html$Html$text('Reduce app load time by over 1 second'),
+					$elm$html$Html$text('Eliminate app memory leaks'),
+					$elm$html$Html$text('Own UI performance.')
+				])),
+			A2(
+			$elm$html$Html$p,
+			$author$project$MorkromCss$technologyStyleW,
+			_List_fromArray(
+				[
+					$elm$html$Html$text('Features:')
+				])),
+			A2(
+			$elm$html$Html$ul,
+			$author$project$MorkromCss$technologyULStyle,
+			_List_fromArray(
+				[
+					$elm$html$Html$text('Ads with Instacart'),
+					$elm$html$Html$text('\"Fresh\" vertical main contributor'),
+					$elm$html$Html$text('Ai chat bot'),
+					$elm$html$Html$text('Ownership of home screen'),
+					$elm$html$Html$text('Shopping List feature set')
+				])),
+			A2(
+			$elm$html$Html$p,
+			$author$project$MorkromCss$technologyStyleW,
+			_List_fromArray(
+				[
+					$elm$html$Html$text('Main contributor: Webby winner “Sahara” product release ( 6% increase in sales). Contribute to every section: Autoship, quiz, PLP, PDP, review orders, cart. Deliver weekly for a growing platform of over a million users. Modernize legacy sections. Increase UI & Unit coverage from 0 to 40%.')
+				]))
+		]));
+var $author$project$Main$thriveMarketExp = A5(
+	$author$project$Main$expBox,
+	'6 yr',
+	A2($author$project$Main$linkedExperience, 'Senior iOS Engineer (Performance, Features, Verticals, Specialist)⇗', 'https://thrivemarket.com'),
+	$author$project$Main$tmBodyText,
+	_List_fromArray(
+		['SwiftUI', 'UIKit', 'Objective-C', 'Swift', 'Xcode Instruments', 'XCTest', 'NewRelic', 'MVVM']),
+	_List_fromArray(
+		[
+			A2($author$project$Main$referenceQuote, 'Michael’s promotion to Senior Engineer is long overdue and well-deserved', 'Karan Shah, iOS Supervisor')
+		]));
+var $elm$html$Html$h1 = _VirtualDom_node('h1');
+var $author$project$MorkromCss$titleTextStyle = _List_fromArray(
+	[
+		A2($elm$html$Html$Attributes$style, 'margin-top', '45px'),
+		A2($elm$html$Html$Attributes$style, 'font-family', 'Arial'),
+		A2($elm$html$Html$Attributes$style, 'text-align', 'center'),
+		A2($elm$html$Html$Attributes$style, 'line-height', '0px'),
+		A2($elm$html$Html$Attributes$style, 'word-break', 'break-word')
+	]);
+var $elm$html$Html$h3 = _VirtualDom_node('h3');
+var $author$project$MorkromCss$subtitleTextStyle = _List_fromArray(
+	[
+		A2($elm$html$Html$Attributes$style, 'margin', '10'),
+		A2($elm$html$Html$Attributes$style, 'font-family', 'Arial'),
+		A2($elm$html$Html$Attributes$style, 'font-weight', '300'),
+		A2($elm$html$Html$Attributes$style, 'word-break', 'break-word'),
+		A2($elm$html$Html$Attributes$style, 'display', 'inline-block'),
+		A2($elm$html$Html$Attributes$style, 'text-align', 'center')
+	]);
+var $author$project$Main$titleTextSubtitle = function (subtitle) {
+	return A2(
+		$elm$html$Html$h3,
+		$author$project$MorkromCss$subtitleTextStyle,
+		_List_fromArray(
+			[
+				$elm$html$Html$text(subtitle)
+			]));
+};
+var $author$project$Main$titleText = F2(
+	function (title, subtitle) {
+		return _List_fromArray(
+			[
+				A2(
+				$elm$html$Html$h1,
+				$author$project$MorkromCss$titleTextStyle,
+				_List_fromArray(
+					[
+						$elm$html$Html$text(title)
+					])),
+				$author$project$Main$titleTextSubtitle(subtitle)
+			]);
+	});
+var $author$project$Main$exp = A2(
+	$elm$html$Html$div,
+	$author$project$MorkromCss$introSectionDivStyle,
+	_Utils_ap(
+		A2($author$project$Main$titleText, 'Exp', '\"Experience is the teacher of all things.\"'),
+		_Utils_ap(
+			_List_fromArray(
+				[$author$project$Main$roundedButtons]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$div,
+					$author$project$MorkromCss$blockContents,
+					_List_fromArray(
+						[$author$project$Main$thriveMarketExp, $author$project$Main$fitplanExp]))
+				]))));
 var $elm$svg$Svg$Attributes$fill = _VirtualDom_attribute('fill');
 var $elm$svg$Svg$Attributes$height = _VirtualDom_attribute('height');
 var $elm$core$Debug$log = _Debug_log;
@@ -5345,7 +5726,6 @@ var $elm$svg$Svg$animate = $elm$svg$Svg$trustedNode('animate');
 var $elm$svg$Svg$Attributes$attributeName = _VirtualDom_attribute('attributeName');
 var $elm$svg$Svg$Attributes$begin = _VirtualDom_attribute('begin');
 var $elm$svg$Svg$Attributes$dur = _VirtualDom_attribute('dur');
-var $elm$core$String$fromFloat = _String_fromNumber;
 var $author$project$Images$phoneVB = '0 0 150 312';
 var $elm$svg$Svg$rect = $elm$svg$Svg$trustedNode('rect');
 var $elm$svg$Svg$Attributes$repeatCount = _VirtualDom_attribute('repeatCount');
@@ -5428,8 +5808,7 @@ var $author$project$Images$phone = A2(
 						[
 							$elm$svg$Svg$Attributes$width('120'),
 							$elm$svg$Svg$Attributes$height('250'),
-							$elm$svg$Svg$Attributes$viewBox($author$project$Images$phoneVB),
-							$elm$svg$Svg$Attributes$fill('green')
+							$elm$svg$Svg$Attributes$viewBox($author$project$Images$phoneVB)
 						]),
 					_Utils_ap(
 						_List_fromArray(
@@ -5469,59 +5848,9 @@ var $author$project$Main$titleSvgs = A2(
 		]),
 	_List_fromArray(
 		[$author$project$Images$phone]));
-var $elm$html$Html$h1 = _VirtualDom_node('h1');
-var $elm$html$Html$h3 = _VirtualDom_node('h3');
-var $author$project$Main$titleTextSubtitle = function (subtitle) {
-	return A2(
-		$elm$html$Html$div,
-		_List_fromArray(
-			[
-				A2($elm$html$Html$Attributes$style, 'justify-content', 'center'),
-				A2($elm$html$Html$Attributes$style, 'display', 'flex'),
-				A2($elm$html$Html$Attributes$style, 'gap', '1px'),
-				A2($elm$html$Html$Attributes$style, 'flex-direction', 'row'),
-				A2($elm$html$Html$Attributes$style, 'background', 'rgb(243, 243, 246)')
-			]),
-		_List_fromArray(
-			[
-				A2(
-				$elm$html$Html$h3,
-				_List_fromArray(
-					[
-						A2($elm$html$Html$Attributes$style, 'margin', '10'),
-						A2($elm$html$Html$Attributes$style, 'font-family', 'Arial'),
-						A2($elm$html$Html$Attributes$style, 'line-height', '0px'),
-						A2($elm$html$Html$Attributes$style, 'font-weight', '300')
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text(subtitle)
-					]))
-			]));
-};
-var $author$project$Main$titleText = F2(
-	function (title, subtitle) {
-		return _List_fromArray(
-			[
-				A2(
-				$elm$html$Html$h1,
-				_List_fromArray(
-					[
-						A2($elm$html$Html$Attributes$style, 'margin-top', '45px'),
-						A2($elm$html$Html$Attributes$style, 'font-family', 'Arial'),
-						A2($elm$html$Html$Attributes$style, 'text-align', 'center'),
-						A2($elm$html$Html$Attributes$style, 'line-height', '0px')
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text(title)
-					])),
-				$author$project$Main$titleTextSubtitle(subtitle)
-			]);
-	});
 var $author$project$Main$introSection = A2(
 	$elm$html$Html$div,
-	$author$project$Main$introSectionDivStyle,
+	$author$project$MorkromCss$introSectionDivStyle,
 	_Utils_ap(
 		A2($author$project$Main$titleText, 'Michael Mork', 'iOS Engineer'),
 		_List_fromArray(
@@ -5604,13 +5933,6 @@ var $author$project$Logo$main = A2(
 				]),
 			_List_Nil)
 		]));
-var $elm$virtual_dom$VirtualDom$attribute = F2(
-	function (key, value) {
-		return A2(
-			_VirtualDom_attribute,
-			_VirtualDom_noOnOrFormAction(key),
-			_VirtualDom_noJavaScriptOrHtmlUri(value));
-	});
 var $elm$virtual_dom$VirtualDom$nodeNS = F2(
 	function (namespace, tag) {
 		return A2(
@@ -5795,54 +6117,46 @@ var $author$project$SwiftIcon$swift = function (attrs) {
 };
 var $author$project$Main$languageGnostic = A2(
 	$elm$html$Html$div,
-	$author$project$Main$introSectionDivStyle,
+	$author$project$MorkromCss$introSectionDivStyle,
 	_Utils_ap(
-		A2($author$project$Main$titleText, 'Language', 'Any paradigm any day'),
-		_List_fromArray(
-			[
-				A2(
-				$elm$html$Html$div,
-				_List_fromArray(
-					[
-						A2($elm$html$Html$Attributes$style, 'justify-content', 'center'),
-						A2($elm$html$Html$Attributes$style, 'display', 'flex'),
-						A2($elm$html$Html$Attributes$style, 'gap', '20px'),
-						A2($elm$html$Html$Attributes$style, 'flex-direction', 'row'),
-						A2($elm$html$Html$Attributes$style, 'flex-wrap', 'wrap'),
-						A2($elm$html$Html$Attributes$style, 'background', 'rgb(243, 243, 246)')
-					]),
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$div,
-						_List_fromArray(
-							[
-								A2($elm$html$Html$Attributes$style, 'width', '200px')
-							]),
-						_List_fromArray(
-							[
-								$author$project$SwiftIcon$swift(_List_Nil)
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_fromArray(
-							[
-								A2($elm$html$Html$Attributes$style, 'width', '200px')
-							]),
-						_List_fromArray(
-							[
-								$author$project$ObjCIcon$objectiveC(_List_Nil)
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_fromArray(
-							[
-								A2($elm$html$Html$Attributes$style, 'width', '190px')
-							]),
-						_List_fromArray(
-							[$author$project$Logo$main]))
-					]))
-			])));
+		A2($author$project$Main$titleText, 'Language', 'Any paradigm any day.'),
+		_Utils_ap(
+			_List_fromArray(
+				[$author$project$Main$roundedButtons]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$div,
+					$author$project$MorkromCss$blockContents,
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									A2($elm$html$Html$Attributes$style, 'width', '200px')
+								]),
+							_List_fromArray(
+								[
+									$author$project$SwiftIcon$swift(_List_Nil)
+								])),
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									A2($elm$html$Html$Attributes$style, 'width', '200px')
+								]),
+							_List_fromArray(
+								[
+									$author$project$ObjCIcon$objectiveC(_List_Nil)
+								])),
+							A2(
+							$elm$html$Html$div,
+							$author$project$MorkromCss$smallBlockW(190.0),
+							_List_fromArray(
+								[$author$project$Logo$main]))
+						]))
+				]))));
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 'Normal', a: a};
@@ -5883,7 +6197,6 @@ var $author$project$Main$view = function (model) {
 		_List_fromArray(
 			[
 				A2($elm$html$Html$Attributes$style, 'position', 'absolute'),
-				A2($elm$html$Html$Attributes$style, 'background', 'gold'),
 				A2($elm$html$Html$Attributes$style, 'top', '0%'),
 				A2($elm$html$Html$Attributes$style, 'width', '100%')
 			]),
@@ -5895,7 +6208,13 @@ var $author$project$Main$view = function (model) {
 					[
 						A2($elm$html$Html$Attributes$style, 'display', 'flex'),
 						A2($elm$html$Html$Attributes$style, 'justify-content', 'center'),
-						A2($elm$html$Html$Attributes$style, 'gap', '10px')
+						A2($elm$html$Html$Attributes$style, 'gap', '10px'),
+						A2($elm$html$Html$Attributes$style, 'position', 'fixed'),
+						A2($elm$html$Html$Attributes$style, 'background-color', 'rgba(255, 255, 255, 0.95)'),
+						A2($elm$html$Html$Attributes$style, 'backdrop-filter', 'blur(50px)'),
+						A2($elm$html$Html$Attributes$style, 'top', '0'),
+						A2($elm$html$Html$Attributes$style, 'left', '0'),
+						A2($elm$html$Html$Attributes$style, 'right', '0')
 					]),
 				_List_fromArray(
 					[
@@ -5910,10 +6229,11 @@ var $author$project$Main$view = function (model) {
 						A2($elm$html$Html$Attributes$style, 'justify-content', 'center'),
 						A2($elm$html$Html$Attributes$style, 'display', 'flex'),
 						A2($elm$html$Html$Attributes$style, 'gap', '10px'),
-						A2($elm$html$Html$Attributes$style, 'flex-direction', 'column')
+						A2($elm$html$Html$Attributes$style, 'flex-direction', 'column'),
+						A2($elm$html$Html$Attributes$style, 'margin-top', '20px')
 					]),
 				_List_fromArray(
-					[$author$project$Main$introSection, $author$project$Main$languageGnostic]))
+					[$author$project$Main$introSection, $author$project$Main$languageGnostic, $author$project$Main$exp]))
 			]));
 };
 var $author$project$Main$main = $elm$browser$Browser$sandbox(
