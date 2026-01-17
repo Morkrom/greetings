@@ -45,7 +45,7 @@ toPhoneScreenElement element =
                 , fill "blue"] []
            ,
             animate [
-              attributeName "opacity",
+             attributeName "opacity",
               values "0;1;0",
               dur "1.0s",
               repeatCount "indefinite",
@@ -59,7 +59,7 @@ phone : Svg msg
 phone = svg
     [ width "120"
     , height "250"
-    , viewBox phoneVB, fill "green"
+    , viewBox phoneVB
     ]
     (
     [ rect [ x "15"
