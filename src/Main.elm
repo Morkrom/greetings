@@ -193,15 +193,17 @@ languageGnostic =
             ++ [ roundedButtons ]
             ++ [ div
                     blockContents
-                    [ div [ style "width" "200px" ]
+                    [ div (smallBlockW 195.0)
                         [ swift []
                         ]
                     , div [ style "width" "200px" ]
                         [ objectiveC []
                         ]
-                    , div (smallBlockW 190.0)
-                        [ Logo.main
-                        ]
+                    , div
+                        (smallBlockW 190.0
+                            ++ [ style "margin-top" "4px" ]
+                        )
+                        [ Logo.main ]
                     ]
                ]
         )
@@ -230,7 +232,7 @@ thriveMarketExp =
         tmBodyText
         [ "SwiftUI", "UIKit", "Objective-C", "Swift", "Xcode Instruments", "XCTest", "NewRelic", "MVVM" ]
         [ referenceQuote "Michael’s promotion to Senior Engineer is long overdue and well-deserved"
-            "Karan Shah, iOS Supervisor"
+            "- Karan Shah, iOS Supervisor"
         ]
 
 
@@ -309,7 +311,12 @@ type alias ReferenceQuote =
 
 referenceQuote : String -> String -> ReferenceQuote
 referenceQuote quote referee =
-    p referenceStyle [ text (quote ++ "\n-" ++ referee) ]
+    p referenceStyle
+        [ text quote
+        , br [] []
+        , br [] []
+        , text referee
+        ]
 
 
 

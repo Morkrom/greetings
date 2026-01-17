@@ -133,12 +133,14 @@ introSectionDivStyle =
 smallBlock : List (Attribute msg)
 smallBlock =
     [ style "width" "200.0px"
+    , style "margin-bottom" "15px"
     ]
 
 
 smallBlockW : Float -> List (Attribute msg)
 smallBlockW w =
     [ style "width" (String.fromFloat w ++ "px")
+    , style "margin-bottom" "15px"
     ]
 
 
