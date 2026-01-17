@@ -65,12 +65,26 @@ technologyStyleW =
     , style "color" (buttonColor LightestGray)
     , style "font-size" "12px"
     , style "text-align" "left"
+    , style "margin-top" "10px"
+    ]
+
+
+technologyBorderedInset : List (Attribute msg)
+technologyBorderedInset =
+    [ style "margin" "0px"
+    , style "border-color" (buttonColor LightBlue)
+    , style "border-style" "solid"
+    , style "border-radius" "15px"
+    , style "border-width" "1px"
     ]
 
 
 technologyStyleBordered : List (Attribute msg)
 technologyStyleBordered =
-    [] ++ technologyStyle
+    [ style "text-shadow" "0px 0px 10px rgba(255, 255, 255, 0.5)"
+    , style "margin" "10px"
+    ]
+        ++ technologyStyle
 
 
 technologyStyle : List (Attribute msg)
@@ -81,6 +95,13 @@ technologyStyle =
     ]
 
 
+referenceStyle : List (Attribute msg)
+referenceStyle =
+    technologyStyle
+        ++ [ style "margin-top" "5px"
+           ]
+
+
 myExperienceLinkCSS : List (Attribute msg)
 myExperienceLinkCSS =
     [ style "font-family" "Arial"
@@ -88,6 +109,7 @@ myExperienceLinkCSS =
     , style "font-size" "14px"
     , style "display" "inlineBlock"
     , style "color" (buttonColor LightBlue) --"rgb(2, 102, 223)"
+    , style "text-shadow" "0px 0px 10px rgba(255, 255, 255, 0.5)"
     ]
 
 
@@ -122,7 +144,7 @@ blockContentsR : List (Attribute msg)
 blockContentsR =
     [ style "justify-content" "center"
     , style "display" "flex"
-    , style "gap" "20px"
+    , style "gap" "10px"
     , style "flex-direction" "row"
     , style "flex-wrap" "wrap"
     , style "margin-top" "20px"
@@ -155,4 +177,14 @@ subtitleTextStyle =
     , style "word-break" "break-word"
     , style "display" "inline-block"
     , style "text-align" "center"
+    ]
+
+
+mainRoundedButtonsStyle : List (Attribute msg)
+mainRoundedButtonsStyle =
+    [ style "justify-content" "center"
+    , style "display" "flex"
+    , style "gap" "10px"
+    , style "flex-direction" "row"
+    , style "background" "rgb(243, 243, 246)"
     ]

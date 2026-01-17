@@ -154,13 +154,7 @@ introSection =
 
 roundedButtons : Html Msg
 roundedButtons =
-    div
-        [ style "justify-content" "center"
-        , style "display" "flex"
-        , style "gap" "10px"
-        , style "flex-direction" "row"
-        , style "background" "rgb(243, 243, 246)"
-        ]
+    div mainRoundedButtonsStyle
         [ --roundedButton "Résumé" "file:///Users/apple/Software/morkrom/resume-master-a.pdf" Highlighted,
           roundedButton "Contact" "mailto:morkrom@icloud.com" Lowlighted
         ]
@@ -219,17 +213,39 @@ exp =
         (titleText "Exp" "\"Experience is the teacher of all things.\" - Julius Caesar"
             ++ [ roundedButtons ]
             ++ [ div blockContents
-                    [ expBox "6 yr"
-                        (linkedExperience
-                            "Senior iOS Engineer (Core, Verticals, Specialist)"
-                            "https://thrivemarket.com"
-                        )
-                        "Main contributor and stability & performance lead. Satisfied KPIs: Reduce app load time by over 1 second - Eliminate app memory leaks - Own UI performance (scroll). Ads with Instacart - “Fresh” vertical main contributor - Implement Ai chat bot - Main contributor role to Webby winner “Sahara” product release, resulting in roughly 6% increase in sales for more than 1 million user base. Ownership of home screen. Implement Shopping List feature set. Contribute to every section: Autoship, quiz, PLP, PDP, review orders, cart. Deliver weekly for a growing platform of over a million users. Modernize legacy sections. Increase UI & Unit coverage to ~40%. Horiziontal Screen and app load research and solutions using Instruments + New Relic."
-                        [ "SwiftUI", "UIKit", "Objective-C", "Swift", "Xcode Instruments", "XCTest", "NewRelic", "MVVM" ]
-                        []
+                    [ thriveMarketExp
+                    , fitplanExp
                     ]
                ]
         )
+
+
+thriveMarketExp : Html Msg
+thriveMarketExp =
+    expBox "6 yr"
+        (linkedExperience
+            "Senior iOS Engineer (Core, Verticals, Specialist)⇗"
+            "https://thrivemarket.com"
+        )
+        "Main contributor and stability & performance lead. Satisfied KPIs: Reduce app load time by over 1 second - Eliminate app memory leaks - Own UI performance (scroll). Ads with Instacart - “Fresh” vertical main contributor - Implement Ai chat bot - Main contributor role to Webby winner “Sahara” product release, resulting in roughly 6% increase in sales for more than 1 million user base. Ownership of home screen. Implement Shopping List feature set. Contribute to every section: Autoship, quiz, PLP, PDP, review orders, cart. Deliver weekly for a growing platform of over a million users. Modernize legacy sections. Increase UI & Unit coverage to ~40%. Horiziontal Screen and app load research and solutions using Instruments + New Relic."
+        [ "SwiftUI", "UIKit", "Objective-C", "Swift", "Xcode Instruments", "XCTest", "NewRelic", "MVVM" ]
+        [ referenceQuote "Michael’s promotion to Senior Engineer is long overdue and well-deserved"
+            "Karan Shah, iOS Supervisor"
+        ]
+
+
+fitplanExp : Html Msg
+fitplanExp =
+    expBox "3 yr"
+        (linkedExperience
+            "Senior iOS Engineer ⇗"
+            "https://www.fitplanapp.com"
+        )
+        "Guide growth to over 60000 iOS users from 35000. Zumba brand long-format workout experience, Apple Watch experience, a/b funnel growth strategies, lead the remote team to triage pre-existing tech debt, architectural improvements. Fitplan iOS took in ~80% of revenue. App’s improvement half a year after my start allowed us to secure our first outside investment. The pertinent features I implemented were:\n        Before/after collage experience, exercise rest timer, Airplay video experience in partnership with Zumba adapted to digest Fitplan’s long-format video experience, Audio Session management, Apple Watch extension, Stabilize and maintain app crashes from less\n\n        than 98% to within 0.1 of 100%. Deliver innovative custom animations."
+        [ "WatchKit", "Core Data", "VIPER", "Core Animation", "AVFoundation", "Airplay", "Lottie", "Swift 5.x", "Objective-C", "Scrum\\Agile" ]
+        [ referenceQuote "Michael was able to quickly refactor major parts of our iOS project under a minimal amount of time and planning. He has deep knowledge of best coding practices using apple’s internal libraries as well as 3rd party SDKs. His ability to code review and offer insight to less senior engineers and ability to drive them to the next level was something I’ll miss."
+            "- Dan Patey (Mobile Lead Engineer)"
+        ]
 
 
 type alias ReferenceQuote =
@@ -238,7 +254,7 @@ type alias ReferenceQuote =
 
 referenceQuote : String -> String -> ReferenceQuote
 referenceQuote quote referee =
-    p technologyStyle [ text (quote ++ "\n-" ++ referee) ]
+    p referenceStyle [ text (quote ++ "\n-" ++ referee) ]
 
 
 
@@ -263,7 +279,9 @@ linkedExperience title link =
 
 technologyHtml : String -> Html msg
 technologyHtml technology =
-    div technologyStyle [ text technology ]
+    div technologyBorderedInset
+        [ div technologyStyleBordered [ text technology ]
+        ]
 
 
 technologiesHtml : List String -> Html msg
@@ -278,8 +296,8 @@ expBox duration titleAndLink bodyText technologies references =
         expBoxStyle
         [ div [ style "margin" "10px" ]
             ([ titleAndLink
-             , br [] []
-             , text duration
+             , br [ style "margin-top" "10px" ] []
+             , p technologyStyleW [ text duration ]
              , p technologyStyleW [ text bodyText ]
              ]
                 ++ [ technologiesHtml technologies ]
