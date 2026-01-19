@@ -199,3 +199,38 @@ mainRoundedButtonsStyle =
     , style "flex-direction" "row"
     , style "background" "rgb(243, 243, 246)"
     ]
+
+
+parentDiv : List (Attribute msg)
+parentDiv =
+    [ style "position" "absolute"
+    , style "top" "0%"
+    , style "width" "100%"
+    ]
+
+
+menuDiv : List (Attribute msg)
+menuDiv =
+    [ style "display" "flex"
+    , style "justify-content" "center"
+    , style "gap" "10px"
+    , style "position" "fixed"
+    , style "background-color" "rgba(255, 255, 255, 0.95)"
+    , style "backdrop-filter" "blur(50px)"
+    , style "top" "0"
+    , style "left" "0"
+    , style "right" "0"
+    ]
+
+
+mainDiv : List (Attribute msg)
+mainDiv =
+    [ style "background" "white"
+    , style "justify-content" "center"
+    , style "display" "flex"
+    , style "gap" "10px"
+
+    --, style "background-color" "white"
+    , style "flex-direction" "column"
+    , style "margin-top" "20px"
+    ]

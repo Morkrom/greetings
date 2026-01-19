@@ -15,19 +15,14 @@ import Svg.Attributes exposing (scale)
 import SwiftIcon exposing (swift)
 
 
+sections =
+    [ "greetings", "worksample" ]
 
--- Domain
 
-
-menuButton : Msg -> String -> Html Msg
-menuButton msg title =
-    button
-        [ onClick msg
-        , style "padding" "10px"
-        , style "border" "none"
-        , style "background" "white"
-        ]
-        [ text title ]
+type alias Model =
+    { appSections : List String
+    , selectedSection : Int
+    }
 
 
 
@@ -45,38 +40,6 @@ main =
 
 
 -- MODEL
-
-
-sections =
-    [ "greetings", "worksample" ]
-
-
-roundedButton : String -> String -> RoundedButton -> Html Msg
-roundedButton title link buttonStyle =
-    div
-        (roundButtonStyle
-            buttonStyle
-        )
-        [ a
-            [ href link
-            , style "font-family" "Arial"
-            , style "padding-left" "10px"
-            , style "padding-right" "10px"
-            , style "padding-top" "5px"
-            , style "padding-bottom" "5px"
-            , style "color" (buttonBackgroundColorTitleString buttonStyle)
-            , style "display" "inline-block"
-            , style "text-decoration" "none"
-            , style "font-size" "12px"
-            ]
-            [ text title ]
-        ]
-
-
-type alias Model =
-    { appSections : List String
-    , selectedSection : Int
-    }
 
 
 init : Model
@@ -143,6 +106,43 @@ view model =
             [ introSection, languageGnostic, exp ]
 
         --    div [style "background" "red"] [text (String.fromInt model.selectedSection)]
+        ]
+
+
+
+-- Domain
+
+
+menuButton : Msg -> String -> Html Msg
+menuButton msg title =
+    button
+        [ onClick msg
+        , style "padding" "10px"
+        , style "border" "none"
+        , style "background" "white"
+        ]
+        [ text title ]
+
+
+roundedButton : String -> String -> RoundedButton -> Html Msg
+roundedButton title link buttonStyle =
+    div
+        (roundButtonStyle
+            buttonStyle
+        )
+        [ a
+            [ href link
+            , style "font-family" "Arial"
+            , style "padding-left" "10px"
+            , style "padding-right" "10px"
+            , style "padding-top" "5px"
+            , style "padding-bottom" "5px"
+            , style "color" (buttonBackgroundColorTitleString buttonStyle)
+            , style "display" "inline-block"
+            , style "text-decoration" "none"
+            , style "font-size" "12px"
+            ]
+            [ text title ]
         ]
 
 
