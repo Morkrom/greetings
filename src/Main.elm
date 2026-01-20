@@ -3,6 +3,7 @@ module Main exposing (main)
 --exposing (Html, button, div, text, a)
 --style, href)
 
+import AppleseGallery exposing (..)
 import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -16,12 +17,13 @@ import SwiftIcon exposing (swift)
 
 
 sections =
-    [ "greetings", "worksample" ]
+    [ "Greetings!" ]
 
 
 type alias Model =
     { appSections : List String
     , selectedSection : Int
+    , gallery : AppleseGallery.State
     }
 
 
@@ -46,6 +48,7 @@ init : Model
 init =
     { appSections = sections
     , selectedSection = 0
+    , gallery = AppleseGallery.init (0 Resting)
     }
 
 
@@ -56,6 +59,7 @@ init =
 type Msg
     = Greetings
     | Work
+    | AppleseGalleryMsg AppleseGallery.Msg
 
 
 update : Msg -> Model -> Model
@@ -67,6 +71,9 @@ update msg model =
         Work ->
             { model | selectedSection = 1 }
 
+        AppleseGalleryMsg msg ->
+            { model | gallery = Gallery.update msg model.gallery }
+
 
 
 -- VIEW
@@ -75,38 +82,55 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div
-        [ style "position" "absolute"
-        , style "top" "0%"
-        , style "width" "100%"
-        ]
+        parentDiv
         [ div
-            [ style "display" "flex"
-            , style "justify-content" "center"
-            , style "gap" "10px"
-            , style "position" "fixed"
-            , style "background-color" "rgba(255, 255, 255, 0.95)"
-            , style "backdrop-filter" "blur(50px)"
-            , style "top" "0"
-            , style "left" "0"
-            , style "right" "0"
-            ]
+            menuDiv
             [ menuButton Greetings "Greetings"
             , menuButton Work "Work"
             ]
         , div
-            [ style "background" "white"
-            , style "justify-content" "center"
-            , style "display" "flex"
-            , style "gap" "10px"
-
-            --, style "background-color" "white"
-            , style "flex-direction" "column"
-            , style "margin-top" "20px"
+            mainDiv
+            [ introSection
+            , languageGnostic
+            , exp
+            , Html.map AppleseGalleryMsg <| AppleseGallery.view config model.gallery
             ]
-            [ introSection, languageGnostic, exp ]
 
         --    div [style "background" "red"] [text (String.fromInt model.selectedSection)]
         ]
+
+
+config : AppleseGallery.Config
+config =
+    AppleseGallery.config
+        { id = "applese-gallery"
+        , width = AppleseGallery.pct 100
+        , height = AppleseGallery.px 500
+        , slides = appleseSlides
+        }
+
+
+appleseSlides : List (Html Msg)
+appleseSlides =
+    [ div
+        [ style "width" "100%"
+        , style "height" "100%"
+        , style "background" "blue"
+        ]
+        [ text "blue" ]
+    , div
+        [ style "width" "100%"
+        , style "height" "100%"
+        , style "background" "green"
+        ]
+        [ text "green" ]
+    , div
+        [ style "width" "100%"
+        , style "height" "100%"
+        , style "background" "red"
+        ]
+        [ text "red" ]
+    ]
 
 
 
