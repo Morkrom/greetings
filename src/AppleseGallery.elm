@@ -157,9 +157,17 @@ update : Msg -> State -> ( State, Cmd Msg )
 update msg ((State index_ transitionState) as state) =
     case msg of
         DragStart position ->
-            ( State index_ (Dragging (Drag position position))
-            , Cmd.none
-            )
+            case transitionState of
+                Resting ->
+                    ( State index_ (Dragging (Drag position position))
+                    , Cmd.none
+                    )
+
+                _ ->
+                    ( state
+                    , Cmd.none
+                    )
+                        |> Debug.log "drag start"
 
         DragAt position ->
             case currentDrag transitionState of
@@ -167,13 +175,9 @@ update msg ((State index_ transitionState) as state) =
                     ( State index_ (Dragging (Drag (dragInitialValueP drag) position))
                     , Cmd.none
                     )
-                        |> Debug.log
-                            ("Drag At position: "
-                                ++ String.fromInt (positionValue position)
-                            )
 
                 Nothing ->
-                    ( State index_ (Dragging (Drag position position))
+                    ( State index_ transitionState
                     , Cmd.none
                     )
 
@@ -205,11 +209,13 @@ update msg ((State index_ transitionState) as state) =
                     ( State index_ Resting
                     , Cmd.none
                     )
+                        |> Debug.log "dragend: nothing"
 
         TransitionEnd ->
             ( State (incOrDec (transitionTypeForState transitionState) index_) Resting
             , Cmd.none
             )
+                |> Debug.log "transition-end"
 
 
 transitionTypeForState : TransitionState -> TransitionType
@@ -295,7 +301,7 @@ view ((Config configR) as config_) ((State index transitionState) as state) =
                       ( "Slides-dragging", isNotInTransition transitionState )
                     ]
                  ]
-                    ++ events (isNotInTransition transitionState) transitionState
+                    ++ events True transitionState
                     -- events here
                     ++ documentDragStyle transitionState
                  {- [ class <| className ++ "__Slides"
@@ -370,7 +376,7 @@ documentDragStyle transition =
 
         InTransition t ->
             [ -- "translateX("(String.fromInt (currentPoints - startPoints)) ++ "px)"
-              style "transform" ("translateX(" ++ loggedStyle (transitionPercentileStr t)) --++ pageItemPercentileOfScreenWidthFStr (50.0 - (toFloat pageItemPercentileOfScreenWidth * 2.5) - 10.0)) --"20%") --++ transitionPercentileStr t ++ ")")
+              style "transform" ("translateX(" ++ transitionPercentileStr t) --++ pageItemPercentileOfScreenWidthFStr (50.0 - (toFloat pageItemPercentileOfScreenWidth * 2.5) - 10.0)) --"20%") --++ transitionPercentileStr t ++ ")")
             ]
 
 
@@ -379,16 +385,13 @@ transitionPercentileStr transition =
     case transition of
         ToNext ->
             pageItemPercentileOfScreenWidthFStr -20.0
-                |> Debug.log "To Next"
 
         ToPrevious ->
             pageItemPercentileOfScreenWidthFStr 20.0
-                --(toFloat pageItemPercentileOfScreenWidth / (toFloat pageItemPercentileOfScreenWidth * toFloat (List.length columns)))
-                |> Debug.log "To ToPrevious"
 
+        --(toFloat pageItemPercentileOfScreenWidth / (toFloat pageItemPercentileOfScreenWidth * toFloat (List.length columns)))
         ToCurrent ->
             "0%"
-                |> Debug.log "To Current"
 
 
 positionValue : Position -> Int
@@ -497,15 +500,6 @@ lStyleSheet configR transition =
     lazy2 (\c t -> styleSheet c t) configR transition
 
 
-loggedStyle : String -> String
-loggedStyle n =
-    let
-        loggedN =
-            Debug.log "loggedStyle: " n
-    in
-    n
-
-
 
 {- }
    [ style "position" "relative"
@@ -598,19 +592,18 @@ styleSheet : String -> TransitionState -> Html msg
 styleSheet id transition =
     node "style"
         []
-        [ text <| loggedStyle (ssText id)
+        [ text <| ssText id
         ]
 
 
 events : Bool -> TransitionState -> List (Attribute Msg)
 events enableDrag transitionState =
     if not enableDrag then
-        [ on "transitionend" (Decode.succeed TransitionEnd) ]
+        []
 
     else
         [ on "mousedown" (Decode.map DragStart decodePosX)
         , on "touchstart" (Decode.map DragStart decodePosX)
-        , on "transitionend" (Decode.succeed TransitionEnd)
         ]
             ++ (if isDragging transitionState then
                     [ preventDefaultOn "mousemove"
@@ -624,7 +617,7 @@ events enableDrag transitionState =
                     ]
 
                 else
-                    []
+                    [ on "transitionend" (Decode.succeed TransitionEnd) ]
                )
 
 
