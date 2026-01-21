@@ -18,7 +18,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Html.Keyed as Keyed
-import Html.Lazy exposing (lazy2)
+import Html.Lazy exposing (lazy)
 import Json.Decode as Decode
 
 
@@ -75,27 +75,35 @@ type Config
         { id : String
         , width : Length
         , height : Length
+        , slidePercentileOfWidth : Int
         , slides : Slides
         }
 
 
 
 ---> Config
+{-
+   pageItemPercentileOfScreenWidth : Int
+   pageItemPercentileOfScreenWidth =
+       75
+-}
 
 
 config :
     { id : String
     , width : Length
     , height : Length
+    , slidePercentileOfWidth : Int
     , slides : Slides
     }
     -> Config
-config { id, width, height, slides } =
+config { id, width, height, slides, slidePercentileOfWidth } =
     Config
         { id = id
         , width = width
         , height = height
         , slides = slides
+        , slidePercentileOfWidth = slidePercentileOfWidth
         }
 
 
@@ -244,11 +252,6 @@ incOrDec transition curIndex =
             curIndex
 
 
-
---TransitionEnd ->
---    State index_ Resting
-
-
 lengthToString : Length -> String
 lengthToString length =
     case length of
@@ -277,42 +280,23 @@ lengthToString length =
 view : Config -> State -> Html Msg
 view ((Config configR) as config_) ((State index transitionState) as state) =
     div
-        [ -- class className
-          id configR.id
+        [ id configR.id
         , style "width" (lengthToString configR.width)
         , style "height" (lengthToString <| configR.height)
         ]
-        [ lStyleSheet configR.id transitionState
+        [ lStyleSheet config_
         , div
             [ class "Wrapper"
-
-            --class <| className ++ "__Wrapper" ]
-            --
-            --                 position: relative;
             ]
             [ div
                 ([ class <|
                     "Slides"
-                 , --class <|
-                   --    "Slides"
-                   --,
-                   classList
-                    [ --( "Slides", True ),
-                      ( "Slides-dragging", isNotInTransition transitionState )
+                 , classList
+                    [ ( "Slides-dragging", isNotInTransition transitionState )
                     ]
                  ]
                     ++ events True transitionState
-                    -- events here
                     ++ documentDragStyle transitionState
-                 {- [ class <| className ++ "__Slides"
-                    , classList
-                       [ ( className ++ "__Slides--dragging"
-                         , isDragging transitionState
-                         )
-                       ]
-                    ]
-
-                 -}
                 )
               <|
                 slidesForCurrentIndex index configR.slides
@@ -369,14 +353,11 @@ documentDragStyle transition =
             []
 
         Dragging drag ->
-            [ --  style "transform" <| "translateX(" ++ (String.fromInt points) ++ "px" ++  ", 0px)"
-              --             [ style "transform" <|
-              style "transform" ("translateX(" ++ String.fromInt (dragCurrentValue drag - dragInitialValue drag) ++ "px)")
+            [ style "transform" ("translateX(" ++ String.fromInt (dragCurrentValue drag - dragInitialValue drag) ++ "px)")
             ]
 
         InTransition t ->
-            [ -- "translateX("(String.fromInt (currentPoints - startPoints)) ++ "px)"
-              style "transform" ("translateX(" ++ transitionPercentileStr t) --++ pageItemPercentileOfScreenWidthFStr (50.0 - (toFloat pageItemPercentileOfScreenWidth * 2.5) - 10.0)) --"20%") --++ transitionPercentileStr t ++ ")")
+            [ style "transform" ("translateX(" ++ transitionPercentileStr t) --++ pageItemPercentileOfScreenWidthFStr (50.0 - (toFloat pageItemPercentileOfScreenWidth * 2.5) - 10.0)) --"20%") --++ transitionPercentileStr t ++ ")")
             ]
 
 
@@ -409,11 +390,6 @@ extractHtmlFromSlide slide =
     Tuple.second slide
 
 
-pageItemPercentileOfScreenWidth : Int
-pageItemPercentileOfScreenWidth =
-    75
-
-
 pageItemPercentileOfScreenWidthStr : Int -> String
 pageItemPercentileOfScreenWidthStr percentile =
     String.fromInt percentile ++ "%"
@@ -424,19 +400,15 @@ pageItemPercentileOfScreenWidthFStr percentile =
     String.fromFloat percentile ++ "%"
 
 
-wrapperWidthString : String
-wrapperWidthString =
-    pageItemPercentileOfScreenWidthStr (pageItemPercentileOfScreenWidth * List.length columns)
+wrapperWidthString : Int -> String
+wrapperWidthString elementPercentageOfWidth =
+    pageItemPercentileOfScreenWidthStr (elementPercentageOfWidth * List.length columns)
 
 
-wrapperRestingPercentileOffset : String
-wrapperRestingPercentileOffset =
+wrapperRestingPercentileOffset : Int -> String
+wrapperRestingPercentileOffset elementPercentageOfWidth =
     --"50%"
-    pageItemPercentileOfScreenWidthFStr (50.0 - (toFloat pageItemPercentileOfScreenWidth * 2.5))
-
-
-
---pageItemPercentileOfScreenWidthFStr (-2.5 * toFloat pageItemPercentileOfScreenWidth)
+    pageItemPercentileOfScreenWidthFStr (50.0 - (toFloat elementPercentageOfWidth * 2.5))
 
 
 htmlForIndex : List ( Int, Html Msg ) -> Int -> Html Msg
@@ -470,10 +442,6 @@ slidesForCurrentIndex index all =
     List.map (htmlForIndex all) addedd
 
 
-
--- List.map (htmlForIndex (modIndex index (List.length all)) all) columns
-
-
 addeddIndex : Int -> Int -> Int
 addeddIndex currentIndex offset =
     currentIndex + offset
@@ -484,54 +452,24 @@ modIndex left right =
     modBy left right
 
 
-
---all
--- List.map (\a -> htmlForIndex ((index + a) modBy (List.length all))) columns
--- [ htmlForIndex ((index + 2) modBy (List.length all))
--- , htmlForIndex ((index + 1) modBy (List.length all))
--- , htmlForIndex (index modBy (List.length all))
--- , htmlForIndex ((index - 1) modBy (List.length all))
--- , htmlForIndex ((index - 2) modBy (List.length all))
--- ]
+lStyleSheet : Config -> Html Msg
+lStyleSheet configR =
+    lazy (\c -> styleSheet c) configR
 
 
-lStyleSheet : String -> TransitionState -> Html Msg
-lStyleSheet configR transition =
-    lazy2 (\c t -> styleSheet c t) configR transition
-
-
-
-{- }
-   [ style "position" "relative"
-   -                 , style "top" "0"
-   -                 , style "height" "100%"
-   -                 , style "display" "flex"
-   -                 , style "flex-direction" "row"
-   -                 , style "padding" "0"
-   -                 , style "margin" "0"
-   -                 , style "cursor" "grab"
-   -                 , style "overflow-x" "auto"
-   -                 , style "white-space" "nowrap"
-   -                 , style "width" wrapperWidthString
-   -                 , style "left" wrapperRestingPercentileOffset
-   -                 , style "transition" (transitionText (isNotInTransition transitionState)) -- "transform 1000ms ease"
--}
-
-
-ssText : String -> String
-ssText id =
+ssText : Config -> String
+ssText ((Config configR) as config_) =
     """
             #"""
-        ++ id
+        ++ configR.id
         ++ """ .Wrapper {
                 width: 100%;
                 height: 100%;
                 overflow: hidden;
-                background: purple;
             }
 
             #"""
-        ++ id
+        ++ configR.id
         ++ """ .Slides {
                 position: relative;
                 top: 0;
@@ -542,28 +480,27 @@ ssText id =
                 margin: 0;
                 cursor: grab;
                 overflow-x: auto;
-                background: gold;
                 white-space: nowrap;
                 width: """
-        ++ wrapperWidthString
+        ++ wrapperWidthString configR.slidePercentileOfWidth
         ++ ";"
         ++ """
                 left: """
-        ++ wrapperRestingPercentileOffset
+        ++ wrapperRestingPercentileOffset configR.slidePercentileOfWidth
         ++ ";"
         ++ """
                 transition: transform 300ms ease;
             }
             #"""
-        ++ id
+        ++ configR.id
         ++ """ .Slides-dragging {
                 transition: none;
                 }
             #"""
-        ++ id
+        ++ configR.id
         ++ """ .Slides-slide {
                 width: """
-        ++ pageItemPercentileOfScreenWidthStr pageItemPercentileOfScreenWidth
+        ++ pageItemPercentileOfScreenWidthStr configR.slidePercentileOfWidth
         ++ ";"
         ++ """
                 max-height: 100%;
@@ -579,20 +516,11 @@ ssText id =
   """
 
 
-
-{-
-   , style "background" "coral"
-   , style "border-style" "solid"
-   , style "border-width" "1px"
-   , style "border-color" "black"
--}
-
-
-styleSheet : String -> TransitionState -> Html msg
-styleSheet id transition =
+styleSheet : Config -> Html msg
+styleSheet configR =
     node "style"
         []
-        [ text <| ssText id
+        [ text <| ssText configR
         ]
 
 

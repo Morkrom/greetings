@@ -106,6 +106,7 @@ config =
         { id = "applese-gallery"
         , width = AppleseGallery.pct 100
         , height = AppleseGallery.px 500
+        , slidePercentileOfWidth = 75
         , slides = appleseSlides
         }
 
@@ -114,7 +115,7 @@ appleseSlides : Slides
 appleseSlides =
     [ ( 0
       , div
-            [ style "width" "80%"
+            [ style "width" "90%"
             , style "height" "100%"
             , style "background" "blue"
             , style "margin" "auto"
@@ -123,7 +124,7 @@ appleseSlides =
       )
     , ( 1
       , div
-            [ style "width" "80%"
+            [ style "width" "90%"
             , style "height" "100%"
             , style "background" "green"
             , style "margin" "auto"
@@ -132,7 +133,7 @@ appleseSlides =
       )
     , ( 2
       , div
-            [ style "width" "80%"
+            [ style "width" "90%"
             , style "height" "100%"
             , style "background" "red"
             , style "margin" "auto"
