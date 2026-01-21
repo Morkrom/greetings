@@ -271,37 +271,29 @@ lengthToString length =
 view : Config -> State -> Html Msg
 view ((Config configR) as config_) ((State index transitionState) as state) =
     div
-        [ class className
-        , id configR.id
+        [ -- class className
+          id configR.id
         , style "width" (lengthToString configR.width)
         , style "height" (lengthToString <| configR.height)
-        , style "background" "purple"
         ]
-        [ --lStyleSheet configR.id transitionState
-          --,
-          div
-            [ --class <| className ++ "__Wrapper" ]
-              --
-              --                 position: relative;
-              style "width" "100%"
-            , style "height" "100%"
-            , style "overflow" "hidden"
-            , style "background" "black"
+        [ lStyleSheet configR.id transitionState
+        , div
+            [ class "Wrapper"
+
+            --class <| className ++ "__Wrapper" ]
+            --
+            --                 position: relative;
             ]
             [ div
-                ([ style "position" "relative"
-                 , style "top" "0"
-                 , style "height" "100%"
-                 , style "display" "flex"
-                 , style "flex-direction" "row"
-                 , style "padding" "0"
-                 , style "margin" "0"
-                 , style "cursor" "grab"
-                 , style "overflow-x" "auto"
-                 , style "white-space" "nowrap"
-                 , style "width" wrapperWidthString
-                 , style "left" wrapperRestingPercentileOffset
-                 , style "transition" (transitionText (isNotInTransition transitionState)) -- "transform 1000ms ease"
+                ([ class <|
+                    "Slides"
+                 , --class <|
+                   --    "Slides"
+                   --,
+                   classList
+                    [ --( "Slides", True ),
+                      ( "Slides-dragging", isNotInTransition transitionState )
+                    ]
                  ]
                     ++ events (isNotInTransition transitionState) transitionState
                     -- events here
@@ -404,41 +396,6 @@ positionValue (Position position) =
     position
 
 
-
-{-
-   ++ dragOffset dragState currentSlide amountOfSlides
-   dragOffset : DragState -> CurrentSlide -> Int -> List (Attribute Msg)
-   dragOffset dragState currentSlide amountOfSlides =
-       let
-           indexBasedOffset =
-               toFloat (-100 * (currentSlide + 1))
-                   / toFloat amountOfSlides
-                   |> String.fromFloat
-                   |> (\x -> x ++ "%")
-       in
-       case dragState of
-           Dragging (PosX startX) (PosX currentX) ->
-               [ style "transform" <|
-                   "translateX( calc("
-                       ++ indexBasedOffset
-                       ++ " + "
-                       ++ String.fromInt (currentX - startX)
-                       ++ "px) )"
-               ]
-
-           NotDragging ->
-               [ style "transform" <| "translateX(" ++ indexBasedOffset ++ ")" ]
--}
---getName : UserName -> String
---getName userName =
---    case userName of
---        UserName s ->
---            s
---
---
-{- ..Style.. -}
-
-
 htmlMatchesIndex : Int -> ( Int, Html Msg ) -> Bool
 htmlMatchesIndex index slide =
     index == Tuple.first slide
@@ -483,23 +440,9 @@ htmlForIndex : List ( Int, Html Msg ) -> Int -> Html Msg
 htmlForIndex insideOf column =
     div
         [ classList
-            [ --( className ++ "__Slides_Slide", True )
-              ( "active", True )
+            [ ( "Slides-slide", True )
+            , ( "active", True )
             ]
-        , style "width" (pageItemPercentileOfScreenWidthStr pageItemPercentileOfScreenWidth)
-        , style "max-height" "100%"
-        , style "overflow" "auto"
-        , style "position" "relative"
-        , style "user-drag" "none"
-        , style "user-select" "none"
-        , style "-webkit-user-select" "none"
-        , style "-moz-user-select" "none"
-        , style "-ms-user-select" "none"
-        , style "display" "inline-block"
-        , style "background" "coral"
-        , style "border-style" "solid"
-        , style "border-width" "1px"
-        , style "border-color" "black"
         ]
         (List.map
             extractHtmlFromSlide
@@ -564,62 +507,72 @@ loggedStyle n =
 
 
 
-{-
-   ++ id
-   ++ "."
+{- }
+   [ style "position" "relative"
+   -                 , style "top" "0"
+   -                 , style "height" "100%"
+   -                 , style "display" "flex"
+   -                 , style "flex-direction" "row"
+   -                 , style "padding" "0"
+   -                 , style "margin" "0"
+   -                 , style "cursor" "grab"
+   -                 , style "overflow-x" "auto"
+   -                 , style "white-space" "nowrap"
+   -                 , style "width" wrapperWidthString
+   -                 , style "left" wrapperRestingPercentileOffset
+   -                 , style "transition" (transitionText (isNotInTransition transitionState)) -- "transform 1000ms ease"
 -}
 
 
-ssText : String -> String -> String
-ssText id class =
+ssText : String -> String
+ssText id =
     """
             #"""
         ++ id
-        ++ "."
-        ++ class
-        ++ """__Wrapper {
-                position: relative;
+        ++ """ .Wrapper {
                 width: 100%;
-                height: 100%";
+                height: 100%;
                 overflow: hidden;
-                background: pink;
+                background: purple;
             }
 
             #"""
         ++ id
-        ++ "."
-        ++ class
-        ++ """__Slides {
-                position: absolute;
+        ++ """ .Slides {
+                position: relative;
                 top: 0;
-                width: 500%;
                 height: 100%;
                 display: flex;
                 flex-direction: row;
-                left: -200%;
-                right: 200%;
                 padding: 0;
                 margin: 0;
-                transition: transform 1000 ms ease"
                 cursor: grab;
                 overflow-x: auto;
-                white-space: nowrap;
                 background: gold;
+                white-space: nowrap;
+                width: """
+        ++ wrapperWidthString
+        ++ ";"
+        ++ """
+                left: """
+        ++ wrapperRestingPercentileOffset
+        ++ ";"
+        ++ """
+                transition: transform 300ms ease;
             }
             #"""
         ++ id
-        ++ "."
-        ++ class
-        ++ """__Slides-dragging {
+        ++ """ .Slides-dragging {
                 transition: none;
                 }
             #"""
         ++ id
-        ++ "."
-        ++ class
-        ++ """__Slides_Slide {
-                max-width: 100%;
-                max-height: 50%;
+        ++ """ .Slides-slide {
+                width: """
+        ++ pageItemPercentileOfScreenWidthStr pageItemPercentileOfScreenWidth
+        ++ ";"
+        ++ """
+                max-height: 100%;
                 overflow: auto;
                 position: relative;
                 user-drag: none;
@@ -627,15 +580,25 @@ ssText id class =
                 -webkit-user-select: none;
                 -moz-user-select: none;
                 -ms-user-select: none;
+                display: inline-block;
                 }
   """
+
+
+
+{-
+   , style "background" "coral"
+   , style "border-style" "solid"
+   , style "border-width" "1px"
+   , style "border-color" "black"
+-}
 
 
 styleSheet : String -> TransitionState -> Html msg
 styleSheet id transition =
     node "style"
         []
-        [ text <| loggedStyle (ssText id className)
+        [ text <| loggedStyle (ssText id)
         ]
 
 
