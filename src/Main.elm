@@ -48,7 +48,7 @@ init : Model
 init =
     { appSections = sections
     , selectedSection = 0
-    , gallery = AppleseGallery.init (0 Resting)
+    , gallery = AppleseGallery.init
     }
 
 
@@ -71,8 +71,8 @@ update msg model =
         Work ->
             { model | selectedSection = 1 }
 
-        AppleseGalleryMsg msg ->
-            { model | gallery = Gallery.update msg model.gallery }
+        AppleseGalleryMsg msgg ->
+            { model | gallery = Tuple.first (AppleseGallery.update msgg model.gallery) }
 
 
 
@@ -110,26 +110,35 @@ config =
         }
 
 
-appleseSlides : List (Html Msg)
+appleseSlides : Slides
 appleseSlides =
-    [ div
-        [ style "width" "100%"
-        , style "height" "100%"
-        , style "background" "blue"
-        ]
-        [ text "blue" ]
-    , div
-        [ style "width" "100%"
-        , style "height" "100%"
-        , style "background" "green"
-        ]
-        [ text "green" ]
-    , div
-        [ style "width" "100%"
-        , style "height" "100%"
-        , style "background" "red"
-        ]
-        [ text "red" ]
+    [ ( 0
+      , div
+            [ style "width" "80%"
+            , style "height" "100%"
+            , style "background" "blue"
+            , style "margin" "auto"
+            ]
+            [ text "blue" ]
+      )
+    , ( 1
+      , div
+            [ style "width" "80%"
+            , style "height" "100%"
+            , style "background" "green"
+            , style "margin" "auto"
+            ]
+            [ text "green" ]
+      )
+    , ( 2
+      , div
+            [ style "width" "80%"
+            , style "height" "100%"
+            , style "background" "red"
+            , style "margin" "auto"
+            ]
+            [ text "red" ]
+      )
     ]
 
 
