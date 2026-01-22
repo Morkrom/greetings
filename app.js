@@ -4459,7 +4459,7 @@ var $elm$core$Basics$EQ = {$: 'EQ'};
 var $elm$core$Basics$GT = {$: 'GT'};
 var $elm$core$Basics$LT = {$: 'LT'};
 var $author$project$Main$sections = _List_fromArray(
-	['greetings', 'worksample']);
+	['greetings']);
 var $author$project$Main$init = {appSections: $author$project$Main$sections, selectedSection: 0};
 var $elm$core$Result$Err = function (a) {
 	return {$: 'Err', a: a};
@@ -5359,6 +5359,7 @@ var $author$project$Main$expBox = F5(
 							references)))
 				]));
 	});
+var $elm$html$Html$li = _VirtualDom_node('li');
 var $author$project$MorkromCss$technologyULStyle = _Utils_ap(
 	$author$project$MorkromCss$technologyStyleW,
 	_List_fromArray(
@@ -5390,12 +5391,48 @@ var $author$project$Main$fitplanBodyText = A2(
 			$author$project$MorkromCss$technologyULStyle,
 			_List_fromArray(
 				[
-					$elm$html$Html$text('\"Zumba\" long-format (Apple TV) workout experience'),
-					$elm$html$Html$text('Apple Watch experience'),
-					$elm$html$Html$text('Before/after collage'),
-					$elm$html$Html$text('Exercise rest timer'),
-					$elm$html$Html$text('Audio Session management (Integration with Spotify)'),
-					$elm$html$Html$text('custom animations')
+					A2(
+					$elm$html$Html$li,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('\"Zumba\" long-format (Apple TV) workout experience')
+						])),
+					A2(
+					$elm$html$Html$li,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Apple Watch experience')
+						])),
+					A2(
+					$elm$html$Html$li,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Before/after collage')
+						])),
+					A2(
+					$elm$html$Html$li,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Exercise rest timer')
+						])),
+					A2(
+					$elm$html$Html$li,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Audio Session management (Integration with Spotify)')
+						])),
+					A2(
+					$elm$html$Html$li,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('custom animations')
+						]))
 				])),
 			A2(
 			$elm$html$Html$p,
@@ -5605,11 +5642,41 @@ var $author$project$Main$tmBodyText = A2(
 			$author$project$MorkromCss$technologyULStyle,
 			_List_fromArray(
 				[
-					$elm$html$Html$text('Ads with Instacart'),
-					$elm$html$Html$text('\"Fresh\" vertical main contributor'),
-					$elm$html$Html$text('Ai chat bot'),
-					$elm$html$Html$text('Ownership of home screen'),
-					$elm$html$Html$text('Shopping List feature set')
+					A2(
+					$elm$html$Html$li,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Ads with Instacart')
+						])),
+					A2(
+					$elm$html$Html$li,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('\"Fresh\" vertical main contributor')
+						])),
+					A2(
+					$elm$html$Html$li,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Ai chat bot')
+						])),
+					A2(
+					$elm$html$Html$li,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Ownership of home screen')
+						])),
+					A2(
+					$elm$html$Html$li,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Shopping List feature set')
+						]))
 				])),
 			A2(
 			$elm$html$Html$p,
@@ -5625,7 +5692,7 @@ var $author$project$Main$thriveMarketExp = A5(
 	A2($author$project$Main$linkedExperience, 'Senior iOS Engineer (Performance, Features, Verticals, Specialist)⇗', 'https://thrivemarket.com'),
 	$author$project$Main$tmBodyText,
 	_List_fromArray(
-		['SwiftUI', 'UIKit', 'Objective-C', 'Swift', 'Xcode Instruments', 'XCTest', 'NewRelic', 'MVVM']),
+		['SwiftUI', 'UIKit', 'Objective-C', 'Swift', 'Xcode Instruments', 'XCTest', 'NewRelic', 'MVVM', 'Optimizely']),
 	_List_fromArray(
 		[
 			A2($author$project$Main$referenceQuote, 'Michael’s promotion to Senior Engineer is long overdue and well-deserved', '- Karan Shah, iOS Supervisor')
@@ -5676,7 +5743,7 @@ var $author$project$Main$exp = A2(
 	$elm$html$Html$div,
 	$author$project$MorkromCss$introSectionDivStyle,
 	_Utils_ap(
-		A2($author$project$Main$titleText, 'Exp', '\"Experience is the teacher of all things.\"'),
+		A2($author$project$Main$titleText, 'Xp', '\"Experience is the teacher of all things.\"'),
 		_Utils_ap(
 			_List_fromArray(
 				[$author$project$Main$roundedButtons]),
