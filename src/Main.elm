@@ -246,7 +246,7 @@ languageGnostic =
 exp : Html Msg
 exp =
     div introSectionDivStyle
-        (titleText "Exp" "\"Experience is the teacher of all things.\""
+        (titleText "Xp" "\"Experience is the teacher of all things.\""
             ++ [ roundedButtons ]
             ++ [ div blockContents
                     [ thriveMarketExp
