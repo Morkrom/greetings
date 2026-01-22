@@ -48,7 +48,7 @@ main =
 
 
 sections =
-    [ "greetings", "worksample" ]
+    [ "greetings" ]
 
 
 roundedButton : String -> String -> RoundedButton -> Html Msg
