@@ -301,11 +301,11 @@ tmBodyText =
                 "Features:"
             ]
         , ul technologyULStyle
-            [ text "Ads with Instacart"
-            , text "\"Fresh\" vertical main contributor"
-            , text "Ai chat bot"
-            , text "Ownership of home screen"
-            , text "Shopping List feature set"
+            [ li [] [ text "Ads with Instacart" ]
+            , li [] [ text "\"Fresh\" vertical main contributor" ]
+            , li [] [ text "Ai chat bot" ]
+            , li [] [ text "Ownership of home screen" ]
+            , li [] [ text "Shopping List feature set" ]
             ]
         , p technologyStyleW
             [ text "Main contributor: Webby winner “Sahara” product release ( 6% increase in sales). Contribute to every section: Autoship, quiz, PLP, PDP, review orders, cart. Deliver weekly for a growing platform of over a million users. Modernize legacy sections. Increase UI & Unit coverage from 0 to 40%."
@@ -325,12 +325,12 @@ fitplanBodyText =
                 "Features:"
             ]
         , ul technologyULStyle
-            [ text "\"Zumba\" long-format (Apple TV) workout experience"
-            , text "Apple Watch experience"
-            , text "Before/after collage"
-            , text "Exercise rest timer"
-            , text "Audio Session management (Integration with Spotify)"
-            , text "custom animations"
+            [ li [] [ text "\"Zumba\" long-format (Apple TV) workout experience" ]
+            , li [] [ text "Apple Watch experience" ]
+            , li [] [ text "Before/after collage" ]
+            , li [] [ text "Exercise rest timer" ]
+            , li [] [ text "Audio Session management (Integration with Spotify)" ]
+            , li [] [ text "custom animations" ]
             ]
         , p technologyStyleW
             [ text
