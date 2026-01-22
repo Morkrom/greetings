@@ -258,9 +258,9 @@ tmBodyText =
                 "Stability & performance lead:"
             ]
         , ul technologyULStyle
-            [ text "Reduce app load time by over 1 second"
-            , text "Eliminate app memory leaks"
-            , text "Own UI performance."
+            [ li [] [ text "Reduce app load time by over 1 second" ]
+            , li [] [ text "Eliminate app memory leaks" ]
+            , li [] [ text "Own UI performance." ]
             ]
         , p technologyStyleW
             [ text

@@ -62,7 +62,7 @@ buttonBackgroundColorString style =
 technologyULStyle : List (Attribute msg)
 technologyULStyle =
     technologyStyleW
-        ++ [ style "padding-inline-start" "10px"
+        ++ [ style "margin-left" "0px"
            ]
 
 
