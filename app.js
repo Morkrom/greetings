@@ -5364,7 +5364,7 @@ var $author$project$MorkromCss$technologyULStyle = _Utils_ap(
 	$author$project$MorkromCss$technologyStyleW,
 	_List_fromArray(
 		[
-			A2($elm$html$Html$Attributes$style, 'padding-inline-start', '10px')
+			A2($elm$html$Html$Attributes$style, 'margin-left', '0px')
 		]));
 var $elm$html$Html$ul = _VirtualDom_node('ul');
 var $author$project$Main$fitplanBodyText = A2(
@@ -5626,9 +5626,27 @@ var $author$project$Main$tmBodyText = A2(
 			$author$project$MorkromCss$technologyULStyle,
 			_List_fromArray(
 				[
-					$elm$html$Html$text('Reduce app load time by over 1 second'),
-					$elm$html$Html$text('Eliminate app memory leaks'),
-					$elm$html$Html$text('Own UI performance.')
+					A2(
+					$elm$html$Html$li,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Reduce app load time by over 1 second')
+						])),
+					A2(
+					$elm$html$Html$li,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Eliminate app memory leaks')
+						])),
+					A2(
+					$elm$html$Html$li,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Own UI performance.')
+						]))
 				])),
 			A2(
 			$elm$html$Html$p,
