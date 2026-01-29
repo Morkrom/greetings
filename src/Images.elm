@@ -5,12 +5,10 @@ import Svg.Attributes exposing (..)
 import Svg.Events exposing (..)
 
 
-type ImageId
-    = Phone
 
 
-type Event
-    = Hover ImageId
+
+
 
 
 phoneAppSize : Float

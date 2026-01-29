@@ -4,15 +4,17 @@ module Main exposing (main)
 --style, href)
 
 import AppleseGallery exposing (..)
+import AppleseGallerySlide exposing(slideComponents, ModalVideo, Msg)--exposing (ModalVideo, SlideComponentData, ModalVideoFrameDesign, SlideImage)
+-- import AppleseGallerySlide as Slide exposing (..)
 import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onClick)
+import Html.Events exposing (..)
 import Images
 import Logo
 import MorkromCss exposing (..)
 import ObjCIcon exposing (objectiveC)
-import Svg.Attributes exposing (scale)
+
 import SwiftIcon exposing (swift)
 
 
@@ -20,10 +22,15 @@ sections =
     [ "Greetings!" ]
 
 
+
+
+
 type alias Model =
     { appSections : List String
     , selectedSection : Int
     , gallery : AppleseGallery.State
+    , flagIsMobile : Bool
+    , selectedGalleryVideo : Maybe AppleseGallerySlide.ModalVideo
     }
 
 
@@ -31,25 +38,36 @@ type alias Model =
 -- Application
 
 
-main : Program () Model Msg
+main : Program Bool Model Msg
 main =
-    Browser.sandbox
+    Browser.element
+        --.sandbox
         { init = init
         , view = view
         , update = update
+        , subscriptions = subscriptions
         }
+
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Sub.none
 
 
 
 -- MODEL
 
 
-init : Model
-init =
-    { appSections = sections
-    , selectedSection = 0
-    , gallery = AppleseGallery.init
-    }
+init : Bool -> ( Model, Cmd Msg )
+init flag =
+    ( { appSections = sections
+      , selectedSection = 0
+      , gallery = AppleseGallery.init
+      , flagIsMobile = flag
+      , selectedGalleryVideo = Nothing
+      }
+    , Cmd.none
+    )
 
 
 
@@ -60,22 +78,36 @@ type Msg
     = Greetings
     | Work
     | AppleseGalleryMsg AppleseGallery.Msg
+    | SlideSelection ModalVideo
 
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Greetings ->
-            { model | selectedSection = 0 }
+            ( { model | selectedSection = 0 }, Cmd.none )
 
         Work ->
-            { model | selectedSection = 1 }
+            ( { model | selectedSection = 1 }, Cmd.none )
 
         AppleseGalleryMsg msgg ->
-            { model | gallery = Tuple.first (AppleseGallery.update msgg model.gallery) }
+            ( { model | gallery = Tuple.first (AppleseGallery.update msgg model.gallery) }
+            , Cmd.none
+            )
+
+        SlideSelection msggg ->
+            ( model, Cmd.none )
 
 
 
+{- }
+   SelectModalVideo video ->
+       ( { model
+           | selectedModalVideo = Just video
+         }
+       , Cmd.none
+       )
+-}
 -- VIEW
 
 
@@ -93,10 +125,8 @@ view model =
             [ introSection
             , languageGnostic
             , exp
-            , Html.map AppleseGalleryMsg <| AppleseGallery.view config model.gallery
+            , AppleseGallery.view config model.gallery (slideComponents model.flagIsMobile) |> Html.map AppleseGalleryMsg
             ]
-
-        --    div [style "background" "red"] [text (String.fromInt model.selectedSection)]
         ]
 
 
@@ -107,44 +137,7 @@ config =
         , width = AppleseGallery.pct 100
         , height = AppleseGallery.px 500
         , slidePercentileOfWidth = 75
-        , slides = appleseSlides
         }
-
-
-appleseSlides : Slides
-appleseSlides =
-    [ ( 0
-      , div
-            [ style "width" "90%"
-            , style "height" "100%"
-            , style "background" "blue"
-            , style "margin" "auto"
-            ]
-            [ text "blue" ]
-      )
-    , ( 1
-      , div
-            [ style "width" "90%"
-            , style "height" "100%"
-            , style "background" "green"
-            , style "margin" "auto"
-            ]
-            [ text "green" ]
-      )
-    , ( 2
-      , div
-            [ style "width" "90%"
-            , style "height" "100%"
-            , style "background" "red"
-            , style "margin" "auto"
-            ]
-            [ text "red" ]
-      )
-    ]
-
-
-
--- Domain
 
 
 menuButton : Msg -> String -> Html Msg
@@ -189,8 +182,7 @@ introSection =
 roundedButtons : Html Msg
 roundedButtons =
     div mainRoundedButtonsStyle
-        [ --roundedButton "Résumé" "file:///Users/apple/Software/morkrom/resume-master-a.pdf" Highlighted,
-          roundedButton "Contact" "mailto:morkrom@icloud.com" Lowlighted
+        [ roundedButton "Contact" "mailto:morkrom@icloud.com" Lowlighted
         ]
 
 
@@ -235,9 +227,12 @@ languageGnostic =
                         ]
                     , div
                         (smallBlockW 190.0
-                            ++ [ style "margin-top" "4px" ]
+                            ++ [ style "margin-top" "4px"
+                               ]
                         )
-                        [ Logo.main ]
+                        [ h3 [ style "position" "absolute" ] [ text "Elm" ]
+                        , Logo.main
+                        ]
                     ]
                ]
         )
@@ -258,7 +253,7 @@ exp =
 
 thriveMarketExp : Html Msg
 thriveMarketExp =
-    expBox "6 yr"
+    expBox "5 yr"
         (linkedExperience
             "Senior iOS Engineer (Performance, Features, Verticals, Specialist)⇗"
             "https://thrivemarket.com"

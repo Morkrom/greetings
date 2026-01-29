@@ -21,13 +21,18 @@ import Html.Keyed as Keyed
 import Html.Lazy exposing (lazy)
 import Json.Decode as Decode
 
+import AppleseGallerySlide exposing (slideContent, SlideComponentData, ModalVideo, Msg)
 
 type alias Slides =
     List ( Int, Html Msg )
 
 
+
+-- try this and then try slides injected thru 'view' function which makes more sense lol
+
+
 type State
-    = State Index TransitionState
+    = State Index TransitionState (Maybe ModalVideo)
 
 
 
@@ -63,11 +68,16 @@ type Msg
     | DragAt Position
     | DragEnd
     | TransitionEnd
+    | CtaMsg AppleseGallerySlide.Msg
+
+
+
+--| ButtonMsg ParentButtonMsg.Msg
 
 
 init : State
 init =
-    State 0 Resting
+    State 0 Resting Nothing
 
 
 type Config
@@ -76,7 +86,8 @@ type Config
         , width : Length
         , height : Length
         , slidePercentileOfWidth : Int
-        , slides : Slides
+
+        --, slides : List (Html Msg)
         }
 
 
@@ -94,15 +105,24 @@ config :
     , width : Length
     , height : Length
     , slidePercentileOfWidth : Int
-    , slides : Slides
+
+    --, slides : List (Html Msg)
     }
     -> Config
-config { id, width, height, slides, slidePercentileOfWidth } =
+config
+    { id
+    , width
+    , height
+    , --slides,
+      slidePercentileOfWidth
+    }
+    =
     Config
         { id = id
         , width = width
         , height = height
-        , slides = slides
+
+        --, slides = slides
         , slidePercentileOfWidth = slidePercentileOfWidth
         }
 
@@ -162,12 +182,12 @@ currentDrag transition =
 
 
 update : Msg -> State -> ( State, Cmd Msg )
-update msg ((State index_ transitionState) as state) =
+update msg ((State index_ transitionState bideo ) as state) =
     case msg of
         DragStart position ->
             case transitionState of
                 Resting ->
-                    ( State index_ (Dragging (Drag position position))
+                    ( State index_ (Dragging (Drag position position)) Nothing
                     , Cmd.none
                     )
 
@@ -180,12 +200,12 @@ update msg ((State index_ transitionState) as state) =
         DragAt position ->
             case currentDrag transitionState of
                 Just drag ->
-                    ( State index_ (Dragging (Drag (dragInitialValueP drag) position))
+                    ( State index_ (Dragging (Drag (dragInitialValueP drag) position)) Nothing
                     , Cmd.none
                     )
 
                 Nothing ->
-                    ( State index_ transitionState
+                    ( State index_ transitionState Nothing
                     , Cmd.none
                     )
 
@@ -196,35 +216,38 @@ update msg ((State index_ transitionState) as state) =
                     case drag of
                         Drag beginning current_ ->
                             if positionValue beginning - positionValue current_ > 100 then
-                                ( State index_ (InTransition ToNext)
+                                ( State index_ (InTransition ToNext) Nothing
                                 , Cmd.none
                                 )
                                     |> Debug.log ("dragEnd: ToNext" ++ String.fromInt (positionValue beginning) ++ String.fromInt (positionValue current_))
 
                             else if positionValue beginning - positionValue current_ < -100 then
-                                ( State index_ (InTransition ToPrevious)
+                                ( State index_ (InTransition ToPrevious) Nothing
                                 , Cmd.none
                                 )
                                     |> Debug.log ("dragEnd: ToPrevious" ++ String.fromInt (positionValue beginning) ++ String.fromInt (positionValue current_))
 
                             else
-                                ( State index_ (InTransition ToCurrent)
+                                ( State index_ (InTransition ToCurrent) Nothing
                                 , Cmd.none
                                 )
                                     |> Debug.log ("dragEnd: ToCurrent" ++ String.fromInt (positionValue beginning) ++ String.fromInt (positionValue current_))
 
                 Nothing ->
-                    ( State index_ Resting
+                    ( State index_ Resting Nothing
                     , Cmd.none
                     )
                         |> Debug.log "dragend: nothing"
 
         TransitionEnd ->
-            ( State (incOrDec (transitionTypeForState transitionState) index_) Resting
+            ( State (incOrDec (transitionTypeForState transitionState) index_) Resting Nothing
             , Cmd.none
             )
                 |> Debug.log "transition-end"
-
+        CtaMsg msgg ->
+            (  State index_ Resting bideo,
+             Cmd.none
+            )
 
 transitionTypeForState : TransitionState -> TransitionType
 transitionTypeForState tState =
@@ -277,8 +300,8 @@ lengthToString length =
             ""
 
 
-view : Config -> State -> Html Msg
-view ((Config configR) as config_) ((State index transitionState) as state) =
+view : Config -> State -> List SlideComponentData -> Html Msg
+view ((Config configR) as config_) ((State index transitionState _) as state) slides =
     div
         [ id configR.id
         , style "width" (lengthToString configR.width)
@@ -299,7 +322,8 @@ view ((Config configR) as config_) ((State index transitionState) as state) =
                     ++ documentDragStyle transitionState
                 )
               <|
-                slidesForCurrentIndex index configR.slides
+                slidesForCurrentIndex index <|
+                    List.indexedMap Tuple.pair (slidesFromData slides)
             ]
         ]
 
@@ -516,7 +540,7 @@ ssText ((Config configR) as config_) =
   """
 
 
-styleSheet : Config -> Html msg
+styleSheet : Config -> Html Msg
 styleSheet configR =
     node "style"
         []
@@ -562,3 +586,11 @@ decodePosX =
         [ decoder
         , Decode.at [ "touches", "0" ] decoder
         ]
+
+slidesFromData : List SlideComponentData -> List (Html Msg)
+slidesFromData components =
+  slidesL <| List.map (slideContent CtaMsg) components
+
+slidesL : List (Html Msg) -> List (Html Msg)
+slidesL list =
+    Debug.log "Slides: " list
