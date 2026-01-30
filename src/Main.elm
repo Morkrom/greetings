@@ -1,11 +1,12 @@
-module Main exposing (main)
+port module Main exposing (main)
 
 --exposing (Html, button, div, text, a)
 --style, href)
+--exposing (ModalVideo, SlideComponentData, ModalVideoFrameDesign, SlideImage)
+-- import AppleseGallerySlide as Slide exposing (..)
 
 import AppleseGallery exposing (..)
-import AppleseGallerySlide exposing(slideComponents, ModalVideo, Msg)--exposing (ModalVideo, SlideComponentData, ModalVideoFrameDesign, SlideImage)
--- import AppleseGallerySlide as Slide exposing (..)
+import AppleseGallerySlide exposing (ModalVideo, Msg, slideComponents)
 import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -14,7 +15,6 @@ import Images
 import Logo
 import MorkromCss exposing (..)
 import ObjCIcon exposing (objectiveC)
-
 import SwiftIcon exposing (swift)
 
 
@@ -22,15 +22,12 @@ sections =
     [ "Greetings!" ]
 
 
-
-
-
 type alias Model =
     { appSections : List String
     , selectedSection : Int
     , gallery : AppleseGallery.State
-    , flagIsMobile : Bool
     , selectedGalleryVideo : Maybe AppleseGallerySlide.ModalVideo
+    , screenWidth : Int
     }
 
 
@@ -38,7 +35,7 @@ type alias Model =
 -- Application
 
 
-main : Program Bool Model Msg
+main : Program Int Model Msg
 main =
     Browser.element
         --.sandbox
@@ -49,22 +46,32 @@ main =
         }
 
 
+
+-- PORTS
+
+
+port sendMessage : Int -> Cmd msg
+
+
+port messageReceiver : (Int -> msg) -> Sub msg
+
+
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-    Sub.none
+    messageReceiver Receive
 
 
 
 -- MODEL
 
 
-init : Bool -> ( Model, Cmd Msg )
+init : Int -> ( Model, Cmd Msg )
 init flag =
     ( { appSections = sections
       , selectedSection = 0
       , gallery = AppleseGallery.init
-      , flagIsMobile = flag
       , selectedGalleryVideo = Nothing
+      , screenWidth = flag
       }
     , Cmd.none
     )
@@ -79,6 +86,7 @@ type Msg
     | Work
     | AppleseGalleryMsg AppleseGallery.Msg
     | SlideSelection ModalVideo
+    | Receive Int
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -97,6 +105,11 @@ update msg model =
 
         SlideSelection msggg ->
             ( model, Cmd.none )
+
+        Receive screenWidth ->
+            ( { model | screenWidth = screenWidth }
+            , Cmd.none
+            )
 
 
 
@@ -125,19 +138,35 @@ view model =
             [ introSection
             , languageGnostic
             , exp
-            , AppleseGallery.view config model.gallery (slideComponents model.flagIsMobile) |> Html.map AppleseGalleryMsg
+            , AppleseGallery.view (config model.screenWidth) model.gallery (slideComponents model.screenWidth) |> Html.map AppleseGalleryMsg
+            , div [ style "height" "50px" ] []
             ]
         ]
 
 
-config : AppleseGallery.Config
-config =
+config : Int -> AppleseGallery.Config
+config viewportW =
     AppleseGallery.config
         { id = "applese-gallery"
         , width = AppleseGallery.pct 100
-        , height = AppleseGallery.px 500
+        , height = AppleseGallery.px <| configH viewportW
         , slidePercentileOfWidth = 75
         }
+
+
+configH : Int -> Float
+configH viewportW =
+    let
+        isLarge : Bool
+        isLarge =
+            viewportW >= 720
+    in
+    case isLarge of
+        False ->
+            250
+
+        _ ->
+            500
 
 
 menuButton : Msg -> String -> Html Msg

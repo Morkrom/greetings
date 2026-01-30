@@ -1,21 +1,63 @@
-html, body {
-  margin: 0;
-  height: 100%;
+html,
+body {
+    margin: 0;
+    height: 100%;
 }
 
 body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 p {
-  margin: 0;
-  text-align: center;
-  font-size: 3rem;
-  color: #999;
+    margin: 0;
+    text-align: center;
+    font-size: 3rem;
+    color: #999;
 }
 
 .name {
-  color: #333;
+    color: #333;
 }
+
+.galleryContentContainer {
+    container-type: inline-size;
+}
+
+.galleryContentFlow {
+    justify-content: center;
+    display: flex;
+    gap: 0px;
+    flex-direction: column;
+    background: lightseagreen;
+}
+
+.galleryContentFlowBig {
+    justify-content: flex-start;
+    display: flex;
+    gap: 0px;
+    background: violet;
+    flex-direction: row-reverse;
+}
+
+/*
+
+    if componentData.useMobileLayout then
+        [ style "justify-content" "center"
+        , style "display" "flex"
+        , style "gap" "0px"
+        , style "flex-direction" "column"
+        , style "background" "rgb(243, 243, 246)"
+        ]
+
+    else
+      []
+  {-}
+        [ style "justify-content" "flex-start"
+        , style "display" "flex"
+        , style "gap" "0px"
+        , style "flex-direction" "row"
+        , style "background" "rgb(243, 243, 246)"
+        ]
+-}*/

@@ -589,8 +589,4 @@ decodePosX =
 
 slidesFromData : List SlideComponentData -> List (Html Msg)
 slidesFromData components =
-  slidesL <| List.map (slideContent CtaMsg) components
-
-slidesL : List (Html Msg) -> List (Html Msg)
-slidesL list =
-    Debug.log "Slides: " list
+   List.map (slideContent CtaMsg) components
