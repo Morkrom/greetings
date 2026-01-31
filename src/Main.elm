@@ -299,7 +299,16 @@ languageGnostic =
                             ++ [ style "margin-top" "4px"
                                ]
                         )
-                        [ h3 [ style "position" "absolute" ] [ text "Elm" ]
+                        [ h1
+                            [ style "position" "absolute"
+                            , style "margin-top" "58px"
+                            , style "margin-left" "40px"
+                            , style "font-family" "arial"
+                            , style "color" "white"
+                            , style "text-shadow" "2px 2px 5px black"
+                            , style "font-size" "4em"
+                            ]
+                            [ text "Elm" ]
                         , Logo.main
                         ]
                     ]
@@ -328,7 +337,7 @@ thriveMarketExp =
             "https://thrivemarket.com"
         )
         tmBodyText
-        [ "SwiftUI", "UIKit", "Objective-C", "Swift", "Xcode Instruments", "XCTest", "NewRelic", "MVVM" ]
+        [ "SwiftUI", "UIKit", "Objective-C", "Swift", "Xcode Instruments", "XCTest", "NewRelic", "MVVM", "Optimizely" ]
         [ referenceQuote "Michael’s promotion to Senior Engineer is long overdue and well-deserved"
             "- Karan Shah, iOS Supervisor"
         ]
@@ -356,9 +365,9 @@ tmBodyText =
                 "Stability & performance lead:"
             ]
         , ul technologyULStyle
-            [ text "Reduce app load time by over 1 second"
-            , text "Eliminate app memory leaks"
-            , text "Own UI performance."
+            [ li [] [ text "Reduce app load time by over 1 second" ]
+            , li [] [ text "Eliminate app memory leaks" ]
+            , li [] [ text "Own UI performance." ]
             ]
         , p technologyStyleW
             [ text
