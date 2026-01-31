@@ -47,6 +47,7 @@ vidFrame vid =
         , style "height" <| pixes (A.vidH vid.frameDesign + 80)
         , style "background" "black"
         , style "border-radius" "15px"
+        , style "border" "0.5px solid gray"
         ]
         [ Html.video
             [ src vid.videoUrl

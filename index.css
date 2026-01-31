@@ -28,17 +28,19 @@ p {
 .galleryContentFlow {
     justify-content: center;
     display: flex;
+    space-between: 0px;
     gap: 0px;
     flex-direction: column;
-    background: lightseagreen;
 }
 
 .galleryContentFlowBig {
     justify-content: flex-start;
     display: flex;
-    gap: 0px;
-    background: violet;
-    flex-direction: row-reverse;
+    gap: 5px;
+    flex-direction: row;
+    max-width: 540px;
+    min-width: 0px;
+    flex-wrap: wrap;
 }
 
 .centeredElement {
@@ -47,6 +49,27 @@ p {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.slideTitle {
+    font-family: Arial;
+    /*margin-top: 0;*/
+}
+
+.slideDesc {
+    font-family: Arial;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    white-space: normal;
+}
+
+.slideButton {
+    border-radius: 30px;
+    font-family: Arial;
+    color: black;
+    background-color: white;
+    font-size: 16px;
+    padding-bottom: 0px;
 }
 
 /*

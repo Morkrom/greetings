@@ -49,7 +49,7 @@ res =
             ]
             []
         , stop
-            [ offset "75%"
+            [ offset "85%"
             , stopColor "black"
             ]
             []

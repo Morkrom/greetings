@@ -8,6 +8,7 @@ port module Main exposing (main)
 import AppleseGallery exposing (..)
 import AppleseGallerySlide exposing (ModalVideo, Msg, slideComponents)
 import Browser
+import Css exposing (infinite)
 import FSVideoPlayer exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -157,18 +158,27 @@ view model =
             [ introSection
             , languageGnostic
             , exp
-            , AppleseGallery.view (config model.screenWidth) model.gallery (slideComponents model.screenWidth) |> Html.map AppleseGalleryMsg
+            , infiniteGalleryView model
             , div [ style "height" "50px" ] []
             ]
         ]
             ++ selectedGalleryVideo model.selectedGalleryVideo
 
 
+infiniteGalleryView : Model -> Html Msg
+infiniteGalleryView model =
+    div introSectionDivStyle <|
+        [ h1 titleTextStyle [ text "Portfolio" ]
+        , AppleseGallery.view (config model.screenWidth) model.gallery (slideComponents model.screenWidth) |> Html.map AppleseGalleryMsg
+        ]
+
+
 selectedGalleryVideo : Maybe AppleseGallerySlide.ModalVideo -> List (Html Msg)
 selectedGalleryVideo video =
     case video of
         Just videoo ->
-            [ FSVideoPlayer.view { msg = TapOutVideo } videoo ]
+            [ FSVideoPlayer.view { msg = TapOutVideo } videoo
+            ]
 
         Nothing ->
             []
@@ -189,7 +199,7 @@ configH viewportW =
     let
         isLarge : Bool
         isLarge =
-            viewportW >= 720
+            viewportW >= 540
     in
     case isLarge of
         False ->

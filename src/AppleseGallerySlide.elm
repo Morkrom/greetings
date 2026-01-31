@@ -1,7 +1,7 @@
 module AppleseGallerySlide exposing (ModalVideo, ModalVideoFrameDesign, Msg, SlideComponentData, slideComponents, slideContent, vidH, vidW, videoOf)
 
 import GallerySlideImages exposing (dnb, izonit, res)
-import Html exposing (Attribute, Html, button, div, h2, text)
+import Html exposing (Attribute, Html, button, div, h2, h4, text)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import MorkromCss exposing (..)
@@ -25,7 +25,9 @@ type alias ModalVideo =
 
 type alias SlideComponentData =
     { title : String
+    , description : String
     , ctaTitle : String
+    , textColor : String
     , videoData : ModalVideo
 
     --, backgroundSvg : Svg msg
@@ -57,7 +59,7 @@ sizeClass sw =
     let
         notIsSmall : Bool
         notIsSmall =
-            sw > 720
+            sw > 540
     in
     case notIsSmall of
         True ->
@@ -111,8 +113,10 @@ svgsize sc sw =
 
 slideComponents : Int -> List SlideComponentData
 slideComponents screenWidth =
-    [ { title = "Preview: Dual N Back"
+    [ { title = "Dual N Back:"
+      , description = "Coming soon to the App Store"
       , ctaTitle = "View now"
+      , textColor = "black"
       , videoData =
             { frameDesign = Phoney
             , videoUrl = "https://github.com/Morkrom/greetings/raw/refs/heads/main/vid-content/dnb-demo.mp4"
@@ -121,8 +125,10 @@ slideComponents screenWidth =
       , sizeClass = sizeClass screenWidth
       , svgSize = svgsize (sizeClass screenWidth) screenWidth
       }
-    , { title = "Preview: iZOnIt"
+    , { title = "izOnIt:"
+      , description = "Coming soon to the App Store"
       , ctaTitle = "View now"
+      , textColor = "white"
       , videoData =
             { frameDesign = Phoney
             , videoUrl = "https://github.com/Morkrom/greetings/raw/refs/heads/main/vid-content/izOnIt.mp4"
@@ -131,8 +137,10 @@ slideComponents screenWidth =
       , sizeClass = sizeClass screenWidth
       , svgSize = svgsize (sizeClass screenWidth) screenWidth
       }
-    , { title = "Sign Posts"
+    , { title = "Portfolio"
+      , description = "Reminisce a moment!"
       , ctaTitle = "View now"
+      , textColor = "black"
       , videoData =
             { frameDesign = Tablet
             , videoUrl = "https://github.com/Morkrom/greetings/raw/refs/heads/main/vid-content/res-demo-c.mp4"
@@ -157,9 +165,35 @@ slideLogo data =
             res
 
 
-slideTitle : String -> Html msg
-slideTitle title =
-    h2 [] [ text title ]
+slideTitle : String -> String -> Html msg
+slideTitle title color =
+    h2
+        [ class "slideTitle"
+        , style "color" color
+        , style "margin-top" "5px"
+        ]
+        [ text title ]
+
+
+slideDescription : String -> String -> SizeClass -> Html msg
+slideDescription title color sc =
+    h4
+        [ class "slideDesc"
+        , style "color" color
+        , style "inline-size" <| descriptionWidth sc
+        , style "margin-top" "12px"
+        ]
+        [ text title ]
+
+
+descriptionWidth : SizeClass -> String
+descriptionWidth sc =
+    case sc of
+        Large ->
+            String.fromInt 250 ++ "px"
+
+        Small ->
+            String.fromInt 150 ++ "px"
 
 
 videoOf : Msg -> Maybe ModalVideo
@@ -172,10 +206,10 @@ videoOf msg =
 slideContent : (Msg -> msg) -> SlideComponentData -> Html msg
 slideContent toSelf componentData =
     div
-        [ style "width" "99%"
-        , style "height" "99%"
-        , style "background" "gray"
+        [ style "width" "100%"
+        , style "height" "100%"
         , style "position" "relative"
+        , style "background-color" "rgb(243, 243, 246)"
         ]
         [ -- div [style "margin" "auto", style "width" "70%", style "background" "pink", style "position" "relative"] [
           div
@@ -198,12 +232,48 @@ slideContent toSelf componentData =
                  ]
                     ++ [ class (divContentClass componentData.sizeClass) ]
                 )
-                --++ slideContentListAttributesForLayout componentData) <|
-                [ slideTitle componentData.title
-                , button [ onClick (toSelf (SelectVideo componentData.videoData)) ] [ text componentData.ctaTitle ]
-                ]
+              --++ slideContentListAttributesForLayout componentData) <|
+              <|
+                slideList toSelf componentData
             ]
         ]
+
+
+slideText : (Msg -> msg) -> SlideComponentData -> List (Html msg)
+slideText toSelf component =
+    let
+        list =
+            [ slideTitle component.title component.textColor
+            , slideDescription component.description component.textColor component.sizeClass
+            ]
+    in
+    case component.sizeClass of
+        Large ->
+            [ button
+                [ class "slideButton"
+                , style "display" "inline-block"
+                , style "height" "35px"
+                , onClick (toSelf (SelectVideo component.videoData))
+                ]
+                [ text component.ctaTitle ]
+            ]
+                ++ list
+
+        Small ->
+            list
+                ++ [ button
+                        [ class "slideButton"
+                        , style "display" "inline-block"
+                        , style "height" "25px"
+                        , onClick (toSelf (SelectVideo component.videoData))
+                        ]
+                        [ text component.ctaTitle ]
+                   ]
+
+
+slideList : (Msg -> msg) -> SlideComponentData -> List (Html msg)
+slideList toSelf component =
+    slideText toSelf component
 
 
 divContentClass : SizeClass -> String
