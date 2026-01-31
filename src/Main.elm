@@ -6,7 +6,7 @@ port module Main exposing (main)
 -- import AppleseGallerySlide as Slide exposing (..)
 
 import AppleseGallery exposing (..)
-import AppleseGallerySlide exposing (ModalVideo, Msg, slideComponents)
+import AppleseGallerySlide exposing (ModalVideo, Msg, SizeClass, sizeClass, slideComponents)
 import Browser
 import Css exposing (infinite, relative)
 import FSVideoPlayer exposing (..)
@@ -162,7 +162,7 @@ view model =
             , div [ style "height" "50px" ] []
             ]
         ]
-            ++ selectedGalleryVideo model.selectedGalleryVideo
+            ++ selectedGalleryVideo model.selectedGalleryVideo model.screenWidth
 
 
 infiniteGalleryView : Model -> Html Msg
@@ -173,11 +173,14 @@ infiniteGalleryView model =
         ]
 
 
-selectedGalleryVideo : Maybe AppleseGallerySlide.ModalVideo -> List (Html Msg)
-selectedGalleryVideo video =
+selectedGalleryVideo : Maybe AppleseGallerySlide.ModalVideo -> Int -> List (Html Msg)
+selectedGalleryVideo video sw =
     case video of
         Just videoo ->
-            [ FSVideoPlayer.view { msg = TapOutVideo } videoo
+            [ FSVideoPlayer.view { msg = TapOutVideo }
+                { modalVideo = videoo
+                , sizeClass = AppleseGallerySlide.sizeClass sw
+                }
             ]
 
         Nothing ->
@@ -298,6 +301,7 @@ languageGnostic =
                         (smallBlockW 190.0
                             ++ [ style "margin-top" "4px"
                                , style "position" "relative"
+                               , style "height" "190px"
                                ]
                         )
                         [ div [ style "position" "absolute" ] [ Logo.main ]

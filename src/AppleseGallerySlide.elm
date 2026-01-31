@@ -1,4 +1,16 @@
-module AppleseGallerySlide exposing (ModalVideo, ModalVideoFrameDesign, Msg, SlideComponentData, slideComponents, slideContent, vidH, vidW, videoOf)
+module AppleseGallerySlide exposing
+    ( ModalVideo
+    , ModalVideoFrameDesign
+    , Msg
+    , SizeClass
+    , SlideComponentData
+    , sizeClass
+    , slideComponents
+    , slideContent
+    , vidH
+    , vidW
+    , videoOf
+    )
 
 import GallerySlideImages exposing (dnb, izonit, res)
 import Html exposing (Attribute, Html, button, div, h2, h4, text)
@@ -286,21 +298,31 @@ divContentClass class =
             "galleryContentFlow"
 
 
-vidW : ModalVideoFrameDesign -> Int
-vidW frame =
+vidW : ModalVideoFrameDesign -> SizeClass -> Int
+vidW frame sc =
     case frame of
         Tablet ->
-            714
+            case sc of
+                Large ->
+                    714
+
+                Small ->
+                    201
 
         Phoney ->
             201
 
 
-vidH : ModalVideoFrameDesign -> Int
-vidH frame =
+vidH : ModalVideoFrameDesign -> SizeClass -> Int
+vidH frame sc =
     case frame of
         Tablet ->
-            401
+            case sc of
+                Large ->
+                    401
+
+                Small ->
+                    112
 
         Phoney ->
             348

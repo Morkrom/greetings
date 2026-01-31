@@ -1,6 +1,6 @@
 module FSVideoPlayer exposing (Msg, view)
 
-import AppleseGallerySlide as A exposing (ModalVideo, ModalVideoFrameDesign, vidH, vidW)
+import AppleseGallerySlide as A exposing (ModalVideo, ModalVideoFrameDesign, SizeClass, vidH, vidW)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -11,7 +11,13 @@ type Msg
     = TapOutVideo
 
 
-view : { msg : Msg -> msg } -> A.ModalVideo -> Html msg
+type alias FSVideoPlayerModel =
+    { modalVideo : A.ModalVideo
+    , sizeClass : A.SizeClass
+    }
+
+
+view : { msg : Msg -> msg } -> FSVideoPlayerModel -> Html msg
 view msg model =
     -- div
     --     []
@@ -39,22 +45,22 @@ view msg model =
         ]
 
 
-vidFrame : A.ModalVideo -> Html msg
+vidFrame : FSVideoPlayerModel -> Html msg
 vidFrame vid =
     div
         [ class "centeredElement"
-        , style "width" <| pixes (A.vidW vid.frameDesign + 40)
-        , style "height" <| pixes (A.vidH vid.frameDesign + 80)
+        , style "width" <| pixes (A.vidW vid.modalVideo.frameDesign vid.sizeClass + 40)
+        , style "height" <| pixes (A.vidH vid.modalVideo.frameDesign vid.sizeClass + 80)
         , style "background" "black"
         , style "border-radius" "15px"
         , style "border" "0.5px solid gray"
         ]
         [ Html.video
-            [ src vid.videoUrl
+            [ src vid.modalVideo.videoUrl
             , class "centeredElement"
             , controls True
-            , style "width" <| pixes (A.vidW vid.frameDesign)
-            , style "height" <| pixes (A.vidH vid.frameDesign)
+            , style "width" <| pixes (A.vidW vid.modalVideo.frameDesign vid.sizeClass)
+            , style "height" <| pixes (A.vidH vid.modalVideo.frameDesign vid.sizeClass)
             , style "border" "0.5px solid midnightblue"
             ]
             []
