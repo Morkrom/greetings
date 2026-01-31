@@ -85,7 +85,7 @@ type Msg
     = Greetings
     | Work
     | AppleseGalleryMsg AppleseGallery.Msg
-    | SlideSelection ModalVideo
+    | CloseSelection
     | Receive Int
 
 
@@ -99,17 +99,36 @@ update msg model =
             ( { model | selectedSection = 1 }, Cmd.none )
 
         AppleseGalleryMsg msgg ->
-            ( { model | gallery = Tuple.first (AppleseGallery.update msgg model.gallery) }
+            ( modelWithGalleryAndVideo (galleryAndVideo (Tuple.first (AppleseGallery.update msgg model.gallery))) model
             , Cmd.none
             )
-
-        SlideSelection msggg ->
-            ( model, Cmd.none )
+                |> Debug.log "::: gallery update"
 
         Receive screenWidth ->
             ( { model | screenWidth = screenWidth }
             , Cmd.none
             )
+
+        CloseSelection ->
+            ( { model
+                | gallery = Tuple.first <| AppleseGallery.update AppleseGallery.cancelSelectedMsg model.gallery
+                , selectedGalleryVideo = Nothing
+              }
+            , Cmd.none
+            )
+
+
+galleryAndVideo : AppleseGallery.State -> ( AppleseGallery.State, Maybe AppleseGallerySlide.ModalVideo )
+galleryAndVideo state =
+    ( state, AppleseGallery.videoOfState state )
+
+
+modelWithGalleryAndVideo : ( AppleseGallery.State, Maybe AppleseGallerySlide.ModalVideo ) -> Model -> Model
+modelWithGalleryAndVideo tupple model =
+    { model
+        | gallery = Tuple.first tupple
+        , selectedGalleryVideo = Tuple.second tupple
+    }
 
 
 
@@ -128,6 +147,7 @@ view : Model -> Html Msg
 view model =
     div
         parentDiv
+    <|
         [ div
             menuDiv
             [ menuButton Greetings "Greetings"
@@ -142,6 +162,30 @@ view model =
             , div [ style "height" "50px" ] []
             ]
         ]
+            ++ selectedGalleryVideo model.selectedGalleryVideo
+
+
+selectedGalleryVideo : Maybe AppleseGallerySlide.ModalVideo -> List (Html Msg)
+selectedGalleryVideo video =
+    case video of
+        Just videoo ->
+            [ div
+                [ style "position" "absolute"
+                , style "background" "rgba(0, 0, 0, 0.75)"
+                , style "width" "100%"
+                , style "height" "100%"
+                , style "top" "0"
+                , style "left" "0"
+                ]
+                [ button [ onClick CloseSelection ] [ text "Close" ] ]
+
+            --p [] [ text videoo.videoUrl ], button [ onClick CloseSelection ] [ text "Close" ] ]
+            ]
+                |> Debug.log "::: selected gallery video"
+
+        Nothing ->
+            []
+                |> Debug.log "::: selected gallery video EMPTY"
 
 
 config : Int -> AppleseGallery.Config

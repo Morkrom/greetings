@@ -1,4 +1,4 @@
-module AppleseGallerySlide exposing (ModalVideo, Msg, SlideComponentData, slideComponents, slideContent)
+module AppleseGallerySlide exposing (ModalVideo, Msg, SlideComponentData, slideComponents, slideContent, videoOf)
 
 {-
 
@@ -166,6 +166,13 @@ slideLogo data =
 slideTitle : String -> Html msg
 slideTitle title =
     h2 [] [ text title ]
+
+
+videoOf : Msg -> Maybe ModalVideo
+videoOf msg =
+    case msg of
+        SelectVideo video ->
+            Just video
 
 
 slideContent : (Msg -> msg) -> SlideComponentData -> Html msg
