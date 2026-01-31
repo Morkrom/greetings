@@ -80,6 +80,271 @@ function A9(fun, a, b, c, d, e, f, g, h, i) {
 console.warn('Compiled in DEV mode. Follow the advice at https://elm-lang.org/0.19.1/optimize for better performance and smaller assets.');
 
 
+// EQUALITY
+
+function _Utils_eq(x, y)
+{
+	for (
+		var pair, stack = [], isEqual = _Utils_eqHelp(x, y, 0, stack);
+		isEqual && (pair = stack.pop());
+		isEqual = _Utils_eqHelp(pair.a, pair.b, 0, stack)
+		)
+	{}
+
+	return isEqual;
+}
+
+function _Utils_eqHelp(x, y, depth, stack)
+{
+	if (x === y)
+	{
+		return true;
+	}
+
+	if (typeof x !== 'object' || x === null || y === null)
+	{
+		typeof x === 'function' && _Debug_crash(5);
+		return false;
+	}
+
+	if (depth > 100)
+	{
+		stack.push(_Utils_Tuple2(x,y));
+		return true;
+	}
+
+	/**/
+	if (x.$ === 'Set_elm_builtin')
+	{
+		x = $elm$core$Set$toList(x);
+		y = $elm$core$Set$toList(y);
+	}
+	if (x.$ === 'RBNode_elm_builtin' || x.$ === 'RBEmpty_elm_builtin')
+	{
+		x = $elm$core$Dict$toList(x);
+		y = $elm$core$Dict$toList(y);
+	}
+	//*/
+
+	/**_UNUSED/
+	if (x.$ < 0)
+	{
+		x = $elm$core$Dict$toList(x);
+		y = $elm$core$Dict$toList(y);
+	}
+	//*/
+
+	for (var key in x)
+	{
+		if (!_Utils_eqHelp(x[key], y[key], depth + 1, stack))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+var _Utils_equal = F2(_Utils_eq);
+var _Utils_notEqual = F2(function(a, b) { return !_Utils_eq(a,b); });
+
+
+
+// COMPARISONS
+
+// Code in Generate/JavaScript.hs, Basics.js, and List.js depends on
+// the particular integer values assigned to LT, EQ, and GT.
+
+function _Utils_cmp(x, y, ord)
+{
+	if (typeof x !== 'object')
+	{
+		return x === y ? /*EQ*/ 0 : x < y ? /*LT*/ -1 : /*GT*/ 1;
+	}
+
+	/**/
+	if (x instanceof String)
+	{
+		var a = x.valueOf();
+		var b = y.valueOf();
+		return a === b ? 0 : a < b ? -1 : 1;
+	}
+	//*/
+
+	/**_UNUSED/
+	if (typeof x.$ === 'undefined')
+	//*/
+	/**/
+	if (x.$[0] === '#')
+	//*/
+	{
+		return (ord = _Utils_cmp(x.a, y.a))
+			? ord
+			: (ord = _Utils_cmp(x.b, y.b))
+				? ord
+				: _Utils_cmp(x.c, y.c);
+	}
+
+	// traverse conses until end of a list or a mismatch
+	for (; x.b && y.b && !(ord = _Utils_cmp(x.a, y.a)); x = x.b, y = y.b) {} // WHILE_CONSES
+	return ord || (x.b ? /*GT*/ 1 : y.b ? /*LT*/ -1 : /*EQ*/ 0);
+}
+
+var _Utils_lt = F2(function(a, b) { return _Utils_cmp(a, b) < 0; });
+var _Utils_le = F2(function(a, b) { return _Utils_cmp(a, b) < 1; });
+var _Utils_gt = F2(function(a, b) { return _Utils_cmp(a, b) > 0; });
+var _Utils_ge = F2(function(a, b) { return _Utils_cmp(a, b) >= 0; });
+
+var _Utils_compare = F2(function(x, y)
+{
+	var n = _Utils_cmp(x, y);
+	return n < 0 ? $elm$core$Basics$LT : n ? $elm$core$Basics$GT : $elm$core$Basics$EQ;
+});
+
+
+// COMMON VALUES
+
+var _Utils_Tuple0_UNUSED = 0;
+var _Utils_Tuple0 = { $: '#0' };
+
+function _Utils_Tuple2_UNUSED(a, b) { return { a: a, b: b }; }
+function _Utils_Tuple2(a, b) { return { $: '#2', a: a, b: b }; }
+
+function _Utils_Tuple3_UNUSED(a, b, c) { return { a: a, b: b, c: c }; }
+function _Utils_Tuple3(a, b, c) { return { $: '#3', a: a, b: b, c: c }; }
+
+function _Utils_chr_UNUSED(c) { return c; }
+function _Utils_chr(c) { return new String(c); }
+
+
+// RECORDS
+
+function _Utils_update(oldRecord, updatedFields)
+{
+	var newRecord = {};
+
+	for (var key in oldRecord)
+	{
+		newRecord[key] = oldRecord[key];
+	}
+
+	for (var key in updatedFields)
+	{
+		newRecord[key] = updatedFields[key];
+	}
+
+	return newRecord;
+}
+
+
+// APPEND
+
+var _Utils_append = F2(_Utils_ap);
+
+function _Utils_ap(xs, ys)
+{
+	// append Strings
+	if (typeof xs === 'string')
+	{
+		return xs + ys;
+	}
+
+	// append Lists
+	if (!xs.b)
+	{
+		return ys;
+	}
+	var root = _List_Cons(xs.a, ys);
+	xs = xs.b
+	for (var curr = root; xs.b; xs = xs.b) // WHILE_CONS
+	{
+		curr = curr.b = _List_Cons(xs.a, ys);
+	}
+	return root;
+}
+
+
+
+var _List_Nil_UNUSED = { $: 0 };
+var _List_Nil = { $: '[]' };
+
+function _List_Cons_UNUSED(hd, tl) { return { $: 1, a: hd, b: tl }; }
+function _List_Cons(hd, tl) { return { $: '::', a: hd, b: tl }; }
+
+
+var _List_cons = F2(_List_Cons);
+
+function _List_fromArray(arr)
+{
+	var out = _List_Nil;
+	for (var i = arr.length; i--; )
+	{
+		out = _List_Cons(arr[i], out);
+	}
+	return out;
+}
+
+function _List_toArray(xs)
+{
+	for (var out = []; xs.b; xs = xs.b) // WHILE_CONS
+	{
+		out.push(xs.a);
+	}
+	return out;
+}
+
+var _List_map2 = F3(function(f, xs, ys)
+{
+	for (var arr = []; xs.b && ys.b; xs = xs.b, ys = ys.b) // WHILE_CONSES
+	{
+		arr.push(A2(f, xs.a, ys.a));
+	}
+	return _List_fromArray(arr);
+});
+
+var _List_map3 = F4(function(f, xs, ys, zs)
+{
+	for (var arr = []; xs.b && ys.b && zs.b; xs = xs.b, ys = ys.b, zs = zs.b) // WHILE_CONSES
+	{
+		arr.push(A3(f, xs.a, ys.a, zs.a));
+	}
+	return _List_fromArray(arr);
+});
+
+var _List_map4 = F5(function(f, ws, xs, ys, zs)
+{
+	for (var arr = []; ws.b && xs.b && ys.b && zs.b; ws = ws.b, xs = xs.b, ys = ys.b, zs = zs.b) // WHILE_CONSES
+	{
+		arr.push(A4(f, ws.a, xs.a, ys.a, zs.a));
+	}
+	return _List_fromArray(arr);
+});
+
+var _List_map5 = F6(function(f, vs, ws, xs, ys, zs)
+{
+	for (var arr = []; vs.b && ws.b && xs.b && ys.b && zs.b; vs = vs.b, ws = ws.b, xs = xs.b, ys = ys.b, zs = zs.b) // WHILE_CONSES
+	{
+		arr.push(A5(f, vs.a, ws.a, xs.a, ys.a, zs.a));
+	}
+	return _List_fromArray(arr);
+});
+
+var _List_sortBy = F2(function(f, xs)
+{
+	return _List_fromArray(_List_toArray(xs).sort(function(a, b) {
+		return _Utils_cmp(f(a), f(b));
+	}));
+});
+
+var _List_sortWith = F2(function(f, xs)
+{
+	return _List_fromArray(_List_toArray(xs).sort(function(a, b) {
+		var ord = A2(f, a, b);
+		return ord === $elm$core$Basics$EQ ? 0 : ord === $elm$core$Basics$LT ? -1 : 1;
+	}));
+});
+
+
+
 var _JsArray_empty = [];
 
 function _JsArray_singleton(value)
@@ -525,271 +790,6 @@ function _Debug_regionToString(region)
 	}
 	return 'on lines ' + region.start.line + ' through ' + region.end.line;
 }
-
-
-
-// EQUALITY
-
-function _Utils_eq(x, y)
-{
-	for (
-		var pair, stack = [], isEqual = _Utils_eqHelp(x, y, 0, stack);
-		isEqual && (pair = stack.pop());
-		isEqual = _Utils_eqHelp(pair.a, pair.b, 0, stack)
-		)
-	{}
-
-	return isEqual;
-}
-
-function _Utils_eqHelp(x, y, depth, stack)
-{
-	if (x === y)
-	{
-		return true;
-	}
-
-	if (typeof x !== 'object' || x === null || y === null)
-	{
-		typeof x === 'function' && _Debug_crash(5);
-		return false;
-	}
-
-	if (depth > 100)
-	{
-		stack.push(_Utils_Tuple2(x,y));
-		return true;
-	}
-
-	/**/
-	if (x.$ === 'Set_elm_builtin')
-	{
-		x = $elm$core$Set$toList(x);
-		y = $elm$core$Set$toList(y);
-	}
-	if (x.$ === 'RBNode_elm_builtin' || x.$ === 'RBEmpty_elm_builtin')
-	{
-		x = $elm$core$Dict$toList(x);
-		y = $elm$core$Dict$toList(y);
-	}
-	//*/
-
-	/**_UNUSED/
-	if (x.$ < 0)
-	{
-		x = $elm$core$Dict$toList(x);
-		y = $elm$core$Dict$toList(y);
-	}
-	//*/
-
-	for (var key in x)
-	{
-		if (!_Utils_eqHelp(x[key], y[key], depth + 1, stack))
-		{
-			return false;
-		}
-	}
-	return true;
-}
-
-var _Utils_equal = F2(_Utils_eq);
-var _Utils_notEqual = F2(function(a, b) { return !_Utils_eq(a,b); });
-
-
-
-// COMPARISONS
-
-// Code in Generate/JavaScript.hs, Basics.js, and List.js depends on
-// the particular integer values assigned to LT, EQ, and GT.
-
-function _Utils_cmp(x, y, ord)
-{
-	if (typeof x !== 'object')
-	{
-		return x === y ? /*EQ*/ 0 : x < y ? /*LT*/ -1 : /*GT*/ 1;
-	}
-
-	/**/
-	if (x instanceof String)
-	{
-		var a = x.valueOf();
-		var b = y.valueOf();
-		return a === b ? 0 : a < b ? -1 : 1;
-	}
-	//*/
-
-	/**_UNUSED/
-	if (typeof x.$ === 'undefined')
-	//*/
-	/**/
-	if (x.$[0] === '#')
-	//*/
-	{
-		return (ord = _Utils_cmp(x.a, y.a))
-			? ord
-			: (ord = _Utils_cmp(x.b, y.b))
-				? ord
-				: _Utils_cmp(x.c, y.c);
-	}
-
-	// traverse conses until end of a list or a mismatch
-	for (; x.b && y.b && !(ord = _Utils_cmp(x.a, y.a)); x = x.b, y = y.b) {} // WHILE_CONSES
-	return ord || (x.b ? /*GT*/ 1 : y.b ? /*LT*/ -1 : /*EQ*/ 0);
-}
-
-var _Utils_lt = F2(function(a, b) { return _Utils_cmp(a, b) < 0; });
-var _Utils_le = F2(function(a, b) { return _Utils_cmp(a, b) < 1; });
-var _Utils_gt = F2(function(a, b) { return _Utils_cmp(a, b) > 0; });
-var _Utils_ge = F2(function(a, b) { return _Utils_cmp(a, b) >= 0; });
-
-var _Utils_compare = F2(function(x, y)
-{
-	var n = _Utils_cmp(x, y);
-	return n < 0 ? $elm$core$Basics$LT : n ? $elm$core$Basics$GT : $elm$core$Basics$EQ;
-});
-
-
-// COMMON VALUES
-
-var _Utils_Tuple0_UNUSED = 0;
-var _Utils_Tuple0 = { $: '#0' };
-
-function _Utils_Tuple2_UNUSED(a, b) { return { a: a, b: b }; }
-function _Utils_Tuple2(a, b) { return { $: '#2', a: a, b: b }; }
-
-function _Utils_Tuple3_UNUSED(a, b, c) { return { a: a, b: b, c: c }; }
-function _Utils_Tuple3(a, b, c) { return { $: '#3', a: a, b: b, c: c }; }
-
-function _Utils_chr_UNUSED(c) { return c; }
-function _Utils_chr(c) { return new String(c); }
-
-
-// RECORDS
-
-function _Utils_update(oldRecord, updatedFields)
-{
-	var newRecord = {};
-
-	for (var key in oldRecord)
-	{
-		newRecord[key] = oldRecord[key];
-	}
-
-	for (var key in updatedFields)
-	{
-		newRecord[key] = updatedFields[key];
-	}
-
-	return newRecord;
-}
-
-
-// APPEND
-
-var _Utils_append = F2(_Utils_ap);
-
-function _Utils_ap(xs, ys)
-{
-	// append Strings
-	if (typeof xs === 'string')
-	{
-		return xs + ys;
-	}
-
-	// append Lists
-	if (!xs.b)
-	{
-		return ys;
-	}
-	var root = _List_Cons(xs.a, ys);
-	xs = xs.b
-	for (var curr = root; xs.b; xs = xs.b) // WHILE_CONS
-	{
-		curr = curr.b = _List_Cons(xs.a, ys);
-	}
-	return root;
-}
-
-
-
-var _List_Nil_UNUSED = { $: 0 };
-var _List_Nil = { $: '[]' };
-
-function _List_Cons_UNUSED(hd, tl) { return { $: 1, a: hd, b: tl }; }
-function _List_Cons(hd, tl) { return { $: '::', a: hd, b: tl }; }
-
-
-var _List_cons = F2(_List_Cons);
-
-function _List_fromArray(arr)
-{
-	var out = _List_Nil;
-	for (var i = arr.length; i--; )
-	{
-		out = _List_Cons(arr[i], out);
-	}
-	return out;
-}
-
-function _List_toArray(xs)
-{
-	for (var out = []; xs.b; xs = xs.b) // WHILE_CONS
-	{
-		out.push(xs.a);
-	}
-	return out;
-}
-
-var _List_map2 = F3(function(f, xs, ys)
-{
-	for (var arr = []; xs.b && ys.b; xs = xs.b, ys = ys.b) // WHILE_CONSES
-	{
-		arr.push(A2(f, xs.a, ys.a));
-	}
-	return _List_fromArray(arr);
-});
-
-var _List_map3 = F4(function(f, xs, ys, zs)
-{
-	for (var arr = []; xs.b && ys.b && zs.b; xs = xs.b, ys = ys.b, zs = zs.b) // WHILE_CONSES
-	{
-		arr.push(A3(f, xs.a, ys.a, zs.a));
-	}
-	return _List_fromArray(arr);
-});
-
-var _List_map4 = F5(function(f, ws, xs, ys, zs)
-{
-	for (var arr = []; ws.b && xs.b && ys.b && zs.b; ws = ws.b, xs = xs.b, ys = ys.b, zs = zs.b) // WHILE_CONSES
-	{
-		arr.push(A4(f, ws.a, xs.a, ys.a, zs.a));
-	}
-	return _List_fromArray(arr);
-});
-
-var _List_map5 = F6(function(f, vs, ws, xs, ys, zs)
-{
-	for (var arr = []; vs.b && ws.b && xs.b && ys.b && zs.b; vs = vs.b, ws = ws.b, xs = xs.b, ys = ys.b, zs = zs.b) // WHILE_CONSES
-	{
-		arr.push(A5(f, vs.a, ws.a, xs.a, ys.a, zs.a));
-	}
-	return _List_fromArray(arr);
-});
-
-var _List_sortBy = F2(function(f, xs)
-{
-	return _List_fromArray(_List_toArray(xs).sort(function(a, b) {
-		return _Utils_cmp(f(a), f(b));
-	}));
-});
-
-var _List_sortWith = F2(function(f, xs)
-{
-	return _List_fromArray(_List_toArray(xs).sort(function(a, b) {
-		var ord = A2(f, a, b);
-		return ord === $elm$core$Basics$EQ ? 0 : ord === $elm$core$Basics$LT ? -1 : 1;
-	}));
-});
 
 
 
@@ -4378,31 +4378,10 @@ function _Browser_load(url)
 		}
 	}));
 }
+var $elm$core$Basics$EQ = {$: 'EQ'};
+var $elm$core$Basics$GT = {$: 'GT'};
+var $elm$core$Basics$LT = {$: 'LT'};
 var $elm$core$List$cons = _List_cons;
-var $elm$core$Elm$JsArray$foldr = _JsArray_foldr;
-var $elm$core$Array$foldr = F3(
-	function (func, baseCase, _v0) {
-		var tree = _v0.c;
-		var tail = _v0.d;
-		var helper = F2(
-			function (node, acc) {
-				if (node.$ === 'SubTree') {
-					var subTree = node.a;
-					return A3($elm$core$Elm$JsArray$foldr, helper, acc, subTree);
-				} else {
-					var values = node.a;
-					return A3($elm$core$Elm$JsArray$foldr, func, acc, values);
-				}
-			});
-		return A3(
-			$elm$core$Elm$JsArray$foldr,
-			helper,
-			A3($elm$core$Elm$JsArray$foldr, func, baseCase, tail),
-			tree);
-	});
-var $elm$core$Array$toList = function (array) {
-	return A3($elm$core$Array$foldr, $elm$core$List$cons, _List_Nil, array);
-};
 var $elm$core$Dict$foldr = F3(
 	function (func, acc, t) {
 		foldr:
@@ -4455,12 +4434,30 @@ var $elm$core$Set$toList = function (_v0) {
 	var dict = _v0.a;
 	return $elm$core$Dict$keys(dict);
 };
-var $elm$core$Basics$EQ = {$: 'EQ'};
-var $elm$core$Basics$GT = {$: 'GT'};
-var $elm$core$Basics$LT = {$: 'LT'};
-var $author$project$Main$sections = _List_fromArray(
-	['greetings']);
-var $author$project$Main$init = {appSections: $author$project$Main$sections, selectedSection: 0};
+var $elm$core$Elm$JsArray$foldr = _JsArray_foldr;
+var $elm$core$Array$foldr = F3(
+	function (func, baseCase, _v0) {
+		var tree = _v0.c;
+		var tail = _v0.d;
+		var helper = F2(
+			function (node, acc) {
+				if (node.$ === 'SubTree') {
+					var subTree = node.a;
+					return A3($elm$core$Elm$JsArray$foldr, helper, acc, subTree);
+				} else {
+					var values = node.a;
+					return A3($elm$core$Elm$JsArray$foldr, func, acc, values);
+				}
+			});
+		return A3(
+			$elm$core$Elm$JsArray$foldr,
+			helper,
+			A3($elm$core$Elm$JsArray$foldr, func, baseCase, tail),
+			tree);
+	});
+var $elm$core$Array$toList = function (array) {
+	return A3($elm$core$Array$foldr, $elm$core$List$cons, _List_Nil, array);
+};
 var $elm$core$Result$Err = function (a) {
 	return {$: 'Err', a: a};
 };
@@ -5169,42 +5166,255 @@ var $elm$core$Task$perform = F2(
 			$elm$core$Task$Perform(
 				A2($elm$core$Task$map, toMessage, task)));
 	});
+var $elm$browser$Browser$element = _Browser_element;
+var $author$project$AppleseGallery$Resting = {$: 'Resting'};
+var $author$project$AppleseGallery$State = F3(
+	function (a, b, c) {
+		return {$: 'State', a: a, b: b, c: c};
+	});
+var $author$project$AppleseGallery$init = A3($author$project$AppleseGallery$State, 0, $author$project$AppleseGallery$Resting, $elm$core$Maybe$Nothing);
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
-var $elm$core$Platform$Sub$batch = _Platform_batch;
-var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
-var $elm$browser$Browser$sandbox = function (impl) {
-	return _Browser_element(
-		{
-			init: function (_v0) {
-				return _Utils_Tuple2(impl.init, $elm$core$Platform$Cmd$none);
-			},
-			subscriptions: function (_v1) {
-				return $elm$core$Platform$Sub$none;
-			},
-			update: F2(
-				function (msg, model) {
-					return _Utils_Tuple2(
-						A2(impl.update, msg, model),
-						$elm$core$Platform$Cmd$none);
-				}),
-			view: impl.view
-		});
+var $author$project$Main$sections = _List_fromArray(
+	['Greetings!']);
+var $author$project$Main$init = function (flag) {
+	return _Utils_Tuple2(
+		{appSections: $author$project$Main$sections, gallery: $author$project$AppleseGallery$init, screenWidth: flag, selectedGalleryVideo: $elm$core$Maybe$Nothing, selectedSection: 0},
+		$elm$core$Platform$Cmd$none);
 };
+var $elm$json$Json$Decode$int = _Json_decodeInt;
+var $author$project$Main$Receive = function (a) {
+	return {$: 'Receive', a: a};
+};
+var $author$project$Main$messageReceiver = _Platform_incomingPort('messageReceiver', $elm$json$Json$Decode$int);
+var $author$project$Main$subscriptions = function (_v0) {
+	return $author$project$Main$messageReceiver($author$project$Main$Receive);
+};
+var $author$project$AppleseGallery$CancelSelected = {$: 'CancelSelected'};
+var $author$project$AppleseGallery$cancelSelectedMsg = $author$project$AppleseGallery$CancelSelected;
+var $author$project$AppleseGallery$videoOfState = function (state) {
+	var video = state.c;
+	return video;
+};
+var $author$project$Main$galleryAndVideo = function (state) {
+	return _Utils_Tuple2(
+		state,
+		$author$project$AppleseGallery$videoOfState(state));
+};
+var $elm$core$Tuple$second = function (_v0) {
+	var y = _v0.b;
+	return y;
+};
+var $author$project$Main$modelWithGalleryAndVideo = F2(
+	function (tupple, model) {
+		return _Utils_update(
+			model,
+			{gallery: tupple.a, selectedGalleryVideo: tupple.b});
+	});
+var $author$project$AppleseGallery$Drag = F2(
+	function (a, b) {
+		return {$: 'Drag', a: a, b: b};
+	});
+var $author$project$AppleseGallery$Dragging = function (a) {
+	return {$: 'Dragging', a: a};
+};
+var $author$project$AppleseGallery$InTransition = function (a) {
+	return {$: 'InTransition', a: a};
+};
+var $author$project$AppleseGallery$ToCurrent = {$: 'ToCurrent'};
+var $author$project$AppleseGallery$ToNext = {$: 'ToNext'};
+var $author$project$AppleseGallery$ToPrevious = {$: 'ToPrevious'};
+var $author$project$AppleseGallery$currentDrag = function (transition) {
+	switch (transition.$) {
+		case 'Dragging':
+			var drag = transition.a;
+			return $elm$core$Maybe$Just(drag);
+		case 'Resting':
+			return $elm$core$Maybe$Nothing;
+		default:
+			return $elm$core$Maybe$Nothing;
+	}
+};
+var $author$project$AppleseGallery$dragInitialValueP = function (_v0) {
+	var initial = _v0.a;
+	return initial;
+};
+var $author$project$AppleseGallery$incOrDec = F2(
+	function (transition, curIndex) {
+		switch (transition.$) {
+			case 'ToNext':
+				return curIndex + 1;
+			case 'ToPrevious':
+				return curIndex - 1;
+			default:
+				return curIndex;
+		}
+	});
+var $elm$core$Basics$negate = function (n) {
+	return -n;
+};
+var $author$project$AppleseGallery$positionValue = function (_v0) {
+	var position = _v0.a;
+	return position;
+};
+var $author$project$AppleseGallery$transitionTypeForState = function (tState) {
+	switch (tState.$) {
+		case 'InTransition':
+			var t = tState.a;
+			return t;
+		case 'Dragging':
+			return $author$project$AppleseGallery$ToCurrent;
+		default:
+			return $author$project$AppleseGallery$ToCurrent;
+	}
+};
+var $author$project$AppleseGallerySlide$videoOf = function (msg) {
+	var video = msg.a;
+	return $elm$core$Maybe$Just(video);
+};
+var $author$project$AppleseGallery$update = F2(
+	function (msg, state) {
+		var index_ = state.a;
+		var transitionState = state.b;
+		var bideo = state.c;
+		switch (msg.$) {
+			case 'DragStart':
+				var position = msg.a;
+				if (transitionState.$ === 'Resting') {
+					return _Utils_Tuple2(
+						A3(
+							$author$project$AppleseGallery$State,
+							index_,
+							$author$project$AppleseGallery$Dragging(
+								A2($author$project$AppleseGallery$Drag, position, position)),
+							bideo),
+						$elm$core$Platform$Cmd$none);
+				} else {
+					return _Utils_Tuple2(state, $elm$core$Platform$Cmd$none);
+				}
+			case 'DragAt':
+				var position = msg.a;
+				var _v2 = $author$project$AppleseGallery$currentDrag(transitionState);
+				if (_v2.$ === 'Just') {
+					var drag = _v2.a;
+					return _Utils_Tuple2(
+						A3(
+							$author$project$AppleseGallery$State,
+							index_,
+							$author$project$AppleseGallery$Dragging(
+								A2(
+									$author$project$AppleseGallery$Drag,
+									$author$project$AppleseGallery$dragInitialValueP(drag),
+									position)),
+							bideo),
+						$elm$core$Platform$Cmd$none);
+				} else {
+					return _Utils_Tuple2(
+						A3($author$project$AppleseGallery$State, index_, transitionState, bideo),
+						$elm$core$Platform$Cmd$none);
+				}
+			case 'DragEnd':
+				var _v3 = $author$project$AppleseGallery$currentDrag(transitionState);
+				if (_v3.$ === 'Just') {
+					var drag = _v3.a;
+					var beginning = drag.a;
+					var current_ = drag.b;
+					return (($author$project$AppleseGallery$positionValue(beginning) - $author$project$AppleseGallery$positionValue(current_)) > 100) ? _Utils_Tuple2(
+						A3(
+							$author$project$AppleseGallery$State,
+							index_,
+							$author$project$AppleseGallery$InTransition($author$project$AppleseGallery$ToNext),
+							bideo),
+						$elm$core$Platform$Cmd$none) : ((_Utils_cmp(
+						$author$project$AppleseGallery$positionValue(beginning) - $author$project$AppleseGallery$positionValue(current_),
+						-100) < 0) ? _Utils_Tuple2(
+						A3(
+							$author$project$AppleseGallery$State,
+							index_,
+							$author$project$AppleseGallery$InTransition($author$project$AppleseGallery$ToPrevious),
+							bideo),
+						$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
+						A3(
+							$author$project$AppleseGallery$State,
+							index_,
+							$author$project$AppleseGallery$InTransition($author$project$AppleseGallery$ToCurrent),
+							bideo),
+						$elm$core$Platform$Cmd$none));
+				} else {
+					return _Utils_Tuple2(
+						A3($author$project$AppleseGallery$State, index_, $author$project$AppleseGallery$Resting, bideo),
+						$elm$core$Platform$Cmd$none);
+				}
+			case 'TransitionEnd':
+				return _Utils_Tuple2(
+					A3(
+						$author$project$AppleseGallery$State,
+						A2(
+							$author$project$AppleseGallery$incOrDec,
+							$author$project$AppleseGallery$transitionTypeForState(transitionState),
+							index_),
+						$author$project$AppleseGallery$Resting,
+						bideo),
+					$elm$core$Platform$Cmd$none);
+			case 'CtaMsg':
+				var msgg = msg.a;
+				return _Utils_Tuple2(
+					A3(
+						$author$project$AppleseGallery$State,
+						index_,
+						$author$project$AppleseGallery$Resting,
+						$author$project$AppleseGallerySlide$videoOf(msgg)),
+					$elm$core$Platform$Cmd$none);
+			default:
+				return _Utils_Tuple2(
+					A3($author$project$AppleseGallery$State, index_, transitionState, $elm$core$Maybe$Nothing),
+					$elm$core$Platform$Cmd$none);
+		}
+	});
 var $author$project$Main$update = F2(
 	function (msg, model) {
-		if (msg.$ === 'Greetings') {
-			return _Utils_update(
-				model,
-				{selectedSection: 0});
-		} else {
-			return _Utils_update(
-				model,
-				{selectedSection: 1});
+		switch (msg.$) {
+			case 'Greetings':
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{selectedSection: 0}),
+					$elm$core$Platform$Cmd$none);
+			case 'Work':
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{selectedSection: 1}),
+					$elm$core$Platform$Cmd$none);
+			case 'AppleseGalleryMsg':
+				var msgg = msg.a;
+				return _Utils_Tuple2(
+					A2(
+						$author$project$Main$modelWithGalleryAndVideo,
+						$author$project$Main$galleryAndVideo(
+							A2($author$project$AppleseGallery$update, msgg, model.gallery).a),
+						model),
+					$elm$core$Platform$Cmd$none);
+			case 'Receive':
+				var screenWidth = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{screenWidth: screenWidth}),
+					$elm$core$Platform$Cmd$none);
+			default:
+				var vidMsg = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							gallery: A2($author$project$AppleseGallery$update, $author$project$AppleseGallery$cancelSelectedMsg, model.gallery).a,
+							selectedGalleryVideo: $elm$core$Maybe$Nothing
+						}),
+					$elm$core$Platform$Cmd$none);
 		}
 	});
 var $author$project$Main$Greetings = {$: 'Greetings'};
-var $author$project$Main$Work = {$: 'Work'};
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
 var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
@@ -5706,7 +5916,7 @@ var $author$project$Main$tmBodyText = A2(
 		]));
 var $author$project$Main$thriveMarketExp = A5(
 	$author$project$Main$expBox,
-	'6 yr',
+	'5 yr',
 	A2($author$project$Main$linkedExperience, 'Senior iOS Engineer (Performance, Features, Verticals, Specialist)⇗', 'https://thrivemarket.com'),
 	$author$project$Main$tmBodyText,
 	_List_fromArray(
@@ -5773,9 +5983,878 @@ var $author$project$Main$exp = A2(
 					_List_fromArray(
 						[$author$project$Main$thriveMarketExp, $author$project$Main$fitplanExp]))
 				]))));
+var $author$project$Main$AppleseGalleryMsg = function (a) {
+	return {$: 'AppleseGalleryMsg', a: a};
+};
+var $author$project$AppleseGallery$Config = function (a) {
+	return {$: 'Config', a: a};
+};
+var $author$project$AppleseGallery$config = function (_v0) {
+	var id = _v0.id;
+	var width = _v0.width;
+	var height = _v0.height;
+	var slidePercentileOfWidth = _v0.slidePercentileOfWidth;
+	return $author$project$AppleseGallery$Config(
+		{height: height, id: id, slidePercentileOfWidth: slidePercentileOfWidth, width: width});
+};
+var $elm$core$Basics$ge = _Utils_ge;
+var $author$project$Main$configH = function (viewportW) {
+	var isLarge = viewportW >= 540;
+	if (!isLarge) {
+		return 250;
+	} else {
+		return 500;
+	}
+};
+var $author$project$AppleseGallery$Pct = function (a) {
+	return {$: 'Pct', a: a};
+};
+var $author$project$AppleseGallery$pct = function (x) {
+	return $author$project$AppleseGallery$Pct(x);
+};
+var $author$project$AppleseGallery$Px = function (a) {
+	return {$: 'Px', a: a};
+};
+var $author$project$AppleseGallery$px = function (x) {
+	return $author$project$AppleseGallery$Px(x);
+};
+var $author$project$Main$config = function (viewportW) {
+	return $author$project$AppleseGallery$config(
+		{
+			height: $author$project$AppleseGallery$px(
+				$author$project$Main$configH(viewportW)),
+			id: 'applese-gallery',
+			slidePercentileOfWidth: 75,
+			width: $author$project$AppleseGallery$pct(100)
+		});
+};
+var $elm$virtual_dom$VirtualDom$map = _VirtualDom_map;
+var $elm$html$Html$map = $elm$virtual_dom$VirtualDom$map;
+var $author$project$AppleseGallerySlide$Dnb = {$: 'Dnb'};
+var $author$project$AppleseGallerySlide$IzOn = {$: 'IzOn'};
+var $author$project$AppleseGallerySlide$Phoney = {$: 'Phoney'};
+var $author$project$AppleseGallerySlide$Res = {$: 'Res'};
+var $author$project$AppleseGallerySlide$Tablet = {$: 'Tablet'};
+var $author$project$AppleseGallerySlide$Large = {$: 'Large'};
+var $author$project$AppleseGallerySlide$Small = {$: 'Small'};
+var $author$project$AppleseGallerySlide$sizeClass = function (sw) {
+	var notIsSmall = sw > 540;
+	if (notIsSmall) {
+		return $author$project$AppleseGallerySlide$Large;
+	} else {
+		return $author$project$AppleseGallerySlide$Small;
+	}
+};
+var $author$project$AppleseGallerySlide$svgH = function (sc) {
+	if (sc.$ === 'Small') {
+		return 230;
+	} else {
+		return 450;
+	}
+};
+var $elm$core$Basics$round = _Basics_round;
+var $author$project$AppleseGallerySlide$smallWidth = function (sw) {
+	var notIsSmall = sw > 320;
+	if (notIsSmall) {
+		return 280;
+	} else {
+		return 180;
+	}
+};
+var $author$project$AppleseGallerySlide$svgW = F2(
+	function (sc, sW) {
+		if (sc.$ === 'Small') {
+			return $author$project$AppleseGallerySlide$smallWidth(sW);
+		} else {
+			return $elm$core$Basics$round((sW * 0.75) - (sW * 0.1));
+		}
+	});
+var $author$project$AppleseGallerySlide$svgsize = F2(
+	function (sc, sw) {
+		return {
+			h: $elm$core$String$fromInt(
+				$author$project$AppleseGallerySlide$svgH(sc)) + 'px',
+			w: $elm$core$String$fromInt(
+				A2($author$project$AppleseGallerySlide$svgW, sc, sw)) + 'px'
+		};
+	});
+var $author$project$AppleseGallerySlide$slideComponents = function (screenWidth) {
+	return _List_fromArray(
+		[
+			{
+			ctaTitle: 'View now',
+			description: 'Coming soon to the App Store',
+			sizeClass: $author$project$AppleseGallerySlide$sizeClass(screenWidth),
+			slideImage: $author$project$AppleseGallerySlide$Dnb,
+			svgSize: A2(
+				$author$project$AppleseGallerySlide$svgsize,
+				$author$project$AppleseGallerySlide$sizeClass(screenWidth),
+				screenWidth),
+			textColor: 'black',
+			title: 'Dual N Back:',
+			videoData: {frameDesign: $author$project$AppleseGallerySlide$Phoney, videoUrl: 'https://github.com/Morkrom/greetings/raw/refs/heads/main/vid-content/dnb-demo.mp4'}
+		},
+			{
+			ctaTitle: 'View now',
+			description: 'Coming soon to the App Store',
+			sizeClass: $author$project$AppleseGallerySlide$sizeClass(screenWidth),
+			slideImage: $author$project$AppleseGallerySlide$IzOn,
+			svgSize: A2(
+				$author$project$AppleseGallerySlide$svgsize,
+				$author$project$AppleseGallerySlide$sizeClass(screenWidth),
+				screenWidth),
+			textColor: 'white',
+			title: 'izOnIt:',
+			videoData: {frameDesign: $author$project$AppleseGallerySlide$Phoney, videoUrl: 'https://github.com/Morkrom/greetings/raw/refs/heads/main/vid-content/izOnIt.mp4'}
+		},
+			{
+			ctaTitle: 'View now',
+			description: 'Reminisce a moment!',
+			sizeClass: $author$project$AppleseGallerySlide$sizeClass(screenWidth),
+			slideImage: $author$project$AppleseGallerySlide$Res,
+			svgSize: A2(
+				$author$project$AppleseGallerySlide$svgsize,
+				$author$project$AppleseGallerySlide$sizeClass(screenWidth),
+				screenWidth),
+			textColor: 'black',
+			title: 'Portfolio',
+			videoData: {frameDesign: $author$project$AppleseGallerySlide$Tablet, videoUrl: 'https://github.com/Morkrom/greetings/raw/refs/heads/main/vid-content/res-demo-c.mp4'}
+		}
+		]);
+};
+var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
+var $elm$core$List$filter = F2(
+	function (isGood, list) {
+		return A3(
+			$elm$core$List$foldr,
+			F2(
+				function (x, xs) {
+					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
+				}),
+			_List_Nil,
+			list);
+	});
+var $elm$html$Html$Attributes$classList = function (classes) {
+	return $elm$html$Html$Attributes$class(
+		A2(
+			$elm$core$String$join,
+			' ',
+			A2(
+				$elm$core$List$map,
+				$elm$core$Tuple$first,
+				A2($elm$core$List$filter, $elm$core$Tuple$second, classes))));
+};
+var $author$project$AppleseGallery$dragCurrentValue = function (_v0) {
+	var current = _v0.b;
+	return $author$project$AppleseGallery$positionValue(current);
+};
+var $author$project$AppleseGallery$dragInitialValue = function (_v0) {
+	var initial = _v0.a;
+	return $author$project$AppleseGallery$positionValue(initial);
+};
+var $author$project$AppleseGallery$pageItemPercentileOfScreenWidthFStr = function (percentile) {
+	return $elm$core$String$fromFloat(percentile) + '%';
+};
+var $author$project$AppleseGallery$transitionPercentileStr = function (transition) {
+	switch (transition.$) {
+		case 'ToNext':
+			return $author$project$AppleseGallery$pageItemPercentileOfScreenWidthFStr(-20.0);
+		case 'ToPrevious':
+			return $author$project$AppleseGallery$pageItemPercentileOfScreenWidthFStr(20.0);
+		default:
+			return '0%';
+	}
+};
+var $author$project$AppleseGallery$documentDragStyle = function (transition) {
+	switch (transition.$) {
+		case 'Resting':
+			return _List_Nil;
+		case 'Dragging':
+			var drag = transition.a;
+			return _List_fromArray(
+				[
+					A2(
+					$elm$html$Html$Attributes$style,
+					'transform',
+					'translateX(' + ($elm$core$String$fromInt(
+						$author$project$AppleseGallery$dragCurrentValue(drag) - $author$project$AppleseGallery$dragInitialValue(drag)) + 'px)'))
+				]);
+		default:
+			var t = transition.a;
+			return _List_fromArray(
+				[
+					A2(
+					$elm$html$Html$Attributes$style,
+					'transform',
+					'translateX(' + $author$project$AppleseGallery$transitionPercentileStr(t))
+				]);
+	}
+};
+var $author$project$AppleseGallery$DragAt = function (a) {
+	return {$: 'DragAt', a: a};
+};
+var $author$project$AppleseGallery$DragEnd = {$: 'DragEnd'};
+var $author$project$AppleseGallery$DragStart = function (a) {
+	return {$: 'DragStart', a: a};
+};
+var $author$project$AppleseGallery$TransitionEnd = {$: 'TransitionEnd'};
+var $author$project$AppleseGallery$Position = function (a) {
+	return {$: 'Position', a: a};
+};
+var $elm$json$Json$Decode$field = _Json_decodeField;
+var $elm$json$Json$Decode$at = F2(
+	function (fields, decoder) {
+		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
+	});
+var $elm$json$Json$Decode$float = _Json_decodeFloat;
+var $elm$json$Json$Decode$oneOf = _Json_oneOf;
+var $author$project$AppleseGallery$decodePosX = function () {
+	var decoder = A2(
+		$elm$json$Json$Decode$map,
+		$author$project$AppleseGallery$Position,
+		A2(
+			$elm$json$Json$Decode$field,
+			'pageX',
+			A2($elm$json$Json$Decode$map, $elm$core$Basics$floor, $elm$json$Json$Decode$float)));
+	return $elm$json$Json$Decode$oneOf(
+		_List_fromArray(
+			[
+				decoder,
+				A2(
+				$elm$json$Json$Decode$at,
+				_List_fromArray(
+					['touches', '0']),
+				decoder)
+			]));
+}();
+var $author$project$AppleseGallery$isDragging = function (transition) {
+	if (transition.$ === 'Dragging') {
+		return true;
+	} else {
+		return false;
+	}
+};
+var $elm$core$Basics$not = _Basics_not;
+var $elm$virtual_dom$VirtualDom$Normal = function (a) {
+	return {$: 'Normal', a: a};
+};
+var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
+var $elm$html$Html$Events$on = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$Normal(decoder));
+	});
+var $elm$virtual_dom$VirtualDom$MayPreventDefault = function (a) {
+	return {$: 'MayPreventDefault', a: a};
+};
+var $elm$html$Html$Events$preventDefaultOn = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$MayPreventDefault(decoder));
+	});
+var $author$project$AppleseGallery$events = F2(
+	function (enableDrag, transitionState) {
+		return (!enableDrag) ? _List_Nil : _Utils_ap(
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$Events$on,
+					'mousedown',
+					A2($elm$json$Json$Decode$map, $author$project$AppleseGallery$DragStart, $author$project$AppleseGallery$decodePosX)),
+					A2(
+					$elm$html$Html$Events$on,
+					'touchstart',
+					A2($elm$json$Json$Decode$map, $author$project$AppleseGallery$DragStart, $author$project$AppleseGallery$decodePosX))
+				]),
+			$author$project$AppleseGallery$isDragging(transitionState) ? _List_fromArray(
+				[
+					A2(
+					$elm$html$Html$Events$preventDefaultOn,
+					'mousemove',
+					A2(
+						$elm$json$Json$Decode$map,
+						function (posX) {
+							return _Utils_Tuple2(
+								$author$project$AppleseGallery$DragAt(posX),
+								true);
+						},
+						$author$project$AppleseGallery$decodePosX)),
+					A2(
+					$elm$html$Html$Events$preventDefaultOn,
+					'touchmove',
+					A2(
+						$elm$json$Json$Decode$map,
+						function (posX) {
+							return _Utils_Tuple2(
+								$author$project$AppleseGallery$DragAt(posX),
+								true);
+						},
+						$author$project$AppleseGallery$decodePosX)),
+					A2(
+					$elm$html$Html$Events$on,
+					'mouseup',
+					$elm$json$Json$Decode$succeed($author$project$AppleseGallery$DragEnd)),
+					A2(
+					$elm$html$Html$Events$on,
+					'mouseleave',
+					$elm$json$Json$Decode$succeed($author$project$AppleseGallery$DragEnd)),
+					A2(
+					$elm$html$Html$Events$on,
+					'touchend',
+					$elm$json$Json$Decode$succeed($author$project$AppleseGallery$DragEnd)),
+					A2(
+					$elm$html$Html$Events$on,
+					'touchcancel',
+					$elm$json$Json$Decode$succeed($author$project$AppleseGallery$DragEnd))
+				]) : _List_fromArray(
+				[
+					A2(
+					$elm$html$Html$Events$on,
+					'transitionend',
+					$elm$json$Json$Decode$succeed($author$project$AppleseGallery$TransitionEnd))
+				]));
+	});
+var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
+var $author$project$AppleseGallery$isNotInTransition = function (transition) {
+	switch (transition.$) {
+		case 'InTransition':
+			return false;
+		case 'Resting':
+			return true;
+		default:
+			return true;
+	}
+};
+var $elm$virtual_dom$VirtualDom$lazy = _VirtualDom_lazy;
+var $elm$html$Html$Lazy$lazy = $elm$virtual_dom$VirtualDom$lazy;
+var $elm$virtual_dom$VirtualDom$node = function (tag) {
+	return _VirtualDom_node(
+		_VirtualDom_noScript(tag));
+};
+var $elm$html$Html$node = $elm$virtual_dom$VirtualDom$node;
+var $author$project$AppleseGallery$pageItemPercentileOfScreenWidthStr = function (percentile) {
+	return $elm$core$String$fromInt(percentile) + '%';
+};
+var $author$project$AppleseGallery$wrapperRestingPercentileOffset = function (elementPercentageOfWidth) {
+	return $author$project$AppleseGallery$pageItemPercentileOfScreenWidthFStr(50.0 - (elementPercentageOfWidth * 2.5));
+};
+var $author$project$AppleseGallery$columns = _List_fromArray(
+	[-2, -1, 0, 1, 2]);
+var $author$project$AppleseGallery$wrapperWidthString = function (elementPercentageOfWidth) {
+	return $author$project$AppleseGallery$pageItemPercentileOfScreenWidthStr(
+		elementPercentageOfWidth * $elm$core$List$length($author$project$AppleseGallery$columns));
+};
+var $author$project$AppleseGallery$ssText = function (config_) {
+	var configR = config_.a;
+	return '\n            #' + (configR.id + (' .Wrapper {\n                width: 100%;\n                height: 100%;\n                overflow: hidden;\n            }\n\n            #' + (configR.id + (' .Slides {\n                position: relative;\n                top: 0;\n                height: 100%;\n                display: flex;\n                flex-direction: row;\n                padding: 0;\n                margin: 0;\n                cursor: grab;\n                overflow-x: auto;\n                white-space: nowrap;\n                width: ' + ($author$project$AppleseGallery$wrapperWidthString(configR.slidePercentileOfWidth) + (';' + ('\n                left: ' + ($author$project$AppleseGallery$wrapperRestingPercentileOffset(configR.slidePercentileOfWidth) + (';' + ('\n                transition: transform 300ms ease;\n            }\n            #' + (configR.id + (' .Slides-dragging {\n                transition: none;\n                }\n            #' + (configR.id + (' .Slides-slide {\n                width: ' + ($author$project$AppleseGallery$pageItemPercentileOfScreenWidthStr(configR.slidePercentileOfWidth) + (';' + '\n                max-height: 100%;\n                overflow: auto;\n                position: relative;\n                user-drag: none;\n                user-select: none;\n                -webkit-user-select: none;\n                -moz-user-select: none;\n                -ms-user-select: none;\n                display: inline-block;\n                }\n  '))))))))))))))));
+};
+var $author$project$AppleseGallery$styleSheet = function (configR) {
+	return A3(
+		$elm$html$Html$node,
+		'style',
+		_List_Nil,
+		_List_fromArray(
+			[
+				$elm$html$Html$text(
+				$author$project$AppleseGallery$ssText(configR))
+			]));
+};
+var $author$project$AppleseGallery$lStyleSheet = function (configR) {
+	return A2(
+		$elm$html$Html$Lazy$lazy,
+		function (c) {
+			return $author$project$AppleseGallery$styleSheet(c);
+		},
+		configR);
+};
+var $author$project$AppleseGallery$lengthToString = function (length) {
+	switch (length.$) {
+		case 'Px':
+			var x = length.a;
+			return $elm$core$String$fromFloat(x) + 'px';
+		case 'Pct':
+			var x = length.a;
+			return $elm$core$String$fromFloat(x) + '%';
+		case 'Rem':
+			var x = length.a;
+			return $elm$core$String$fromFloat(x) + 'rem';
+		case 'Em':
+			var x = length.a;
+			return $elm$core$String$fromFloat(x) + 'em';
+		case 'Vh':
+			var x = length.a;
+			return $elm$core$String$fromFloat(x) + 'vh';
+		case 'Vw':
+			var x = length.a;
+			return $elm$core$String$fromFloat(x) + 'vw';
+		default:
+			return '';
+	}
+};
+var $elm$core$Tuple$pair = F2(
+	function (a, b) {
+		return _Utils_Tuple2(a, b);
+	});
+var $author$project$AppleseGallery$addeddIndex = F2(
+	function (currentIndex, offset) {
+		return currentIndex + offset;
+	});
+var $author$project$AppleseGallery$extractHtmlFromSlide = function (slide) {
+	return slide.b;
+};
+var $author$project$AppleseGallery$htmlMatchesIndex = F2(
+	function (index, slide) {
+		return _Utils_eq(index, slide.a);
+	});
+var $author$project$AppleseGallery$htmlForIndex = F2(
+	function (insideOf, column) {
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$classList(
+					_List_fromArray(
+						[
+							_Utils_Tuple2('Slides-slide', true),
+							_Utils_Tuple2('active', true)
+						]))
+				]),
+			A2(
+				$elm$core$List$map,
+				$author$project$AppleseGallery$extractHtmlFromSlide,
+				A2(
+					$elm$core$List$filter,
+					$author$project$AppleseGallery$htmlMatchesIndex(column),
+					insideOf)));
+	});
+var $elm$core$Basics$modBy = _Basics_modBy;
+var $author$project$AppleseGallery$modIndex = F2(
+	function (left, right) {
+		return A2($elm$core$Basics$modBy, left, right);
+	});
+var $author$project$AppleseGallery$slidesForCurrentIndex = F2(
+	function (index, all) {
+		var addedd = A2(
+			$elm$core$List$map,
+			$author$project$AppleseGallery$modIndex(
+				$elm$core$List$length(all)),
+			A2(
+				$elm$core$List$map,
+				$author$project$AppleseGallery$addeddIndex(index),
+				$author$project$AppleseGallery$columns));
+		return A2(
+			$elm$core$List$map,
+			$author$project$AppleseGallery$htmlForIndex(all),
+			addedd);
+	});
+var $author$project$AppleseGallery$CtaMsg = function (a) {
+	return {$: 'CtaMsg', a: a};
+};
+var $author$project$AppleseGallerySlide$divContentClass = function (_class) {
+	if (_class.$ === 'Large') {
+		return 'galleryContentFlowBig';
+	} else {
+		return 'galleryContentFlow';
+	}
+};
+var $author$project$AppleseGallerySlide$SelectVideo = function (a) {
+	return {$: 'SelectVideo', a: a};
+};
+var $elm$html$Html$button = _VirtualDom_node('button');
+var $elm$html$Html$Events$onClick = function (msg) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'click',
+		$elm$json$Json$Decode$succeed(msg));
+};
+var $author$project$AppleseGallerySlide$descriptionWidth = function (sc) {
+	if (sc.$ === 'Large') {
+		return $elm$core$String$fromInt(250) + 'px';
+	} else {
+		return $elm$core$String$fromInt(150) + 'px';
+	}
+};
+var $elm$html$Html$h4 = _VirtualDom_node('h4');
+var $author$project$AppleseGallerySlide$slideDescription = F3(
+	function (title, color, sc) {
+		return A2(
+			$elm$html$Html$h4,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('slideDesc'),
+					A2($elm$html$Html$Attributes$style, 'color', color),
+					A2(
+					$elm$html$Html$Attributes$style,
+					'inline-size',
+					$author$project$AppleseGallerySlide$descriptionWidth(sc)),
+					A2($elm$html$Html$Attributes$style, 'margin-top', '12px')
+				]),
+			_List_fromArray(
+				[
+					$elm$html$Html$text(title)
+				]));
+	});
+var $elm$html$Html$h2 = _VirtualDom_node('h2');
+var $author$project$AppleseGallerySlide$slideTitle = F2(
+	function (title, color) {
+		return A2(
+			$elm$html$Html$h2,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('slideTitle'),
+					A2($elm$html$Html$Attributes$style, 'color', color),
+					A2($elm$html$Html$Attributes$style, 'margin-top', '5px')
+				]),
+			_List_fromArray(
+				[
+					$elm$html$Html$text(title)
+				]));
+	});
+var $author$project$AppleseGallerySlide$slideText = F2(
+	function (toSelf, component) {
+		var list = _List_fromArray(
+			[
+				A2($author$project$AppleseGallerySlide$slideTitle, component.title, component.textColor),
+				A3($author$project$AppleseGallerySlide$slideDescription, component.description, component.textColor, component.sizeClass)
+			]);
+		var _v0 = component.sizeClass;
+		if (_v0.$ === 'Large') {
+			return _Utils_ap(
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$button,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('slideButton'),
+								A2($elm$html$Html$Attributes$style, 'display', 'inline-block'),
+								A2($elm$html$Html$Attributes$style, 'height', '35px'),
+								$elm$html$Html$Events$onClick(
+								toSelf(
+									$author$project$AppleseGallerySlide$SelectVideo(component.videoData)))
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text(component.ctaTitle)
+							]))
+					]),
+				list);
+		} else {
+			return _Utils_ap(
+				list,
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$button,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('slideButton'),
+								A2($elm$html$Html$Attributes$style, 'display', 'inline-block'),
+								A2($elm$html$Html$Attributes$style, 'height', '25px'),
+								$elm$html$Html$Events$onClick(
+								toSelf(
+									$author$project$AppleseGallerySlide$SelectVideo(component.videoData)))
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text(component.ctaTitle)
+							]))
+					]));
+		}
+	});
+var $author$project$AppleseGallerySlide$slideList = F2(
+	function (toSelf, component) {
+		return A2($author$project$AppleseGallerySlide$slideText, toSelf, component);
+	});
+var $elm$svg$Svg$Attributes$offset = _VirtualDom_attribute('offset');
+var $elm$svg$Svg$trustedNode = _VirtualDom_nodeNS('http://www.w3.org/2000/svg');
+var $elm$svg$Svg$defs = $elm$svg$Svg$trustedNode('defs');
 var $elm$svg$Svg$Attributes$fill = _VirtualDom_attribute('fill');
 var $elm$svg$Svg$Attributes$height = _VirtualDom_attribute('height');
-var $elm$core$Debug$log = _Debug_log;
+var $elm$svg$Svg$Attributes$id = _VirtualDom_attribute('id');
+var $elm$svg$Svg$linearGradient = $elm$svg$Svg$trustedNode('linearGradient');
+var $author$project$GallerySlideImages$phoneVB = '0 0 720 720';
+var $elm$svg$Svg$Attributes$preserveAspectRatio = _VirtualDom_attribute('preserveAspectRatio');
+var $elm$svg$Svg$rect = $elm$svg$Svg$trustedNode('rect');
+var $elm$svg$Svg$Attributes$rx = _VirtualDom_attribute('rx');
+var $elm$svg$Svg$Attributes$ry = _VirtualDom_attribute('ry');
+var $elm$svg$Svg$svg = $elm$svg$Svg$trustedNode('svg');
+var $elm$svg$Svg$Attributes$viewBox = _VirtualDom_attribute('viewBox');
+var $elm$svg$Svg$Attributes$width = _VirtualDom_attribute('width');
+var $elm$svg$Svg$Attributes$x = _VirtualDom_attribute('x');
+var $elm$svg$Svg$Attributes$x1 = _VirtualDom_attribute('x1');
+var $elm$svg$Svg$Attributes$x2 = _VirtualDom_attribute('x2');
+var $elm$svg$Svg$Attributes$y = _VirtualDom_attribute('y');
+var $elm$svg$Svg$Attributes$y1 = _VirtualDom_attribute('y1');
+var $elm$svg$Svg$Attributes$y2 = _VirtualDom_attribute('y2');
+var $author$project$GallerySlideImages$presize = function (colorString) {
+	return A2(
+		$elm$svg$Svg$svg,
+		_List_fromArray(
+			[
+				$elm$svg$Svg$Attributes$width('100%'),
+				$elm$svg$Svg$Attributes$height('100%'),
+				$elm$svg$Svg$Attributes$viewBox($author$project$GallerySlideImages$phoneVB),
+				$elm$svg$Svg$Attributes$preserveAspectRatio('none')
+			]),
+		_List_fromArray(
+			[
+				A2(
+				$elm$svg$Svg$defs,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						$elm$svg$Svg$linearGradient,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$id('grad'),
+								$elm$svg$Svg$Attributes$x1('0'),
+								$elm$svg$Svg$Attributes$x2('1'),
+								$elm$svg$Svg$Attributes$y1('1'),
+								$elm$svg$Svg$Attributes$y2('0')
+							]),
+						colorString)
+					])),
+				A2(
+				$elm$svg$Svg$rect,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$x('0'),
+						$elm$svg$Svg$Attributes$y('0'),
+						$elm$svg$Svg$Attributes$width('720'),
+						$elm$svg$Svg$Attributes$height('720'),
+						$elm$svg$Svg$Attributes$rx('20'),
+						$elm$svg$Svg$Attributes$ry('20'),
+						$elm$svg$Svg$Attributes$fill('url(\'#grad\')')
+					]),
+				_List_Nil)
+			]));
+};
+var $elm$svg$Svg$stop = $elm$svg$Svg$trustedNode('stop');
+var $elm$svg$Svg$Attributes$stopColor = _VirtualDom_attribute('stop-color');
+var $author$project$GallerySlideImages$dnb = $author$project$GallerySlideImages$presize(
+	_List_fromArray(
+		[
+			A2(
+			$elm$svg$Svg$stop,
+			_List_fromArray(
+				[
+					$elm$svg$Svg$Attributes$offset('0%'),
+					$elm$svg$Svg$Attributes$stopColor('#40e8cc')
+				]),
+			_List_Nil),
+			A2(
+			$elm$svg$Svg$stop,
+			_List_fromArray(
+				[
+					$elm$svg$Svg$Attributes$offset('75%'),
+					$elm$svg$Svg$Attributes$stopColor('#e61e45')
+				]),
+			_List_Nil)
+		]));
+var $author$project$GallerySlideImages$izonit = $author$project$GallerySlideImages$presize(
+	_List_fromArray(
+		[
+			A2(
+			$elm$svg$Svg$stop,
+			_List_fromArray(
+				[
+					$elm$svg$Svg$Attributes$offset('0%'),
+					$elm$svg$Svg$Attributes$stopColor('#0d02dd')
+				]),
+			_List_Nil),
+			A2(
+			$elm$svg$Svg$stop,
+			_List_fromArray(
+				[
+					$elm$svg$Svg$Attributes$offset('35%'),
+					$elm$svg$Svg$Attributes$stopColor('#000000')
+				]),
+			_List_Nil)
+		]));
+var $author$project$GallerySlideImages$res = $author$project$GallerySlideImages$presize(
+	_List_fromArray(
+		[
+			A2(
+			$elm$svg$Svg$stop,
+			_List_fromArray(
+				[
+					$elm$svg$Svg$Attributes$offset('0%'),
+					$elm$svg$Svg$Attributes$stopColor('gold')
+				]),
+			_List_Nil),
+			A2(
+			$elm$svg$Svg$stop,
+			_List_fromArray(
+				[
+					$elm$svg$Svg$Attributes$offset('25%'),
+					$elm$svg$Svg$Attributes$stopColor('#04f9bc')
+				]),
+			_List_Nil),
+			A2(
+			$elm$svg$Svg$stop,
+			_List_fromArray(
+				[
+					$elm$svg$Svg$Attributes$offset('85%'),
+					$elm$svg$Svg$Attributes$stopColor('black')
+				]),
+			_List_Nil)
+		]));
+var $author$project$AppleseGallerySlide$slideLogo = function (data) {
+	switch (data.$) {
+		case 'Dnb':
+			return $author$project$GallerySlideImages$dnb;
+		case 'IzOn':
+			return $author$project$GallerySlideImages$izonit;
+		default:
+			return $author$project$GallerySlideImages$res;
+	}
+};
+var $author$project$AppleseGallerySlide$slideContent = F2(
+	function (toSelf, componentData) {
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					A2($elm$html$Html$Attributes$style, 'width', '100%'),
+					A2($elm$html$Html$Attributes$style, 'height', '100%'),
+					A2($elm$html$Html$Attributes$style, 'position', 'relative'),
+					A2($elm$html$Html$Attributes$style, 'background-color', 'rgb(243, 243, 246)')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							A2($elm$html$Html$Attributes$style, 'margin', '0'),
+							A2($elm$html$Html$Attributes$style, 'position', 'absolute'),
+							A2($elm$html$Html$Attributes$style, 'top', '50%'),
+							A2($elm$html$Html$Attributes$style, 'left', '50%'),
+							A2($elm$html$Html$Attributes$style, 'transform', 'translate(-50%, -50%)')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									A2($elm$html$Html$Attributes$style, 'width', componentData.svgSize.w),
+									A2($elm$html$Html$Attributes$style, 'height', componentData.svgSize.h)
+								]),
+							_List_fromArray(
+								[
+									$author$project$AppleseGallerySlide$slideLogo(componentData.slideImage)
+								])),
+							A2(
+							$elm$html$Html$div,
+							_Utils_ap(
+								_List_fromArray(
+									[
+										A2($elm$html$Html$Attributes$style, 'position', 'absolute'),
+										A2($elm$html$Html$Attributes$style, 'bottom', '10%'),
+										A2($elm$html$Html$Attributes$style, 'left', '10%')
+									]),
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class(
+										$author$project$AppleseGallerySlide$divContentClass(componentData.sizeClass))
+									])),
+							A2($author$project$AppleseGallerySlide$slideList, toSelf, componentData))
+						]))
+				]));
+	});
+var $author$project$AppleseGallery$slidesFromData = function (components) {
+	return A2(
+		$elm$core$List$map,
+		$author$project$AppleseGallerySlide$slideContent($author$project$AppleseGallery$CtaMsg),
+		components);
+};
+var $author$project$AppleseGallery$view = F3(
+	function (config_, state, slides) {
+		var configR = config_.a;
+		var index = state.a;
+		var transitionState = state.b;
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$id(configR.id),
+					A2(
+					$elm$html$Html$Attributes$style,
+					'width',
+					$author$project$AppleseGallery$lengthToString(configR.width)),
+					A2(
+					$elm$html$Html$Attributes$style,
+					'height',
+					$author$project$AppleseGallery$lengthToString(configR.height))
+				]),
+			_List_fromArray(
+				[
+					$author$project$AppleseGallery$lStyleSheet(config_),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('Wrapper')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$div,
+							_Utils_ap(
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('Slides'),
+										$elm$html$Html$Attributes$classList(
+										_List_fromArray(
+											[
+												_Utils_Tuple2(
+												'Slides-dragging',
+												$author$project$AppleseGallery$isNotInTransition(transitionState))
+											]))
+									]),
+								_Utils_ap(
+									A2($author$project$AppleseGallery$events, true, transitionState),
+									$author$project$AppleseGallery$documentDragStyle(transitionState))),
+							A2(
+								$author$project$AppleseGallery$slidesForCurrentIndex,
+								index,
+								A2(
+									$elm$core$List$indexedMap,
+									$elm$core$Tuple$pair,
+									$author$project$AppleseGallery$slidesFromData(slides))))
+						]))
+				]));
+	});
+var $author$project$Main$infiniteGalleryView = function (model) {
+	return A2(
+		$elm$html$Html$div,
+		$author$project$MorkromCss$introSectionDivStyle,
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$h1,
+				$author$project$MorkromCss$titleTextStyle,
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Portfolio')
+					])),
+				A2(
+				$elm$html$Html$map,
+				$author$project$Main$AppleseGalleryMsg,
+				A3(
+					$author$project$AppleseGallery$view,
+					$author$project$Main$config(model.screenWidth),
+					model.gallery,
+					$author$project$AppleseGallerySlide$slideComponents(model.screenWidth)))
+			]));
+};
 var $author$project$Images$phoneAppSize = 25.0;
 var $elm$core$List$append = F2(
 	function (xs, ys) {
@@ -5810,25 +6889,18 @@ var $author$project$Images$phoneApps = function (size) {
 			},
 			$author$project$Images$phoneRows));
 };
-var $elm$svg$Svg$trustedNode = _VirtualDom_nodeNS('http://www.w3.org/2000/svg');
 var $elm$svg$Svg$animate = $elm$svg$Svg$trustedNode('animate');
 var $elm$svg$Svg$Attributes$attributeName = _VirtualDom_attribute('attributeName');
 var $elm$svg$Svg$Attributes$begin = _VirtualDom_attribute('begin');
 var $elm$svg$Svg$Attributes$dur = _VirtualDom_attribute('dur');
 var $author$project$Images$phoneVB = '0 0 150 312';
-var $elm$svg$Svg$rect = $elm$svg$Svg$trustedNode('rect');
 var $elm$svg$Svg$Attributes$repeatCount = _VirtualDom_attribute('repeatCount');
-var $elm$svg$Svg$svg = $elm$svg$Svg$trustedNode('svg');
 var $elm$svg$Svg$Attributes$values = function (value) {
 	return A2(
 		_VirtualDom_attribute,
 		'values',
 		_VirtualDom_noJavaScriptUri(value));
 };
-var $elm$svg$Svg$Attributes$viewBox = _VirtualDom_attribute('viewBox');
-var $elm$svg$Svg$Attributes$width = _VirtualDom_attribute('width');
-var $elm$svg$Svg$Attributes$x = _VirtualDom_attribute('x');
-var $elm$svg$Svg$Attributes$y = _VirtualDom_attribute('y');
 var $author$project$Images$toPhoneScreenElement = function (element) {
 	return A2(
 		$elm$svg$Svg$svg,
@@ -5873,61 +6945,43 @@ var $author$project$Images$phoneAppsElements = function (size) {
 		},
 		$author$project$Images$phoneApps(size));
 };
-var $elm$svg$Svg$Attributes$rx = _VirtualDom_attribute('rx');
-var $elm$svg$Svg$Attributes$ry = _VirtualDom_attribute('ry');
-var $elm$core$Debug$toString = _Debug_toString;
 var $author$project$Images$phone = A2(
-	$elm$core$Debug$log,
-	$elm$core$Debug$toString($author$project$Images$phoneColumns),
-	A2(
-		$elm$core$Debug$log,
-		$elm$core$Debug$toString(
-			A2($author$project$Images$phoneAppsRow, 25.0, 1)),
-		A2(
-			$elm$core$Debug$log,
-			'Log phone apps elements:' + $elm$core$Debug$toString(
-				$author$project$Images$phoneAppsElements($author$project$Images$phoneAppSize)),
-			A2(
-				$elm$core$Debug$log,
-				'appies' + $elm$core$Debug$toString(
-					$author$project$Images$phoneApps(25.0)),
+	$elm$svg$Svg$svg,
+	_List_fromArray(
+		[
+			$elm$svg$Svg$Attributes$width('120'),
+			$elm$svg$Svg$Attributes$height('250'),
+			$elm$svg$Svg$Attributes$viewBox($author$project$Images$phoneVB)
+		]),
+	_Utils_ap(
+		_List_fromArray(
+			[
 				A2(
-					$elm$svg$Svg$svg,
-					_List_fromArray(
-						[
-							$elm$svg$Svg$Attributes$width('120'),
-							$elm$svg$Svg$Attributes$height('250'),
-							$elm$svg$Svg$Attributes$viewBox($author$project$Images$phoneVB)
-						]),
-					_Utils_ap(
-						_List_fromArray(
-							[
-								A2(
-								$elm$svg$Svg$rect,
-								_List_fromArray(
-									[
-										$elm$svg$Svg$Attributes$x('15'),
-										$elm$svg$Svg$Attributes$y('31'),
-										$elm$svg$Svg$Attributes$width('120'),
-										$elm$svg$Svg$Attributes$height('250'),
-										$elm$svg$Svg$Attributes$rx('20'),
-										$elm$svg$Svg$Attributes$ry('20'),
-										$elm$svg$Svg$Attributes$fill('black')
-									]),
-								_List_Nil),
-								A2(
-								$elm$svg$Svg$rect,
-								_List_fromArray(
-									[
-										$elm$svg$Svg$Attributes$x('25'),
-										$elm$svg$Svg$Attributes$y('55'),
-										$elm$svg$Svg$Attributes$width('100'),
-										$elm$svg$Svg$Attributes$height('195'),
-										$elm$svg$Svg$Attributes$fill('white')
-									]),
-								_List_Nil)
-							]),
-						$author$project$Images$phoneAppsElements($author$project$Images$phoneAppSize)))))));
+				$elm$svg$Svg$rect,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$x('15'),
+						$elm$svg$Svg$Attributes$y('31'),
+						$elm$svg$Svg$Attributes$width('120'),
+						$elm$svg$Svg$Attributes$height('250'),
+						$elm$svg$Svg$Attributes$rx('20'),
+						$elm$svg$Svg$Attributes$ry('20'),
+						$elm$svg$Svg$Attributes$fill('black')
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$rect,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$x('25'),
+						$elm$svg$Svg$Attributes$y('55'),
+						$elm$svg$Svg$Attributes$width('100'),
+						$elm$svg$Svg$Attributes$height('195'),
+						$elm$svg$Svg$Attributes$fill('white')
+					]),
+				_List_Nil)
+			]),
+		$author$project$Images$phoneAppsElements($author$project$Images$phoneAppSize)));
 var $author$project$Main$titleSvgs = A2(
 	$elm$html$Html$div,
 	_List_fromArray(
@@ -5956,8 +7010,7 @@ var $author$project$Logo$main = A2(
 			$elm$svg$Svg$Attributes$x('0'),
 			$elm$svg$Svg$Attributes$y('0'),
 			$elm$svg$Svg$Attributes$viewBox('0 0 323.141 322.95'),
-			$elm$svg$Svg$Attributes$width('100%'),
-			$elm$svg$Svg$Attributes$height('auto')
+			$elm$svg$Svg$Attributes$width('100%')
 		]),
 	_List_fromArray(
 		[
@@ -6245,27 +7298,36 @@ var $author$project$Main$languageGnostic = A2(
 										A2($elm$html$Html$Attributes$style, 'margin-top', '4px')
 									])),
 							_List_fromArray(
-								[$author$project$Logo$main]))
+								[
+									A2(
+									$elm$html$Html$h1,
+									_List_fromArray(
+										[
+											A2($elm$html$Html$Attributes$style, 'position', 'absolute'),
+											A2($elm$html$Html$Attributes$style, 'margin-top', '58px'),
+											A2($elm$html$Html$Attributes$style, 'margin-left', '40px'),
+											A2($elm$html$Html$Attributes$style, 'font-family', 'arial'),
+											A2($elm$html$Html$Attributes$style, 'color', 'white'),
+											A2($elm$html$Html$Attributes$style, 'text-shadow', '2px 2px 5px black'),
+											A2($elm$html$Html$Attributes$style, 'font-size', '4em')
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text('Elm')
+										])),
+									$author$project$Logo$main
+								]))
 						]))
 				]))));
-var $elm$html$Html$button = _VirtualDom_node('button');
-var $elm$virtual_dom$VirtualDom$Normal = function (a) {
-	return {$: 'Normal', a: a};
-};
-var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
-var $elm$html$Html$Events$on = F2(
-	function (event, decoder) {
-		return A2(
-			$elm$virtual_dom$VirtualDom$on,
-			event,
-			$elm$virtual_dom$VirtualDom$Normal(decoder));
-	});
-var $elm$html$Html$Events$onClick = function (msg) {
-	return A2(
-		$elm$html$Html$Events$on,
-		'click',
-		$elm$json$Json$Decode$succeed(msg));
-};
+var $author$project$MorkromCss$mainDiv = _List_fromArray(
+	[
+		A2($elm$html$Html$Attributes$style, 'background', 'white'),
+		A2($elm$html$Html$Attributes$style, 'justify-content', 'center'),
+		A2($elm$html$Html$Attributes$style, 'display', 'flex'),
+		A2($elm$html$Html$Attributes$style, 'gap', '10px'),
+		A2($elm$html$Html$Attributes$style, 'flex-direction', 'column'),
+		A2($elm$html$Html$Attributes$style, 'margin-top', '20px')
+	]);
 var $author$project$Main$menuButton = F2(
 	function (msg, title) {
 		return A2(
@@ -6282,52 +7344,189 @@ var $author$project$Main$menuButton = F2(
 					$elm$html$Html$text(title)
 				]));
 	});
-var $author$project$Main$view = function (model) {
+var $author$project$MorkromCss$menuDiv = _List_fromArray(
+	[
+		A2($elm$html$Html$Attributes$style, 'display', 'flex'),
+		A2($elm$html$Html$Attributes$style, 'justify-content', 'center'),
+		A2($elm$html$Html$Attributes$style, 'gap', '10px'),
+		A2($elm$html$Html$Attributes$style, 'position', 'fixed'),
+		A2($elm$html$Html$Attributes$style, 'background-color', 'rgba(255, 255, 255, 0.95)'),
+		A2($elm$html$Html$Attributes$style, 'backdrop-filter', 'blur(50px)'),
+		A2($elm$html$Html$Attributes$style, 'top', '0'),
+		A2($elm$html$Html$Attributes$style, 'left', '0'),
+		A2($elm$html$Html$Attributes$style, 'right', '0')
+	]);
+var $author$project$MorkromCss$parentDiv = _List_fromArray(
+	[
+		A2($elm$html$Html$Attributes$style, 'position', 'absolute'),
+		A2($elm$html$Html$Attributes$style, 'top', '0%'),
+		A2($elm$html$Html$Attributes$style, 'width', '100%')
+	]);
+var $author$project$Main$TapOutVideo = function (a) {
+	return {$: 'TapOutVideo', a: a};
+};
+var $author$project$FSVideoPlayer$TapOutVideo = {$: 'TapOutVideo'};
+var $elm$json$Json$Encode$bool = _Json_wrap;
+var $elm$html$Html$Attributes$boolProperty = F2(
+	function (key, bool) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$bool(bool));
+	});
+var $elm$html$Html$Attributes$controls = $elm$html$Html$Attributes$boolProperty('controls');
+var $author$project$FSVideoPlayer$pixes = function (value) {
+	return $elm$core$String$fromInt(value) + 'px';
+};
+var $elm$html$Html$Attributes$src = function (url) {
+	return A2(
+		$elm$html$Html$Attributes$stringProperty,
+		'src',
+		_VirtualDom_noJavaScriptOrHtmlUri(url));
+};
+var $author$project$AppleseGallerySlide$vidH = function (frame) {
+	if (frame.$ === 'Tablet') {
+		return 401;
+	} else {
+		return 348;
+	}
+};
+var $author$project$AppleseGallerySlide$vidW = function (frame) {
+	if (frame.$ === 'Tablet') {
+		return 714;
+	} else {
+		return 201;
+	}
+};
+var $elm$html$Html$video = _VirtualDom_node('video');
+var $author$project$FSVideoPlayer$vidFrame = function (vid) {
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
 			[
-				A2($elm$html$Html$Attributes$style, 'position', 'absolute'),
-				A2($elm$html$Html$Attributes$style, 'top', '0%'),
-				A2($elm$html$Html$Attributes$style, 'width', '100%')
+				$elm$html$Html$Attributes$class('centeredElement'),
+				A2(
+				$elm$html$Html$Attributes$style,
+				'width',
+				$author$project$FSVideoPlayer$pixes(
+					$author$project$AppleseGallerySlide$vidW(vid.frameDesign) + 40)),
+				A2(
+				$elm$html$Html$Attributes$style,
+				'height',
+				$author$project$FSVideoPlayer$pixes(
+					$author$project$AppleseGallerySlide$vidH(vid.frameDesign) + 80)),
+				A2($elm$html$Html$Attributes$style, 'background', 'black'),
+				A2($elm$html$Html$Attributes$style, 'border-radius', '15px'),
+				A2($elm$html$Html$Attributes$style, 'border', '0.5px solid gray')
 			]),
 		_List_fromArray(
 			[
 				A2(
-				$elm$html$Html$div,
+				$elm$html$Html$video,
 				_List_fromArray(
 					[
-						A2($elm$html$Html$Attributes$style, 'display', 'flex'),
-						A2($elm$html$Html$Attributes$style, 'justify-content', 'center'),
-						A2($elm$html$Html$Attributes$style, 'gap', '10px'),
-						A2($elm$html$Html$Attributes$style, 'position', 'fixed'),
-						A2($elm$html$Html$Attributes$style, 'background-color', 'rgba(255, 255, 255, 0.95)'),
-						A2($elm$html$Html$Attributes$style, 'backdrop-filter', 'blur(50px)'),
-						A2($elm$html$Html$Attributes$style, 'top', '0'),
-						A2($elm$html$Html$Attributes$style, 'left', '0'),
-						A2($elm$html$Html$Attributes$style, 'right', '0')
+						$elm$html$Html$Attributes$src(vid.videoUrl),
+						$elm$html$Html$Attributes$class('centeredElement'),
+						$elm$html$Html$Attributes$controls(true),
+						A2(
+						$elm$html$Html$Attributes$style,
+						'width',
+						$author$project$FSVideoPlayer$pixes(
+							$author$project$AppleseGallerySlide$vidW(vid.frameDesign))),
+						A2(
+						$elm$html$Html$Attributes$style,
+						'height',
+						$author$project$FSVideoPlayer$pixes(
+							$author$project$AppleseGallerySlide$vidH(vid.frameDesign))),
+						A2($elm$html$Html$Attributes$style, 'border', '0.5px solid midnightblue')
 					]),
-				_List_fromArray(
-					[
-						A2($author$project$Main$menuButton, $author$project$Main$Greetings, 'Greetings'),
-						A2($author$project$Main$menuButton, $author$project$Main$Work, 'Work')
-					])),
-				A2(
-				$elm$html$Html$div,
-				_List_fromArray(
-					[
-						A2($elm$html$Html$Attributes$style, 'background', 'white'),
-						A2($elm$html$Html$Attributes$style, 'justify-content', 'center'),
-						A2($elm$html$Html$Attributes$style, 'display', 'flex'),
-						A2($elm$html$Html$Attributes$style, 'gap', '10px'),
-						A2($elm$html$Html$Attributes$style, 'flex-direction', 'column'),
-						A2($elm$html$Html$Attributes$style, 'margin-top', '20px')
-					]),
-				_List_fromArray(
-					[$author$project$Main$introSection, $author$project$Main$languageGnostic, $author$project$Main$exp]))
+				_List_Nil)
 			]));
 };
-var $author$project$Main$main = $elm$browser$Browser$sandbox(
-	{init: $author$project$Main$init, update: $author$project$Main$update, view: $author$project$Main$view});
-_Platform_export({'Main':{'init':$author$project$Main$main(
-	$elm$json$Json$Decode$succeed(_Utils_Tuple0))(0)}});}(this));
+var $author$project$FSVideoPlayer$view = F2(
+	function (msg, model) {
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					A2($elm$html$Html$Attributes$style, 'position', 'fixed'),
+					A2($elm$html$Html$Attributes$style, 'width', '100%'),
+					A2($elm$html$Html$Attributes$style, 'height', '100%'),
+					A2($elm$html$Html$Attributes$style, 'top', '0'),
+					A2($elm$html$Html$Attributes$style, 'left', '0'),
+					A2($elm$html$Html$Attributes$style, 'background-color', 'rgba(0, 0, 0, 0.75)'),
+					A2($elm$html$Html$Attributes$style, 'z-index', '2')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$button,
+					_List_fromArray(
+						[
+							$elm$html$Html$Events$onClick(
+							msg.msg($author$project$FSVideoPlayer$TapOutVideo)),
+							A2($elm$html$Html$Attributes$style, 'position', 'absolute'),
+							A2($elm$html$Html$Attributes$style, 'background', 'rgba(0.0, 0.0, 0.0, 0.0)'),
+							A2($elm$html$Html$Attributes$style, 'width', '100%'),
+							A2($elm$html$Html$Attributes$style, 'height', '100%'),
+							A2($elm$html$Html$Attributes$style, 'top', '0'),
+							A2($elm$html$Html$Attributes$style, 'left', '0')
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Close')
+						])),
+					$author$project$FSVideoPlayer$vidFrame(model)
+				]));
+	});
+var $author$project$Main$selectedGalleryVideo = function (video) {
+	if (video.$ === 'Just') {
+		var videoo = video.a;
+		return _List_fromArray(
+			[
+				A2(
+				$author$project$FSVideoPlayer$view,
+				{msg: $author$project$Main$TapOutVideo},
+				videoo)
+			]);
+	} else {
+		return _List_Nil;
+	}
+};
+var $author$project$Main$view = function (model) {
+	return A2(
+		$elm$html$Html$div,
+		$author$project$MorkromCss$parentDiv,
+		_Utils_ap(
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$div,
+					$author$project$MorkromCss$menuDiv,
+					_List_fromArray(
+						[
+							A2($author$project$Main$menuButton, $author$project$Main$Greetings, 'Greetings')
+						])),
+					A2(
+					$elm$html$Html$div,
+					$author$project$MorkromCss$mainDiv,
+					_List_fromArray(
+						[
+							$author$project$Main$introSection,
+							$author$project$Main$languageGnostic,
+							$author$project$Main$exp,
+							$author$project$Main$infiniteGalleryView(model),
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									A2($elm$html$Html$Attributes$style, 'height', '50px')
+								]),
+							_List_Nil)
+						]))
+				]),
+			$author$project$Main$selectedGalleryVideo(model.selectedGalleryVideo)));
+};
+var $author$project$Main$main = $elm$browser$Browser$element(
+	{init: $author$project$Main$init, subscriptions: $author$project$Main$subscriptions, update: $author$project$Main$update, view: $author$project$Main$view});
+_Platform_export({'Main':{'init':$author$project$Main$main($elm$json$Json$Decode$int)(0)}});}(this));

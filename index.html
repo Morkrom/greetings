@@ -1,19 +1,35 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1" />
+    <head>
+        <meta charset="utf-8" />
+        <title>Hello</title>
+        <link rel="stylesheet" href="index.css" />
+        <script src="app.js"></script>
+    </head>
 
-    <title>Hello</title>
-    <link rel="stylesheet" href="index.css">
-  </head>
-  <body>
-    <div id="app"></div>
-    <script src="app.js"></script>
-    <script>
-      Elm.Main.init({
-        node: document.getElementById("app")
-      });
-    </script>
-  </body>
+    <body>
+        <div id="app"></div>
+        <script>
+            var app = Elm.Main.init({
+                node: document.getElementById("app"),
+                flags: window.innerWidth,
+            });
+
+            window.addEventListener("resize", () => {
+                app.ports.messageReceiver.send(window.innerWidth);
+            });
+            /*
+	    window.addEventListener('resize', () => {
+              console.log('New width: ' + window.innerWidth);
+              app.ports.messageReceiver.send(window.innerWidth)
+            })*/
+
+            /*function isMobileDevice() {
+                const isTouchScreen =
+                    "ontouchstart" in window || navigator.maxTouchPoints > 0;
+                const isSmallScreen = window.innerWidth < 768;
+                return isTouchScreen && isSmallScreen;
+            }*/
+        </script>
+    </body>
 </html>
