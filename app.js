@@ -7296,7 +7296,8 @@ var $author$project$Main$languageGnostic = A2(
 								_List_fromArray(
 									[
 										A2($elm$html$Html$Attributes$style, 'margin-top', '4px'),
-										A2($elm$html$Html$Attributes$style, 'position', 'relative')
+										A2($elm$html$Html$Attributes$style, 'position', 'relative'),
+										A2($elm$html$Html$Attributes$style, 'height', '190px')
 									])),
 							_List_fromArray(
 								[
@@ -7394,20 +7395,30 @@ var $elm$html$Html$Attributes$src = function (url) {
 		'src',
 		_VirtualDom_noJavaScriptOrHtmlUri(url));
 };
-var $author$project$AppleseGallerySlide$vidH = function (frame) {
-	if (frame.$ === 'Tablet') {
-		return 401;
-	} else {
-		return 348;
-	}
-};
-var $author$project$AppleseGallerySlide$vidW = function (frame) {
-	if (frame.$ === 'Tablet') {
-		return 714;
-	} else {
-		return 201;
-	}
-};
+var $author$project$AppleseGallerySlide$vidH = F2(
+	function (frame, sc) {
+		if (frame.$ === 'Tablet') {
+			if (sc.$ === 'Large') {
+				return 401;
+			} else {
+				return 112;
+			}
+		} else {
+			return 348;
+		}
+	});
+var $author$project$AppleseGallerySlide$vidW = F2(
+	function (frame, sc) {
+		if (frame.$ === 'Tablet') {
+			if (sc.$ === 'Large') {
+				return 714;
+			} else {
+				return 201;
+			}
+		} else {
+			return 201;
+		}
+	});
 var $elm$html$Html$video = _VirtualDom_node('video');
 var $author$project$FSVideoPlayer$vidFrame = function (vid) {
 	return A2(
@@ -7419,12 +7430,12 @@ var $author$project$FSVideoPlayer$vidFrame = function (vid) {
 				$elm$html$Html$Attributes$style,
 				'width',
 				$author$project$FSVideoPlayer$pixes(
-					$author$project$AppleseGallerySlide$vidW(vid.frameDesign) + 40)),
+					A2($author$project$AppleseGallerySlide$vidW, vid.modalVideo.frameDesign, vid.sizeClass) + 40)),
 				A2(
 				$elm$html$Html$Attributes$style,
 				'height',
 				$author$project$FSVideoPlayer$pixes(
-					$author$project$AppleseGallerySlide$vidH(vid.frameDesign) + 80)),
+					A2($author$project$AppleseGallerySlide$vidH, vid.modalVideo.frameDesign, vid.sizeClass) + 80)),
 				A2($elm$html$Html$Attributes$style, 'background', 'black'),
 				A2($elm$html$Html$Attributes$style, 'border-radius', '15px'),
 				A2($elm$html$Html$Attributes$style, 'border', '0.5px solid gray')
@@ -7435,19 +7446,19 @@ var $author$project$FSVideoPlayer$vidFrame = function (vid) {
 				$elm$html$Html$video,
 				_List_fromArray(
 					[
-						$elm$html$Html$Attributes$src(vid.videoUrl),
+						$elm$html$Html$Attributes$src(vid.modalVideo.videoUrl),
 						$elm$html$Html$Attributes$class('centeredElement'),
 						$elm$html$Html$Attributes$controls(true),
 						A2(
 						$elm$html$Html$Attributes$style,
 						'width',
 						$author$project$FSVideoPlayer$pixes(
-							$author$project$AppleseGallerySlide$vidW(vid.frameDesign))),
+							A2($author$project$AppleseGallerySlide$vidW, vid.modalVideo.frameDesign, vid.sizeClass))),
 						A2(
 						$elm$html$Html$Attributes$style,
 						'height',
 						$author$project$FSVideoPlayer$pixes(
-							$author$project$AppleseGallerySlide$vidH(vid.frameDesign))),
+							A2($author$project$AppleseGallerySlide$vidH, vid.modalVideo.frameDesign, vid.sizeClass))),
 						A2($elm$html$Html$Attributes$style, 'border', '0.5px solid midnightblue')
 					]),
 				_List_Nil)
@@ -7489,20 +7500,24 @@ var $author$project$FSVideoPlayer$view = F2(
 					$author$project$FSVideoPlayer$vidFrame(model)
 				]));
 	});
-var $author$project$Main$selectedGalleryVideo = function (video) {
-	if (video.$ === 'Just') {
-		var videoo = video.a;
-		return _List_fromArray(
-			[
-				A2(
-				$author$project$FSVideoPlayer$view,
-				{msg: $author$project$Main$TapOutVideo},
-				videoo)
-			]);
-	} else {
-		return _List_Nil;
-	}
-};
+var $author$project$Main$selectedGalleryVideo = F2(
+	function (video, sw) {
+		if (video.$ === 'Just') {
+			var videoo = video.a;
+			return _List_fromArray(
+				[
+					A2(
+					$author$project$FSVideoPlayer$view,
+					{msg: $author$project$Main$TapOutVideo},
+					{
+						modalVideo: videoo,
+						sizeClass: $author$project$AppleseGallerySlide$sizeClass(sw)
+					})
+				]);
+		} else {
+			return _List_Nil;
+		}
+	});
 var $author$project$Main$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
@@ -7535,7 +7550,7 @@ var $author$project$Main$view = function (model) {
 							_List_Nil)
 						]))
 				]),
-			$author$project$Main$selectedGalleryVideo(model.selectedGalleryVideo)));
+			A2($author$project$Main$selectedGalleryVideo, model.selectedGalleryVideo, model.screenWidth)));
 };
 var $author$project$Main$main = $elm$browser$Browser$element(
 	{init: $author$project$Main$init, subscriptions: $author$project$Main$subscriptions, update: $author$project$Main$update, view: $author$project$Main$view});
