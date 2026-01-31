@@ -8,7 +8,7 @@ port module Main exposing (main)
 import AppleseGallery exposing (..)
 import AppleseGallerySlide exposing (ModalVideo, Msg, slideComponents)
 import Browser
-import Css exposing (infinite)
+import Css exposing (infinite, relative)
 import FSVideoPlayer exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -297,19 +297,21 @@ languageGnostic =
                     , div
                         (smallBlockW 190.0
                             ++ [ style "margin-top" "4px"
+                               , style "position" "relative"
                                ]
                         )
-                        [ h1
+                        [ div [ style "position" "absolute" ] [ Logo.main ]
+                        , h1
                             [ style "position" "absolute"
-                            , style "margin-top" "58px"
-                            , style "margin-left" "40px"
+                            , style "margin-left" "37px"
+                            , style "margin-top" "57px"
                             , style "font-family" "arial"
                             , style "color" "white"
                             , style "text-shadow" "2px 2px 5px black"
                             , style "font-size" "4em"
+                            , style "z-index" "1"
                             ]
                             [ text "Elm" ]
-                        , Logo.main
                         ]
                     ]
                ]

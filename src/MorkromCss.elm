@@ -220,6 +220,7 @@ menuDiv =
     , style "top" "0"
     , style "left" "0"
     , style "right" "0"
+    , style "z-index" "2"
     ]
 
 
