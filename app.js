@@ -7295,27 +7295,36 @@ var $author$project$Main$languageGnostic = A2(
 								$author$project$MorkromCss$smallBlockW(190.0),
 								_List_fromArray(
 									[
-										A2($elm$html$Html$Attributes$style, 'margin-top', '4px')
+										A2($elm$html$Html$Attributes$style, 'margin-top', '4px'),
+										A2($elm$html$Html$Attributes$style, 'position', 'relative')
 									])),
 							_List_fromArray(
 								[
+									A2(
+									$elm$html$Html$div,
+									_List_fromArray(
+										[
+											A2($elm$html$Html$Attributes$style, 'position', 'absolute')
+										]),
+									_List_fromArray(
+										[$author$project$Logo$main])),
 									A2(
 									$elm$html$Html$h1,
 									_List_fromArray(
 										[
 											A2($elm$html$Html$Attributes$style, 'position', 'absolute'),
-											A2($elm$html$Html$Attributes$style, 'margin-top', '58px'),
-											A2($elm$html$Html$Attributes$style, 'margin-left', '40px'),
+											A2($elm$html$Html$Attributes$style, 'margin-left', '37px'),
+											A2($elm$html$Html$Attributes$style, 'margin-top', '57px'),
 											A2($elm$html$Html$Attributes$style, 'font-family', 'arial'),
 											A2($elm$html$Html$Attributes$style, 'color', 'white'),
 											A2($elm$html$Html$Attributes$style, 'text-shadow', '2px 2px 5px black'),
-											A2($elm$html$Html$Attributes$style, 'font-size', '4em')
+											A2($elm$html$Html$Attributes$style, 'font-size', '4em'),
+											A2($elm$html$Html$Attributes$style, 'z-index', '1')
 										]),
 									_List_fromArray(
 										[
 											$elm$html$Html$text('Elm')
-										])),
-									$author$project$Logo$main
+										]))
 								]))
 						]))
 				]))));
@@ -7354,7 +7363,8 @@ var $author$project$MorkromCss$menuDiv = _List_fromArray(
 		A2($elm$html$Html$Attributes$style, 'backdrop-filter', 'blur(50px)'),
 		A2($elm$html$Html$Attributes$style, 'top', '0'),
 		A2($elm$html$Html$Attributes$style, 'left', '0'),
-		A2($elm$html$Html$Attributes$style, 'right', '0')
+		A2($elm$html$Html$Attributes$style, 'right', '0'),
+		A2($elm$html$Html$Attributes$style, 'z-index', '2')
 	]);
 var $author$project$MorkromCss$parentDiv = _List_fromArray(
 	[
