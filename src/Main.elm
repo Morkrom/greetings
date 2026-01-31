@@ -1,22 +1,212 @@
-module Main exposing (main)
+port module Main exposing (main)
 
 --exposing (Html, button, div, text, a)
 --style, href)
+--exposing (ModalVideo, SlideComponentData, ModalVideoFrameDesign, SlideImage)
+-- import AppleseGallerySlide as Slide exposing (..)
 
+import AppleseGallery exposing (..)
+import AppleseGallerySlide exposing (ModalVideo, Msg, slideComponents)
 import Browser
+import Css exposing (infinite)
+import FSVideoPlayer exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onClick)
+import Html.Events exposing (..)
 import Images
 import Logo
 import MorkromCss exposing (..)
 import ObjCIcon exposing (objectiveC)
-import Svg.Attributes exposing (scale)
 import SwiftIcon exposing (swift)
 
 
+sections =
+    [ "Greetings!" ]
 
--- Domain
+
+type alias Model =
+    { appSections : List String
+    , selectedSection : Int
+    , gallery : AppleseGallery.State
+    , selectedGalleryVideo : Maybe AppleseGallerySlide.ModalVideo
+    , screenWidth : Int
+    }
+
+
+
+-- Application
+
+
+main : Program Int Model Msg
+main =
+    Browser.element
+        --.sandbox
+        { init = init
+        , view = view
+        , update = update
+        , subscriptions = subscriptions
+        }
+
+
+
+-- PORTS
+
+
+port sendMessage : Int -> Cmd msg
+
+
+port messageReceiver : (Int -> msg) -> Sub msg
+
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    messageReceiver Receive
+
+
+
+-- MODEL
+
+
+init : Int -> ( Model, Cmd Msg )
+init flag =
+    ( { appSections = sections
+      , selectedSection = 0
+      , gallery = AppleseGallery.init
+      , selectedGalleryVideo = Nothing
+      , screenWidth = flag
+      }
+    , Cmd.none
+    )
+
+
+
+-- UPDATE
+
+
+type Msg
+    = Greetings
+    | Work
+    | AppleseGalleryMsg AppleseGallery.Msg
+    | Receive Int
+    | TapOutVideo FSVideoPlayer.Msg
+
+
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    case msg of
+        Greetings ->
+            ( { model | selectedSection = 0 }, Cmd.none )
+
+        Work ->
+            ( { model | selectedSection = 1 }, Cmd.none )
+
+        AppleseGalleryMsg msgg ->
+            ( modelWithGalleryAndVideo (galleryAndVideo (Tuple.first (AppleseGallery.update msgg model.gallery))) model
+            , Cmd.none
+            )
+
+        Receive screenWidth ->
+            ( { model | screenWidth = screenWidth }
+            , Cmd.none
+            )
+
+        TapOutVideo vidMsg ->
+            ( { model
+                | gallery = Tuple.first <| AppleseGallery.update AppleseGallery.cancelSelectedMsg model.gallery
+                , selectedGalleryVideo = Nothing
+              }
+            , Cmd.none
+            )
+
+
+galleryAndVideo : AppleseGallery.State -> ( AppleseGallery.State, Maybe AppleseGallerySlide.ModalVideo )
+galleryAndVideo state =
+    ( state, AppleseGallery.videoOfState state )
+
+
+modelWithGalleryAndVideo : ( AppleseGallery.State, Maybe AppleseGallerySlide.ModalVideo ) -> Model -> Model
+modelWithGalleryAndVideo tupple model =
+    { model
+        | gallery = Tuple.first tupple
+        , selectedGalleryVideo = Tuple.second tupple
+    }
+
+
+
+{- }
+   SelectModalVideo video ->
+       ( { model
+           | selectedModalVideo = Just video
+         }
+       , Cmd.none
+       )
+-}
+-- VIEW
+
+
+view : Model -> Html Msg
+view model =
+    div
+        parentDiv
+    <|
+        [ div
+            menuDiv
+            [ menuButton Greetings "Greetings"
+            ]
+        , div
+            mainDiv
+            [ introSection
+            , languageGnostic
+            , exp
+            , infiniteGalleryView model
+            , div [ style "height" "50px" ] []
+            ]
+        ]
+            ++ selectedGalleryVideo model.selectedGalleryVideo
+
+
+infiniteGalleryView : Model -> Html Msg
+infiniteGalleryView model =
+    div introSectionDivStyle <|
+        [ h1 titleTextStyle [ text "Portfolio" ]
+        , AppleseGallery.view (config model.screenWidth) model.gallery (slideComponents model.screenWidth) |> Html.map AppleseGalleryMsg
+        ]
+
+
+selectedGalleryVideo : Maybe AppleseGallerySlide.ModalVideo -> List (Html Msg)
+selectedGalleryVideo video =
+    case video of
+        Just videoo ->
+            [ FSVideoPlayer.view { msg = TapOutVideo } videoo
+            ]
+
+        Nothing ->
+            []
+
+
+config : Int -> AppleseGallery.Config
+config viewportW =
+    AppleseGallery.config
+        { id = "applese-gallery"
+        , width = AppleseGallery.pct 100
+        , height = AppleseGallery.px <| configH viewportW
+        , slidePercentileOfWidth = 75
+        }
+
+
+configH : Int -> Float
+configH viewportW =
+    let
+        isLarge : Bool
+        isLarge =
+            viewportW >= 540
+    in
+    case isLarge of
+        False ->
+            250
+
+        _ ->
+            500
 
 
 menuButton : Msg -> String -> Html Msg
@@ -28,27 +218,6 @@ menuButton msg title =
         , style "background" "white"
         ]
         [ text title ]
-
-
-
--- Application
-
-
-main : Program () Model Msg
-main =
-    Browser.sandbox
-        { init = init
-        , view = view
-        , update = update
-        }
-
-
-
--- MODEL
-
-
-sections =
-    [ "greetings" ]
 
 
 roundedButton : String -> String -> RoundedButton -> Html Msg
@@ -73,79 +242,6 @@ roundedButton title link buttonStyle =
         ]
 
 
-type alias Model =
-    { appSections : List String
-    , selectedSection : Int
-    }
-
-
-init : Model
-init =
-    { appSections = sections
-    , selectedSection = 0
-    }
-
-
-
--- UPDATE
-
-
-type Msg
-    = Greetings
-    | Work
-
-
-update : Msg -> Model -> Model
-update msg model =
-    case msg of
-        Greetings ->
-            { model | selectedSection = 0 }
-
-        Work ->
-            { model | selectedSection = 1 }
-
-
-
--- VIEW
-
-
-view : Model -> Html Msg
-view model =
-    div
-        [ style "position" "absolute"
-        , style "top" "0%"
-        , style "width" "100%"
-        ]
-        [ div
-            [ style "display" "flex"
-            , style "justify-content" "center"
-            , style "gap" "10px"
-            , style "position" "fixed"
-            , style "background-color" "rgba(255, 255, 255, 0.95)"
-            , style "backdrop-filter" "blur(50px)"
-            , style "top" "0"
-            , style "left" "0"
-            , style "right" "0"
-            ]
-            [ menuButton Greetings "Greetings"
-            , menuButton Work "Work"
-            ]
-        , div
-            [ style "background" "white"
-            , style "justify-content" "center"
-            , style "display" "flex"
-            , style "gap" "10px"
-
-            --, style "background-color" "white"
-            , style "flex-direction" "column"
-            , style "margin-top" "20px"
-            ]
-            [ introSection, languageGnostic, exp ]
-
-        --    div [style "background" "red"] [text (String.fromInt model.selectedSection)]
-        ]
-
-
 introSection : Html Msg
 introSection =
     div introSectionDivStyle
@@ -155,8 +251,7 @@ introSection =
 roundedButtons : Html Msg
 roundedButtons =
     div mainRoundedButtonsStyle
-        [ --roundedButton "Résumé" "file:///Users/apple/Software/morkrom/resume-master-a.pdf" Highlighted,
-          roundedButton "Contact" "mailto:morkrom@icloud.com" Lowlighted
+        [ roundedButton "Contact" "mailto:morkrom@icloud.com" Lowlighted
         ]
 
 
@@ -201,9 +296,21 @@ languageGnostic =
                         ]
                     , div
                         (smallBlockW 190.0
-                            ++ [ style "margin-top" "4px" ]
+                            ++ [ style "margin-top" "4px"
+                               ]
                         )
-                        [ Logo.main ]
+                        [ h1
+                            [ style "position" "absolute"
+                            , style "margin-top" "58px"
+                            , style "margin-left" "40px"
+                            , style "font-family" "arial"
+                            , style "color" "white"
+                            , style "text-shadow" "2px 2px 5px black"
+                            , style "font-size" "4em"
+                            ]
+                            [ text "Elm" ]
+                        , Logo.main
+                        ]
                     ]
                ]
         )
@@ -224,7 +331,7 @@ exp =
 
 thriveMarketExp : Html Msg
 thriveMarketExp =
-    expBox "6 yr"
+    expBox "5 yr"
         (linkedExperience
             "Senior iOS Engineer (Performance, Features, Verticals, Specialist)⇗"
             "https://thrivemarket.com"
