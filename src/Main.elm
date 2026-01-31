@@ -8,6 +8,7 @@ port module Main exposing (main)
 import AppleseGallery exposing (..)
 import AppleseGallerySlide exposing (ModalVideo, Msg, slideComponents)
 import Browser
+import FSVideoPlayer exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -85,8 +86,8 @@ type Msg
     = Greetings
     | Work
     | AppleseGalleryMsg AppleseGallery.Msg
-    | CloseSelection
     | Receive Int
+    | TapOutVideo FSVideoPlayer.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -102,14 +103,13 @@ update msg model =
             ( modelWithGalleryAndVideo (galleryAndVideo (Tuple.first (AppleseGallery.update msgg model.gallery))) model
             , Cmd.none
             )
-                |> Debug.log "::: gallery update"
 
         Receive screenWidth ->
             ( { model | screenWidth = screenWidth }
             , Cmd.none
             )
 
-        CloseSelection ->
+        TapOutVideo vidMsg ->
             ( { model
                 | gallery = Tuple.first <| AppleseGallery.update AppleseGallery.cancelSelectedMsg model.gallery
                 , selectedGalleryVideo = Nothing
@@ -151,7 +151,6 @@ view model =
         [ div
             menuDiv
             [ menuButton Greetings "Greetings"
-            , menuButton Work "Work"
             ]
         , div
             mainDiv
@@ -169,23 +168,10 @@ selectedGalleryVideo : Maybe AppleseGallerySlide.ModalVideo -> List (Html Msg)
 selectedGalleryVideo video =
     case video of
         Just videoo ->
-            [ div
-                [ style "position" "absolute"
-                , style "background" "rgba(0, 0, 0, 0.75)"
-                , style "width" "100%"
-                , style "height" "100%"
-                , style "top" "0"
-                , style "left" "0"
-                ]
-                [ button [ onClick CloseSelection ] [ text "Close" ] ]
-
-            --p [] [ text videoo.videoUrl ], button [ onClick CloseSelection ] [ text "Close" ] ]
-            ]
-                |> Debug.log "::: selected gallery video"
+            [ FSVideoPlayer.view { msg = TapOutVideo } videoo ]
 
         Nothing ->
             []
-                |> Debug.log "::: selected gallery video EMPTY"
 
 
 config : Int -> AppleseGallery.Config

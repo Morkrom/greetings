@@ -198,7 +198,6 @@ update msg ((State index_ transitionState bideo) as state) =
                     ( state
                     , Cmd.none
                     )
-                        |> Debug.log "AppleseGallery: drag start"
 
         DragAt position ->
             case currentDrag transitionState of
@@ -211,7 +210,6 @@ update msg ((State index_ transitionState bideo) as state) =
                     ( State index_ transitionState bideo
                     , Cmd.none
                     )
-                        |> Debug.log "AppleseGallery: drag at"
 
         --(updatePosition position))
         DragEnd ->
@@ -223,37 +221,31 @@ update msg ((State index_ transitionState bideo) as state) =
                                 ( State index_ (InTransition ToNext) bideo
                                 , Cmd.none
                                 )
-                                    |> Debug.log ("AppleseGallery: dragEnd: ToNext" ++ String.fromInt (positionValue beginning) ++ String.fromInt (positionValue current_))
 
                             else if positionValue beginning - positionValue current_ < -100 then
                                 ( State index_ (InTransition ToPrevious) bideo
                                 , Cmd.none
                                 )
-                                    |> Debug.log ("AppleseGallery: dragEnd: ToPrevious" ++ String.fromInt (positionValue beginning) ++ String.fromInt (positionValue current_))
 
                             else
                                 ( State index_ (InTransition ToCurrent) bideo
                                 , Cmd.none
                                 )
-                                    |> Debug.log ("AppleseGallery: dragEnd: ToCurrent" ++ String.fromInt (positionValue beginning) ++ String.fromInt (positionValue current_))
 
                 Nothing ->
                     ( State index_ Resting bideo
                     , Cmd.none
                     )
-                        |> Debug.log "AppleseGallery: dragend: nothing"
 
         TransitionEnd ->
             ( State (incOrDec (transitionTypeForState transitionState) index_) Resting bideo
             , Cmd.none
             )
-                |> Debug.log "AppleseGallery: transition-end"
 
         CtaMsg msgg ->
             ( State index_ Resting (AppleseGallerySlide.videoOf msgg)
             , Cmd.none
             )
-                |> Debug.log "AppleseGallery: cta message"
 
         CancelSelected ->
             ( State index_ transitionState Nothing, Cmd.none )
@@ -465,7 +457,6 @@ columns =
 videoOfState : State -> Maybe AppleseGallerySlide.ModalVideo
 videoOfState ((State _ _ video) as state) =
     video
-        |> Debug.log "videoofstate"
 
 
 slidesForCurrentIndex : Index -> List ( Int, Html Msg ) -> List (Html Msg)
