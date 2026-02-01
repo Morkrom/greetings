@@ -12,10 +12,12 @@ module AppleseGallerySlide exposing
     , videoOf
     )
 
+import DNBIcon exposing (brainSvgBigZoomie)
 import GallerySlideImages exposing (dnb, izonit, res)
 import Html exposing (Attribute, Html, button, div, h2, h4, text)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Html.Lazy exposing (lazy)
 import MorkromCss exposing (..)
 import Svg exposing (Svg)
 
@@ -168,8 +170,9 @@ slideLogo : SlideImage -> Svg msg
 slideLogo data =
     case data of
         Dnb ->
-            dnb
+            brainSvgBigZoomie
 
+        --dnb
         IzOn ->
             izonit
 
@@ -217,6 +220,7 @@ videoOf msg =
 
 slideContent : (Msg -> msg) -> SlideComponentData -> Html msg
 slideContent toSelf componentData =
+    --lazy (\content -> content) <|
     div
         [ style "width" "100%"
         , style "height" "100%"
@@ -235,6 +239,8 @@ slideContent toSelf componentData =
             [ div
                 [ style "width" componentData.svgSize.w
                 , style "height" componentData.svgSize.h
+                , style "min-width" componentData.svgSize.w
+                , style "min-height" componentData.svgSize.h
                 ]
                 [ slideLogo componentData.slideImage ]
             , div

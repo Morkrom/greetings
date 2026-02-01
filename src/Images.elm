@@ -5,12 +5,6 @@ import Svg.Attributes exposing (..)
 import Svg.Events exposing (..)
 
 
-
-
-
-
-
-
 phoneAppSize : Float
 phoneAppSize =
     25.0
@@ -63,6 +57,8 @@ toPhoneScreenElement element =
             , width "20"
             , height "20"
             , fill "blue"
+            , rx "3px"
+            , ry "3px"
             ]
             []
         , animate
