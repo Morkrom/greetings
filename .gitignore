@@ -1,2 +1,4 @@
 elm-stuff/
 app.js
+.DS_Store
+src/.DS_Store
