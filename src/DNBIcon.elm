@@ -35,7 +35,7 @@ brainSvgBigZoomie =
                         , values "#40e8cc;#e61e45;#40e8cc"
                         , dur "1.8s"
                         , repeatCount "0"
-                        , begin "0.3"
+                        , begin "indefinite"
                         , restart "whenNotActive"
                         ]
                         []
@@ -49,7 +49,7 @@ brainSvgBigZoomie =
                         , values "#e61e45;#40e8cc;#e61e45;"
                         , dur "1.8s"
                         , repeatCount "0"
-                        , begin "0.3"
+                        , begin "indefinite"
                         ]
                         []
                     ]
@@ -70,7 +70,7 @@ brainSvgBigZoomie =
                         , values "#e61e45;#40e8cc;#e61e45"
                         , dur "1.7s"
                         , repeatCount "0"
-                        , begin "0.4"
+                        , begin "indefinite"
                         ]
                         []
                     ]
@@ -83,7 +83,7 @@ brainSvgBigZoomie =
                         , values "#40e8cc;#e61e45;#40e8cc"
                         , dur "1.7s"
                         , repeatCount "0"
-                        , begin "0.4"
+                        , begin "indefinite"
                         ]
                         []
                     ]
