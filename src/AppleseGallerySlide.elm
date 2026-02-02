@@ -13,12 +13,13 @@ module AppleseGallerySlide exposing
     )
 
 import DNBIcon exposing (brainSvgBigZoomie)
-import GallerySlideImages exposing (dnb, izonit, res)
+import GallerySlideImages exposing (empty, izonit, res)
 import Html exposing (Attribute, Html, button, div, h2, h4, text)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Html.Lazy exposing (lazy)
 import MorkromCss exposing (..)
+import SlideImages exposing (..)
 import Svg exposing (Svg)
 
 
@@ -166,6 +167,20 @@ slideComponents screenWidth =
     ]
 
 
+slideAccessoryLogo : SlideImage -> Svg msg
+slideAccessoryLogo data =
+    case data of
+        Dnb ->
+            empty
+
+        --dnb
+        IzOn ->
+            SlideImages.eyeball
+
+        Res ->
+            SlideImages.briefcase
+
+
 slideLogo : SlideImage -> Svg msg
 slideLogo data =
     case data of
@@ -242,7 +257,11 @@ slideContent toSelf componentData =
                 , style "min-width" componentData.svgSize.w
                 , style "min-height" componentData.svgSize.h
                 ]
-                [ slideLogo componentData.slideImage ]
+                [ slideLogo componentData.slideImage
+                , div
+                    (slideAccessoryAttributes componentData.sizeClass)
+                    [ slideAccessoryLogo componentData.slideImage ]
+                ]
             , div
                 ([ style "position" "absolute"
                  , style "bottom" "10%"
@@ -255,6 +274,22 @@ slideContent toSelf componentData =
                 slideList toSelf componentData
             ]
         ]
+
+
+slideAccessoryAttributes : SizeClass -> List (Html.Attribute msg)
+slideAccessoryAttributes sc =
+    case sc of
+        Large ->
+            [ class "topRightedElementL"
+            , style "width" "200px"
+            , style "height" "200px"
+            ]
+
+        Small ->
+            [ class "topRightedElement"
+            , style "width" "50px"
+            , style "height" "50px"
+            ]
 
 
 slideText : (Msg -> msg) -> SlideComponentData -> List (Html msg)

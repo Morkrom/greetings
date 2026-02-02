@@ -1,4 +1,4 @@
-module GallerySlideImages exposing (dnb, izonit, res)
+module GallerySlideImages exposing (empty, izonit, res)
 
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
@@ -61,25 +61,22 @@ res =
    64 232 204
    230 30 69
 -}
-
-
-dnb : Svg msg
-dnb =
-    presize
-        [ stop
-            [ offset "0%"
-            , stopColor "#40e8cc"
-            ]
-            []
-        , stop
-            [ offset "75%"
-            , stopColor "#e61e45"
-            ]
-            []
-        ]
-
-
-
+{- }
+   dnb : Svg msg
+   dnb =
+       presize
+           [ stop
+               [ offset "0%"
+               , stopColor "#40e8cc"
+               ]
+               []
+           , stop
+               [ offset "75%"
+               , stopColor "#e61e45"
+               ]
+               []
+           ]
+-}
 --"rgb(2, 102, 223)"
 -- black
 
@@ -98,3 +95,14 @@ izonit =
             ]
             []
         ]
+
+
+empty : Svg msg
+empty =
+    svg
+        [ width "100%"
+        , height "100%"
+        , viewBox phoneVB
+        , preserveAspectRatio "none"
+        ]
+        []

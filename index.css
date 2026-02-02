@@ -43,6 +43,22 @@ p {
     flex-wrap: wrap;
 }
 
+.topRightedElementL {
+    margin: 0;
+    position: absolute;
+    top: 30%;
+    right: -5%;
+    transform: translate(-50%, -50%);
+}
+
+.topRightedElement {
+    margin: 0;
+    position: absolute;
+    top: 15%;
+    right: 5%;
+    transform: translate(-50%, -50%);
+}
+
 .centeredElement {
     margin: 0;
     position: absolute;
