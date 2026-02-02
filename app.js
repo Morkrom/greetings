@@ -5733,14 +5733,15 @@ var $author$project$Main$fitplanExp = A5(
 		[
 			A2($author$project$Main$referenceQuote, 'Michael was able to quickly refactor major parts of our iOS project under a minimal amount of time and planning. He has deep knowledge of best coding practices using apple’s internal libraries as well as 3rd party SDKs. His ability to code review and offer insight to less senior engineers and ability to drive them to the next level was something I’ll miss.', '- Dan Patey (Mobile Lead Engineer)')
 		]));
-var $author$project$MorkromCss$introSectionDivStyle = _List_fromArray(
-	[
-		A2($elm$html$Html$Attributes$style, 'justify-content', 'center'),
-		A2($elm$html$Html$Attributes$style, 'display', 'flex'),
-		A2($elm$html$Html$Attributes$style, 'gap', '0px'),
-		A2($elm$html$Html$Attributes$style, 'flex-direction', 'column'),
-		A2($elm$html$Html$Attributes$style, 'background', 'rgb(243, 243, 246)')
-	]);
+var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
+var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
+var $author$project$MorkromCss$introSectionStyle = function (uid) {
+	return _List_fromArray(
+		[
+			$elm$html$Html$Attributes$id(uid),
+			$elm$html$Html$Attributes$class('introSection')
+		]);
+};
 var $author$project$MorkromCss$Lowlighted = {$: 'Lowlighted'};
 var $author$project$MorkromCss$mainRoundedButtonsStyle = _List_fromArray(
 	[
@@ -5969,7 +5970,7 @@ var $author$project$Main$titleText = F2(
 	});
 var $author$project$Main$exp = A2(
 	$elm$html$Html$div,
-	$author$project$MorkromCss$introSectionDivStyle,
+	$author$project$MorkromCss$introSectionStyle('xp'),
 	_Utils_ap(
 		A2($author$project$Main$titleText, 'Xp', '\"Experience is the teacher of all things.\"'),
 		_Utils_ap(
@@ -6122,7 +6123,6 @@ var $author$project$AppleseGallerySlide$slideComponents = function (screenWidth)
 		}
 		]);
 };
-var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$core$List$filter = F2(
 	function (isGood, list) {
 		return A3(
@@ -6318,7 +6318,6 @@ var $author$project$AppleseGallery$events = F2(
 					$elm$json$Json$Decode$succeed($author$project$AppleseGallery$TransitionEnd))
 				]));
 	});
-var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
 var $author$project$AppleseGallery$isNotInTransition = function (transition) {
 	switch (transition.$) {
 		case 'InTransition':
@@ -6461,6 +6460,296 @@ var $author$project$AppleseGallerySlide$divContentClass = function (_class) {
 		return 'galleryContentFlow';
 	}
 };
+var $author$project$AppleseGallerySlide$slideAccessoryAttributes = function (sc) {
+	if (sc.$ === 'Large') {
+		return _List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('topRightedElementL'),
+				A2($elm$html$Html$Attributes$style, 'width', '200px'),
+				A2($elm$html$Html$Attributes$style, 'height', '200px')
+			]);
+	} else {
+		return _List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('topRightedElement'),
+				A2($elm$html$Html$Attributes$style, 'width', '50px'),
+				A2($elm$html$Html$Attributes$style, 'height', '50px')
+			]);
+	}
+};
+var $author$project$SlideImages$caseStroke = A2($elm$virtual_dom$VirtualDom$attribute, 'stroke', 'lightsteelblue');
+var $elm$virtual_dom$VirtualDom$nodeNS = F2(
+	function (namespace, tag) {
+		return A2(
+			_VirtualDom_nodeNS,
+			namespace,
+			_VirtualDom_noScript(tag));
+	});
+var $elm$svg$Svg$node = $elm$virtual_dom$VirtualDom$nodeNS('http://www.w3.org/2000/svg');
+var $elm$svg$Svg$Attributes$preserveAspectRatio = _VirtualDom_attribute('preserveAspectRatio');
+var $elm$svg$Svg$Attributes$viewBox = _VirtualDom_attribute('viewBox');
+var $author$project$SlideImages$briefcase = A3(
+	$elm$svg$Svg$node,
+	'svg',
+	_List_fromArray(
+		[
+			$elm$svg$Svg$Attributes$viewBox('0 0 438 305'),
+			A2($elm$virtual_dom$VirtualDom$attribute, 'width', '100%'),
+			A2($elm$virtual_dom$VirtualDom$attribute, 'height', '100%'),
+			$elm$svg$Svg$Attributes$preserveAspectRatio('xMidYMid meet')
+		]),
+	_List_fromArray(
+		[
+			A3(
+			$elm$svg$Svg$node,
+			'g',
+			_List_Nil,
+			_List_fromArray(
+				[
+					A3(
+					$elm$svg$Svg$node,
+					'rect',
+					_List_fromArray(
+						[
+							A2($elm$virtual_dom$VirtualDom$attribute, 'fill-opacity', '0'),
+							$author$project$SlideImages$caseStroke,
+							A2($elm$virtual_dom$VirtualDom$attribute, 'rx', '10'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'id', 'svg_4'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'height', '251.00001'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'width', '418'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'y', '50'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'x', '5'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'stroke-width', '10'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'fill', '#0000ff')
+						]),
+					_List_Nil),
+					A3(
+					$elm$svg$Svg$node,
+					'rect',
+					_List_fromArray(
+						[
+							A2($elm$virtual_dom$VirtualDom$attribute, 'fill-opacity', '0'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'rx', '5'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'id', 'svg_6'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'height', '45'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'width', '96'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'y', '5'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'x', '161'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'stroke-width', '10'),
+							$author$project$SlideImages$caseStroke
+						]),
+					_List_Nil),
+					A3(
+					$elm$svg$Svg$node,
+					'rect',
+					_List_fromArray(
+						[
+							A2($elm$virtual_dom$VirtualDom$attribute, 'id', 'svg_7'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'height', '0'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'width', '26'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'y', '0'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'x', '0'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'stroke-width', '15'),
+							$author$project$SlideImages$caseStroke,
+							A2($elm$virtual_dom$VirtualDom$attribute, 'fill', 'none')
+						]),
+					_List_Nil),
+					A3(
+					$elm$svg$Svg$node,
+					'line',
+					_List_fromArray(
+						[
+							$author$project$SlideImages$caseStroke,
+							A2($elm$virtual_dom$VirtualDom$attribute, 'id', 'svg_14'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'y2', '130'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'x2', '418'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'y1', '130'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'x1', '0'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'stroke-width', '8'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'fill', 'none')
+						]),
+					_List_Nil),
+					A3(
+					$elm$svg$Svg$node,
+					'rect',
+					_List_fromArray(
+						[
+							A2($elm$virtual_dom$VirtualDom$attribute, 'rx', '5'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'id', 'svg_22'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'height', '35'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'width', '46'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'y', '75'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'x', '285'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'stroke-width', '8'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'stroke', 'gold'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'fill', 'none')
+						]),
+					_List_Nil),
+					A3(
+					$elm$svg$Svg$node,
+					'rect',
+					_List_fromArray(
+						[
+							A2($elm$virtual_dom$VirtualDom$attribute, 'stroke', 'gold'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'rx', '4'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'id', 'svg_23'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'height', '26'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'width', '7'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'y', '95'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'x', '305'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'stroke-width', '8'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'fill', 'none')
+						]),
+					_List_Nil),
+					A3(
+					$elm$svg$Svg$node,
+					'rect',
+					_List_fromArray(
+						[
+							A2($elm$virtual_dom$VirtualDom$attribute, 'rx', '5'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'id', 'svg_22'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'height', '35'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'width', '46'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'y', '75'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'x', '81'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'stroke-width', '8'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'stroke', 'gold'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'fill', 'none')
+						]),
+					_List_Nil),
+					A3(
+					$elm$svg$Svg$node,
+					'rect',
+					_List_fromArray(
+						[
+							A2($elm$virtual_dom$VirtualDom$attribute, 'stroke', 'gold'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'rx', '4'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'id', 'svg_23'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'height', '26'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'width', '7'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'y', '95'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'x', '101'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'opacity', 'NaN'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'stroke-width', '8'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'fill', 'none')
+						]),
+					_List_Nil)
+				]))
+		]));
+var $elm$svg$Svg$Attributes$height = _VirtualDom_attribute('height');
+var $author$project$GallerySlideImages$phoneVB = '0 0 720 720';
+var $elm$svg$Svg$trustedNode = _VirtualDom_nodeNS('http://www.w3.org/2000/svg');
+var $elm$svg$Svg$svg = $elm$svg$Svg$trustedNode('svg');
+var $elm$svg$Svg$Attributes$width = _VirtualDom_attribute('width');
+var $author$project$GallerySlideImages$empty = A2(
+	$elm$svg$Svg$svg,
+	_List_fromArray(
+		[
+			$elm$svg$Svg$Attributes$width('100%'),
+			$elm$svg$Svg$Attributes$height('100%'),
+			$elm$svg$Svg$Attributes$viewBox($author$project$GallerySlideImages$phoneVB),
+			$elm$svg$Svg$Attributes$preserveAspectRatio('none')
+		]),
+	_List_Nil);
+var $author$project$SlideImages$eyeball = A3(
+	$elm$svg$Svg$node,
+	'svg',
+	_List_fromArray(
+		[
+			$elm$svg$Svg$Attributes$viewBox('0 0 190 190'),
+			A2($elm$virtual_dom$VirtualDom$attribute, 'width', '100%'),
+			A2($elm$virtual_dom$VirtualDom$attribute, 'height', '100%'),
+			$elm$svg$Svg$Attributes$preserveAspectRatio('xMidYMid meet')
+		]),
+	_List_fromArray(
+		[
+			A3(
+			$elm$svg$Svg$node,
+			'defs',
+			_List_Nil,
+			_List_fromArray(
+				[
+					A3(
+					$elm$svg$Svg$node,
+					'radialGradient',
+					_List_fromArray(
+						[
+							A2($elm$virtual_dom$VirtualDom$attribute, 'r', '0.54308'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'cy', '0.5'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'cx', '0.5'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'spreadMethod', 'pad'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'id', 'svg_36')
+						]),
+					_List_fromArray(
+						[
+							A3(
+							$elm$svg$Svg$node,
+							'stop',
+							_List_fromArray(
+								[
+									A2($elm$virtual_dom$VirtualDom$attribute, 'offset', '0.83984'),
+									A2($elm$virtual_dom$VirtualDom$attribute, 'stop-color', '#ffffff')
+								]),
+							_List_Nil),
+							A3(
+							$elm$svg$Svg$node,
+							'stop',
+							_List_fromArray(
+								[
+									A2($elm$virtual_dom$VirtualDom$attribute, 'offset', '1'),
+									A2($elm$virtual_dom$VirtualDom$attribute, 'stop-color', '#000000')
+								]),
+							_List_Nil)
+						]))
+				])),
+			A3(
+			$elm$svg$Svg$node,
+			'g',
+			_List_Nil,
+			_List_fromArray(
+				[
+					A3(
+					$elm$svg$Svg$node,
+					'ellipse',
+					_List_fromArray(
+						[
+							A2($elm$virtual_dom$VirtualDom$attribute, 'stroke', '#000'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'ry', '95'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'rx', '95'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'id', 'svg_32'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'cy', '95'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'cx', '95'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'stroke-width', '0'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'fill', 'url(#svg_36)')
+						]),
+					_List_Nil),
+					A3(
+					$elm$svg$Svg$node,
+					'ellipse',
+					_List_fromArray(
+						[
+							A2($elm$virtual_dom$VirtualDom$attribute, 'stroke', '#000'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'ry', '65'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'rx', '65'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'id', 'svg_32'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'cy', '95'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'cx', '95'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'stroke-width', '0'),
+							A2($elm$virtual_dom$VirtualDom$attribute, 'fill', '#191919')
+						]),
+					_List_Nil)
+				]))
+		]));
+var $author$project$AppleseGallerySlide$slideAccessoryLogo = function (data) {
+	switch (data.$) {
+		case 'Dnb':
+			return $author$project$GallerySlideImages$empty;
+		case 'IzOn':
+			return $author$project$SlideImages$eyeball;
+		default:
+			return $author$project$SlideImages$briefcase;
+	}
+};
 var $author$project$AppleseGallerySlide$SelectVideo = function (a) {
 	return {$: 'SelectVideo', a: a};
 };
@@ -6570,37 +6859,24 @@ var $author$project$AppleseGallerySlide$slideList = F2(
 	function (toSelf, component) {
 		return A2($author$project$AppleseGallerySlide$slideText, toSelf, component);
 	});
-var $elm$svg$Svg$trustedNode = _VirtualDom_nodeNS('http://www.w3.org/2000/svg');
 var $elm$svg$Svg$animate = $elm$svg$Svg$trustedNode('animate');
 var $elm$svg$Svg$Attributes$attributeName = _VirtualDom_attribute('attributeName');
 var $elm$svg$Svg$Attributes$begin = _VirtualDom_attribute('begin');
 var $elm$svg$Svg$defs = $elm$svg$Svg$trustedNode('defs');
 var $elm$svg$Svg$Attributes$dur = _VirtualDom_attribute('dur');
-var $elm$svg$Svg$Attributes$height = _VirtualDom_attribute('height');
 var $elm$svg$Svg$linearGradient = $elm$svg$Svg$trustedNode('linearGradient');
-var $elm$virtual_dom$VirtualDom$nodeNS = F2(
-	function (namespace, tag) {
-		return A2(
-			_VirtualDom_nodeNS,
-			namespace,
-			_VirtualDom_noScript(tag));
-	});
-var $elm$svg$Svg$node = $elm$virtual_dom$VirtualDom$nodeNS('http://www.w3.org/2000/svg');
-var $elm$svg$Svg$Attributes$preserveAspectRatio = _VirtualDom_attribute('preserveAspectRatio');
 var $elm$svg$Svg$rect = $elm$svg$Svg$trustedNode('rect');
 var $elm$svg$Svg$Attributes$repeatCount = _VirtualDom_attribute('repeatCount');
 var $elm$svg$Svg$Attributes$restart = _VirtualDom_attribute('restart');
 var $elm$svg$Svg$Attributes$rx = _VirtualDom_attribute('rx');
 var $elm$svg$Svg$Attributes$ry = _VirtualDom_attribute('ry');
 var $elm$svg$Svg$stop = $elm$svg$Svg$trustedNode('stop');
-var $elm$svg$Svg$svg = $elm$svg$Svg$trustedNode('svg');
 var $elm$svg$Svg$Attributes$values = function (value) {
 	return A2(
 		_VirtualDom_attribute,
 		'values',
 		_VirtualDom_noJavaScriptUri(value));
 };
-var $elm$svg$Svg$Attributes$width = _VirtualDom_attribute('width');
 var $author$project$DNBIcon$brainSvgBigZoomie = A2(
 	$elm$svg$Svg$svg,
 	_List_fromArray(
@@ -6815,8 +7091,6 @@ var $author$project$DNBIcon$brainSvgBigZoomie = A2(
 var $elm$svg$Svg$Attributes$offset = _VirtualDom_attribute('offset');
 var $elm$svg$Svg$Attributes$fill = _VirtualDom_attribute('fill');
 var $elm$svg$Svg$Attributes$id = _VirtualDom_attribute('id');
-var $author$project$GallerySlideImages$phoneVB = '0 0 720 720';
-var $elm$svg$Svg$Attributes$viewBox = _VirtualDom_attribute('viewBox');
 var $elm$svg$Svg$Attributes$x = _VirtualDom_attribute('x');
 var $elm$svg$Svg$Attributes$x1 = _VirtualDom_attribute('x1');
 var $elm$svg$Svg$Attributes$x2 = _VirtualDom_attribute('x2');
@@ -6962,7 +7236,14 @@ var $author$project$AppleseGallerySlide$slideContent = F2(
 								]),
 							_List_fromArray(
 								[
-									$author$project$AppleseGallerySlide$slideLogo(componentData.slideImage)
+									$author$project$AppleseGallerySlide$slideLogo(componentData.slideImage),
+									A2(
+									$elm$html$Html$div,
+									$author$project$AppleseGallerySlide$slideAccessoryAttributes(componentData.sizeClass),
+									_List_fromArray(
+										[
+											$author$project$AppleseGallerySlide$slideAccessoryLogo(componentData.slideImage)
+										]))
 								])),
 							A2(
 							$elm$html$Html$div,
@@ -7048,7 +7329,7 @@ var $author$project$AppleseGallery$view = F3(
 var $author$project$Main$infiniteGalleryView = function (model) {
 	return A2(
 		$elm$html$Html$div,
-		$author$project$MorkromCss$introSectionDivStyle,
+		$author$project$MorkromCss$introSectionStyle('gallery'),
 		_List_fromArray(
 			[
 				A2(
@@ -7197,7 +7478,7 @@ var $author$project$Main$titleSvgs = A2(
 		[$author$project$Images$phone]));
 var $author$project$Main$introSection = A2(
 	$elm$html$Html$div,
-	$author$project$MorkromCss$introSectionDivStyle,
+	$author$project$MorkromCss$introSectionStyle('intro'),
 	_Utils_ap(
 		A2($author$project$Main$titleText, 'Michael Mork', 'iOS Engineer'),
 		_List_fromArray(
@@ -7455,7 +7736,7 @@ var $author$project$SwiftIcon$swift = function (attrs) {
 };
 var $author$project$Main$languageGnostic = A2(
 	$elm$html$Html$div,
-	$author$project$MorkromCss$introSectionDivStyle,
+	$author$project$MorkromCss$introSectionStyle('language'),
 	_Utils_ap(
 		A2($author$project$Main$titleText, 'Language', 'Any paradigm any day.'),
 		_Utils_ap(
