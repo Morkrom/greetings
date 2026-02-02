@@ -109,24 +109,21 @@ referenceStyle =
            ]
 
 
+introSectionStyle : String -> List (Attribute msg)
+introSectionStyle uid =
+    [ id uid
+    , class "introSection"
+    ]
+
+
 myExperienceLinkCSS : List (Attribute msg)
 myExperienceLinkCSS =
     [ style "font-family" "Arial"
     , style "text-decoration" "none"
     , style "font-size" "14px"
     , style "display" "inlineBlock"
-    , style "color" (buttonColor LightBlue) --"rgb(2, 102, 223)"
+    , style "color" (buttonColor LightBlue)
     , style "text-shadow" "0px 0px 10px rgba(255, 255, 255, 0.5)"
-    ]
-
-
-introSectionDivStyle : List (Attribute msg)
-introSectionDivStyle =
-    [ style "justify-content" "center"
-    , style "display" "flex"
-    , style "gap" "0px"
-    , style "flex-direction" "column"
-    , style "background" "rgb(243, 243, 246)"
     ]
 
 

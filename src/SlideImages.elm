@@ -10,8 +10,8 @@ caseStroke =
     attribute "stroke" "lightsteelblue"
 
 
-briefcase : String -> Svg.Svg msg
-briefcase strokeWidth =
+briefcase : Svg.Svg msg
+briefcase =
     Svg.node "svg"
         [ viewBox "0 0 438 305"
         , attribute "width" "100%"

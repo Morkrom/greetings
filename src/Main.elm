@@ -167,7 +167,7 @@ view model =
 
 infiniteGalleryView : Model -> Html Msg
 infiniteGalleryView model =
-    div introSectionDivStyle <|
+    div (introSectionStyle "gallery")
         [ h1 titleTextStyle [ text "Portfolio" ]
         , AppleseGallery.view (config model.screenWidth) model.gallery (slideComponents model.screenWidth) |> Html.map AppleseGalleryMsg
         ]
@@ -247,7 +247,7 @@ roundedButton title link buttonStyle =
 
 introSection : Html Msg
 introSection =
-    div introSectionDivStyle
+    div (introSectionStyle "intro")
         (titleText "Michael Mork" "iOS Engineer" ++ [ roundedButtons, titleSvgs ])
 
 
@@ -286,7 +286,7 @@ titleText title subtitle =
 
 languageGnostic : Html Msg
 languageGnostic =
-    div introSectionDivStyle
+    div (introSectionStyle "language")
         (titleText "Language" "Any paradigm any day."
             ++ [ roundedButtons ]
             ++ [ div
@@ -324,7 +324,7 @@ languageGnostic =
 
 exp : Html Msg
 exp =
-    div introSectionDivStyle
+    div (introSectionStyle "xp")
         (titleText "Xp" "\"Experience is the teacher of all things.\""
             ++ [ roundedButtons ]
             ++ [ div blockContents

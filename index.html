@@ -20,6 +20,33 @@
                 app.ports.messageReceiver.send(window.innerWidth);
             });
 
+            let targetIdMap = new Map();
+
+            const startAnimation = (entries, observer) => {
+                entries.forEach((entry) => {
+                    if (targetIdMap.get(entry.target.id) == null) {
+                        entry.target.classList.toggle(
+                            "fadeInFromDown",
+                            entry.isIntersecting,
+                        );
+                    }
+
+                    if (entry.isIntersecting) {
+                        targetIdMap.set(entry.target.id, entry.target.id);
+                    }
+                });
+            };
+
+            // items slide in
+            const observer = new IntersectionObserver(startAnimation);
+            const options = { root: null, rootMargin: "0px", threshold: 1 };
+
+            const elements = document.querySelectorAll(".introSection");
+            elements.forEach((el) => {
+                observer.observe(el, options);
+            });
+
+            // observe svg initial appearance
             if ("IntersectionObserver" in window) {
                 let elements = document.querySelectorAll("svg");
                 let observer = new IntersectionObserver(
@@ -42,18 +69,19 @@
 
                 elements.forEach((elem) => observer.observe(elem));
             }
+
             /*
-	    window.addEventListener('resize', () => {
-              console.log('New width: ' + window.innerWidth);
-              app.ports.messageReceiver.send(window.innerWidth)
-            })*/
+            window.addEventListener('resize', () => {
+                     console.log('New width: ' + window.innerWidth);
+                     app.ports.messageReceiver.send(window.innerWidth)
+                   })*/
 
             /*function isMobileDevice() {
-                const isTouchScreen =
-                    "ontouchstart" in window || navigator.maxTouchPoints > 0;
-                const isSmallScreen = window.innerWidth < 768;
-                return isTouchScreen && isSmallScreen;
-            }*/
+                       const isTouchScreen =
+                           "ontouchstart" in window || navigator.maxTouchPoints > 0;
+                       const isSmallScreen = window.innerWidth < 768;
+                       return isTouchScreen && isSmallScreen;
+                   }*/
         </script>
     </body>
 </html>

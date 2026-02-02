@@ -88,6 +88,33 @@ p {
     padding-bottom: 0px;
 }
 
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        margin-top: 20px;
+    }
+    to {
+        opacity: 1;
+        margin-top: 0px;
+    }
+}
+
+.fadeInFromDown {
+    animation-name: fadeIn;
+    animation-duration: 0.8s;
+    animation-timing-function: ease-out;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+.introSection {
+    justify-content: center;
+    display: flex;
+    gap: 0px;
+    flex-direction: column;
+    background: rgb(243, 243, 246);
+}
+
 /*
 
     if componentData.useMobileLayout then
