@@ -328,8 +328,8 @@ exp =
         (titleText "Xp" "\"Experience is the teachers of all things.\""
             ++ [ roundedButtons ]
             ++ [ div blockContents
-                    [ fitplanExp,
-                    dscExp
+                    [ fitplanExp
+                    , dscExp
                     ]
                ]
         )
@@ -364,9 +364,8 @@ fitplanExp =
 tmBodyText : Html Msg
 tmBodyText =
     div technologyStyleW
-        [
-         p technologyStyleW
-            [ text "Main contributor: Webby winner product release. Own alerts, settings. Contribute re write project to Swift. With my departure we had roughly 70,000 users. Modernize legacy sections to Swift. Increase UI & Unit coverage to 40%.
+        [ p technologyStyleW
+            [ text "Main contributor: Webby winner product release. Own alerts, settings. Contribute re write project to Swift. With my departure we had roughly 70,000 users. Modernize legacy sections to Swift. Increase UI & Unit coverage to 40%."
             ]
         ]
 
