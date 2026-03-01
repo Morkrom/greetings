@@ -5569,6 +5569,78 @@ var $author$project$Main$expBox = F5(
 							references)))
 				]));
 	});
+var $elm$html$Html$a = _VirtualDom_node('a');
+var $elm$virtual_dom$VirtualDom$attribute = F2(
+	function (key, value) {
+		return A2(
+			_VirtualDom_attribute,
+			_VirtualDom_noOnOrFormAction(key),
+			_VirtualDom_noJavaScriptOrHtmlUri(value));
+	});
+var $elm$html$Html$Attributes$attribute = $elm$virtual_dom$VirtualDom$attribute;
+var $elm$json$Json$Encode$string = _Json_wrap;
+var $elm$html$Html$Attributes$stringProperty = F2(
+	function (key, string) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$string(string));
+	});
+var $elm$html$Html$Attributes$href = function (url) {
+	return A2(
+		$elm$html$Html$Attributes$stringProperty,
+		'href',
+		_VirtualDom_noJavaScriptUri(url));
+};
+var $author$project$MorkromCss$myExperienceLinkCSS = _List_fromArray(
+	[
+		A2($elm$html$Html$Attributes$style, 'font-family', 'Arial'),
+		A2($elm$html$Html$Attributes$style, 'text-decoration', 'none'),
+		A2($elm$html$Html$Attributes$style, 'font-size', '14px'),
+		A2($elm$html$Html$Attributes$style, 'display', 'inlineBlock'),
+		A2(
+		$elm$html$Html$Attributes$style,
+		'color',
+		$author$project$MorkromCss$buttonColor($author$project$MorkromCss$LightBlue)),
+		A2($elm$html$Html$Attributes$style, 'text-shadow', '0px 0px 10px rgba(255, 255, 255, 0.5)')
+	]);
+var $author$project$Main$linkedExperience = F2(
+	function (title, link) {
+		return A2(
+			$elm$html$Html$a,
+			_Utils_ap(
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$href(link),
+						A2($elm$html$Html$Attributes$attribute, 'target', '_blank')
+					]),
+				$author$project$MorkromCss$myExperienceLinkCSS),
+			_List_fromArray(
+				[
+					$elm$html$Html$text(title)
+				]));
+	});
+var $author$project$Main$tmBodyText = A2(
+	$elm$html$Html$div,
+	$author$project$MorkromCss$technologyStyleW,
+	_List_fromArray(
+		[
+			A2(
+			$elm$html$Html$p,
+			$author$project$MorkromCss$technologyStyleW,
+			_List_fromArray(
+				[
+					$elm$html$Html$text('Main contributor: Webby winner product release. Own alerts, settings. Contribute re write project to Swift. With my departure we had roughly 70,000 users. Modernize legacy sections to Swift. Increase UI & Unit coverage to 40%.')
+				]))
+		]));
+var $author$project$Main$dscExp = A5(
+	$author$project$Main$expBox,
+	'5 yr',
+	A2($author$project$Main$linkedExperience, 'iOS Engineer⇗', 'https://us.dollarshaveclub.com/products/8-starter-set?msclkid=b67490363df21e150010f9958400022a&nb_bmt=bp&nb_ci=&nb_fii=&nb_li_ms=&nb_lp_ms=99438&nb_mt=e&nb_oii=80608343601429&nb_pc=&nb_pi=&nb_qs=dollar%20shave%20club%20app&nbt=nb%3Amicrosoft%3Ao%3A638331319%3A1289728440961403%3A80608147400984&utm_campaign=US%20%7C%20BOF%20%7C%20Search%20%7C%20OD%20%2B%20Sub%20%7C%20Brand%20%7C%20Evergreen&utm_content=Name%20%7C%20Starter%20Set%20%7C%20All&utm_medium=cpc&utm_source=bing&utm_term=dollar%20shave%20club%20app'),
+	$author$project$Main$tmBodyText,
+	_List_fromArray(
+		['SwiftUI', 'UIKit', 'Objective-C', 'Swift', 'Xcode Instruments', 'XCTest', 'NewRelic', 'MVVM', 'Optimizely']),
+	_List_Nil);
 var $elm$html$Html$li = _VirtualDom_node('li');
 var $author$project$MorkromCss$technologyULStyle = _Utils_ap(
 	$author$project$MorkromCss$technologyStyleW,
@@ -5652,57 +5724,6 @@ var $author$project$Main$fitplanBodyText = A2(
 					$elm$html$Html$text('Iterate on Funnel for growth. Lead the remote team to streamline architecture. App’s improvement half a year after my start allowed us to secure our first outside investment. Stabilize and maintain app crashes from less than 98% to within 0.1 of 100%.')
 				]))
 		]));
-var $elm$html$Html$a = _VirtualDom_node('a');
-var $elm$virtual_dom$VirtualDom$attribute = F2(
-	function (key, value) {
-		return A2(
-			_VirtualDom_attribute,
-			_VirtualDom_noOnOrFormAction(key),
-			_VirtualDom_noJavaScriptOrHtmlUri(value));
-	});
-var $elm$html$Html$Attributes$attribute = $elm$virtual_dom$VirtualDom$attribute;
-var $elm$json$Json$Encode$string = _Json_wrap;
-var $elm$html$Html$Attributes$stringProperty = F2(
-	function (key, string) {
-		return A2(
-			_VirtualDom_property,
-			key,
-			$elm$json$Json$Encode$string(string));
-	});
-var $elm$html$Html$Attributes$href = function (url) {
-	return A2(
-		$elm$html$Html$Attributes$stringProperty,
-		'href',
-		_VirtualDom_noJavaScriptUri(url));
-};
-var $author$project$MorkromCss$myExperienceLinkCSS = _List_fromArray(
-	[
-		A2($elm$html$Html$Attributes$style, 'font-family', 'Arial'),
-		A2($elm$html$Html$Attributes$style, 'text-decoration', 'none'),
-		A2($elm$html$Html$Attributes$style, 'font-size', '14px'),
-		A2($elm$html$Html$Attributes$style, 'display', 'inlineBlock'),
-		A2(
-		$elm$html$Html$Attributes$style,
-		'color',
-		$author$project$MorkromCss$buttonColor($author$project$MorkromCss$LightBlue)),
-		A2($elm$html$Html$Attributes$style, 'text-shadow', '0px 0px 10px rgba(255, 255, 255, 0.5)')
-	]);
-var $author$project$Main$linkedExperience = F2(
-	function (title, link) {
-		return A2(
-			$elm$html$Html$a,
-			_Utils_ap(
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$href(link),
-						A2($elm$html$Html$Attributes$attribute, 'target', '_blank')
-					]),
-				$author$project$MorkromCss$myExperienceLinkCSS),
-			_List_fromArray(
-				[
-					$elm$html$Html$text(title)
-				]));
-	});
 var $author$project$MorkromCss$referenceStyle = _Utils_ap(
 	$author$project$MorkromCss$technologyStyle,
 	_List_fromArray(
@@ -5725,7 +5746,7 @@ var $author$project$Main$referenceQuote = F2(
 var $author$project$Main$fitplanExp = A5(
 	$author$project$Main$expBox,
 	'3 yr',
-	A2($author$project$Main$linkedExperience, 'Senior iOS Engineer ⇗', 'https://www.fitplanapp.com'),
+	A2($author$project$Main$linkedExperience, 'Lead iOS Engineer ⇗', 'https://www.fitplanapp.com'),
 	$author$project$Main$fitplanBodyText,
 	_List_fromArray(
 		['WatchKit', 'Core Data', 'VIPER', 'Core Animation', 'AVFoundation', 'Airplay', 'Lottie', 'Swift 5.x', 'Objective-C', 'Scrum\\Agile']),
@@ -5820,112 +5841,6 @@ var $author$project$Main$roundedButtons = A2(
 		[
 			A3($author$project$Main$roundedButton, 'Contact', 'mailto:morkrom@icloud.com', $author$project$MorkromCss$Lowlighted)
 		]));
-var $author$project$Main$tmBodyText = A2(
-	$elm$html$Html$div,
-	$author$project$MorkromCss$technologyStyleW,
-	_List_fromArray(
-		[
-			A2(
-			$elm$html$Html$p,
-			$author$project$MorkromCss$technologyStyleW,
-			_List_fromArray(
-				[
-					$elm$html$Html$text('Stability & performance lead:')
-				])),
-			A2(
-			$elm$html$Html$ul,
-			$author$project$MorkromCss$technologyULStyle,
-			_List_fromArray(
-				[
-					A2(
-					$elm$html$Html$li,
-					_List_Nil,
-					_List_fromArray(
-						[
-							$elm$html$Html$text('Reduce app load time by over 1 second')
-						])),
-					A2(
-					$elm$html$Html$li,
-					_List_Nil,
-					_List_fromArray(
-						[
-							$elm$html$Html$text('Eliminate app memory leaks')
-						])),
-					A2(
-					$elm$html$Html$li,
-					_List_Nil,
-					_List_fromArray(
-						[
-							$elm$html$Html$text('Own UI performance.')
-						]))
-				])),
-			A2(
-			$elm$html$Html$p,
-			$author$project$MorkromCss$technologyStyleW,
-			_List_fromArray(
-				[
-					$elm$html$Html$text('Features:')
-				])),
-			A2(
-			$elm$html$Html$ul,
-			$author$project$MorkromCss$technologyULStyle,
-			_List_fromArray(
-				[
-					A2(
-					$elm$html$Html$li,
-					_List_Nil,
-					_List_fromArray(
-						[
-							$elm$html$Html$text('Ads with Instacart')
-						])),
-					A2(
-					$elm$html$Html$li,
-					_List_Nil,
-					_List_fromArray(
-						[
-							$elm$html$Html$text('\"Fresh\" vertical main contributor')
-						])),
-					A2(
-					$elm$html$Html$li,
-					_List_Nil,
-					_List_fromArray(
-						[
-							$elm$html$Html$text('Ai chat bot')
-						])),
-					A2(
-					$elm$html$Html$li,
-					_List_Nil,
-					_List_fromArray(
-						[
-							$elm$html$Html$text('Ownership of home screen')
-						])),
-					A2(
-					$elm$html$Html$li,
-					_List_Nil,
-					_List_fromArray(
-						[
-							$elm$html$Html$text('Shopping List feature set')
-						]))
-				])),
-			A2(
-			$elm$html$Html$p,
-			$author$project$MorkromCss$technologyStyleW,
-			_List_fromArray(
-				[
-					$elm$html$Html$text('Main contributor: Webby winner “Sahara” product release ( 6% increase in sales). Contribute to every section: Autoship, quiz, PLP, PDP, review orders, cart. Deliver weekly for a growing platform of over a million users. Modernize legacy sections. Increase UI & Unit coverage from 0 to 40%.')
-				]))
-		]));
-var $author$project$Main$thriveMarketExp = A5(
-	$author$project$Main$expBox,
-	'5 yr',
-	A2($author$project$Main$linkedExperience, 'Senior iOS Engineer (Performance, Features, Verticals, Specialist)⇗', 'https://thrivemarket.com'),
-	$author$project$Main$tmBodyText,
-	_List_fromArray(
-		['SwiftUI', 'UIKit', 'Objective-C', 'Swift', 'Xcode Instruments', 'XCTest', 'NewRelic', 'MVVM', 'Optimizely']),
-	_List_fromArray(
-		[
-			A2($author$project$Main$referenceQuote, 'Michael’s promotion to Senior Engineer is long overdue and well-deserved', '- Karan Shah, iOS Supervisor')
-		]));
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
 var $author$project$MorkromCss$titleTextStyle = _List_fromArray(
 	[
@@ -5972,7 +5887,7 @@ var $author$project$Main$exp = A2(
 	$elm$html$Html$div,
 	$author$project$MorkromCss$introSectionStyle('xp'),
 	_Utils_ap(
-		A2($author$project$Main$titleText, 'Xp', '\"Experience is the teacher of all things.\"'),
+		A2($author$project$Main$titleText, 'Xp', '\"Experience is the teachers of all things.\"'),
 		_Utils_ap(
 			_List_fromArray(
 				[$author$project$Main$roundedButtons]),
@@ -5982,7 +5897,7 @@ var $author$project$Main$exp = A2(
 					$elm$html$Html$div,
 					$author$project$MorkromCss$blockContents,
 					_List_fromArray(
-						[$author$project$Main$thriveMarketExp, $author$project$Main$fitplanExp]))
+						[$author$project$Main$fitplanExp, $author$project$Main$dscExp]))
 				]))));
 var $author$project$Main$AppleseGalleryMsg = function (a) {
 	return {$: 'AppleseGalleryMsg', a: a};
