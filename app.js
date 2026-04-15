@@ -5639,7 +5639,7 @@ var $author$project$Main$dscExp = A5(
 	A2($author$project$Main$linkedExperience, 'iOS Engineer⇗', 'https://us.dollarshaveclub.com/products/8-starter-set?msclkid=b67490363df21e150010f9958400022a&nb_bmt=bp&nb_ci=&nb_fii=&nb_li_ms=&nb_lp_ms=99438&nb_mt=e&nb_oii=80608343601429&nb_pc=&nb_pi=&nb_qs=dollar%20shave%20club%20app&nbt=nb%3Amicrosoft%3Ao%3A638331319%3A1289728440961403%3A80608147400984&utm_campaign=US%20%7C%20BOF%20%7C%20Search%20%7C%20OD%20%2B%20Sub%20%7C%20Brand%20%7C%20Evergreen&utm_content=Name%20%7C%20Starter%20Set%20%7C%20All&utm_medium=cpc&utm_source=bing&utm_term=dollar%20shave%20club%20app'),
 	$author$project$Main$dscBody,
 	_List_fromArray(
-		['SwiftUI', 'UIKit', 'Objective-C', 'Swift', 'Xcode Instruments', 'XCTest', 'NewRelic', 'MVVM', 'Optimizely']),
+		['UIKit', 'Objective-C', 'Swift', 'Xcode Instruments', 'XCTest', 'Optimizely']),
 	_List_Nil);
 var $elm$html$Html$li = _VirtualDom_node('li');
 var $author$project$MorkromCss$technologyULStyle = _Utils_ap(
