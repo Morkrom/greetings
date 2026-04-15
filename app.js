@@ -5434,6 +5434,44 @@ var $author$project$MorkromCss$blockContents = _Utils_ap(
 		[
 			A2($elm$html$Html$Attributes$style, 'background', 'rgb(243, 243, 246)')
 		]));
+var $elm$html$Html$p = _VirtualDom_node('p');
+var $author$project$MorkromCss$LightestGray = {$: 'LightestGray'};
+var $author$project$MorkromCss$buttonColor = function (color) {
+	switch (color.$) {
+		case 'LightBlue':
+			return 'rgb(120, 197, 239)';
+		case 'LightestGray':
+			return 'rgb(229, 229, 234)';
+		default:
+			return 'rgb(2, 102, 223)';
+	}
+};
+var $author$project$MorkromCss$technologyStyleW = _List_fromArray(
+	[
+		A2($elm$html$Html$Attributes$style, 'font-family', 'Arial'),
+		A2(
+		$elm$html$Html$Attributes$style,
+		'color',
+		$author$project$MorkromCss$buttonColor($author$project$MorkromCss$LightestGray)),
+		A2($elm$html$Html$Attributes$style, 'font-size', '12px'),
+		A2($elm$html$Html$Attributes$style, 'text-align', 'left'),
+		A2($elm$html$Html$Attributes$style, 'margin-top', '10px')
+	]);
+var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
+var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $author$project$Main$dscBody = A2(
+	$elm$html$Html$div,
+	$author$project$MorkromCss$technologyStyleW,
+	_List_fromArray(
+		[
+			A2(
+			$elm$html$Html$p,
+			$author$project$MorkromCss$technologyStyleW,
+			_List_fromArray(
+				[
+					$elm$html$Html$text('Main contributor: Webby winner product release. Own alerts, settings. Contribute re write project to Swift. With my departure we had roughly 70,000 users. Modernize legacy sections to Swift. Increase UI & Unit coverage to 40%.')
+				]))
+		]));
 var $elm$html$Html$br = _VirtualDom_node('br');
 var $elm$core$String$fromFloat = _String_fromNumber;
 var $author$project$MorkromCss$smallBlockW = function (w) {
@@ -5454,18 +5492,7 @@ var $author$project$MorkromCss$expBoxStyle = _Utils_ap(
 			A2($elm$html$Html$Attributes$style, 'margin-bottom', '10px')
 		]),
 	$author$project$MorkromCss$smallBlockW(260));
-var $elm$html$Html$p = _VirtualDom_node('p');
 var $author$project$MorkromCss$LightBlue = {$: 'LightBlue'};
-var $author$project$MorkromCss$buttonColor = function (color) {
-	switch (color.$) {
-		case 'LightBlue':
-			return 'rgb(120, 197, 239)';
-		case 'LightestGray':
-			return 'rgb(229, 229, 234)';
-		default:
-			return 'rgb(2, 102, 223)';
-	}
-};
 var $author$project$MorkromCss$technologyBorderedInset = _List_fromArray(
 	[
 		A2($elm$html$Html$Attributes$style, 'margin', '0px'),
@@ -5493,8 +5520,6 @@ var $author$project$MorkromCss$technologyStyleBordered = _Utils_ap(
 			A2($elm$html$Html$Attributes$style, 'margin', '10px')
 		]),
 	$author$project$MorkromCss$technologyStyle);
-var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
-var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $author$project$Main$technologyHtml = function (technology) {
 	return A2(
 		$elm$html$Html$div,
@@ -5516,18 +5541,6 @@ var $author$project$Main$technologiesHtml = function (techs) {
 		$author$project$MorkromCss$blockContentsR,
 		A2($elm$core$List$map, $author$project$Main$technologyHtml, techs));
 };
-var $author$project$MorkromCss$LightestGray = {$: 'LightestGray'};
-var $author$project$MorkromCss$technologyStyleW = _List_fromArray(
-	[
-		A2($elm$html$Html$Attributes$style, 'font-family', 'Arial'),
-		A2(
-		$elm$html$Html$Attributes$style,
-		'color',
-		$author$project$MorkromCss$buttonColor($author$project$MorkromCss$LightestGray)),
-		A2($elm$html$Html$Attributes$style, 'font-size', '12px'),
-		A2($elm$html$Html$Attributes$style, 'text-align', 'left'),
-		A2($elm$html$Html$Attributes$style, 'margin-top', '10px')
-	]);
 var $author$project$Main$expBox = F5(
 	function (duration, titleAndLink, bodyText, technologies, references) {
 		return A2(
@@ -5620,24 +5633,11 @@ var $author$project$Main$linkedExperience = F2(
 					$elm$html$Html$text(title)
 				]));
 	});
-var $author$project$Main$tmBodyText = A2(
-	$elm$html$Html$div,
-	$author$project$MorkromCss$technologyStyleW,
-	_List_fromArray(
-		[
-			A2(
-			$elm$html$Html$p,
-			$author$project$MorkromCss$technologyStyleW,
-			_List_fromArray(
-				[
-					$elm$html$Html$text('Main contributor: Webby winner product release. Own alerts, settings. Contribute re write project to Swift. With my departure we had roughly 70,000 users. Modernize legacy sections to Swift. Increase UI & Unit coverage to 40%.')
-				]))
-		]));
 var $author$project$Main$dscExp = A5(
 	$author$project$Main$expBox,
-	'5 yr',
+	'3 yr',
 	A2($author$project$Main$linkedExperience, 'iOS Engineer⇗', 'https://us.dollarshaveclub.com/products/8-starter-set?msclkid=b67490363df21e150010f9958400022a&nb_bmt=bp&nb_ci=&nb_fii=&nb_li_ms=&nb_lp_ms=99438&nb_mt=e&nb_oii=80608343601429&nb_pc=&nb_pi=&nb_qs=dollar%20shave%20club%20app&nbt=nb%3Amicrosoft%3Ao%3A638331319%3A1289728440961403%3A80608147400984&utm_campaign=US%20%7C%20BOF%20%7C%20Search%20%7C%20OD%20%2B%20Sub%20%7C%20Brand%20%7C%20Evergreen&utm_content=Name%20%7C%20Starter%20Set%20%7C%20All&utm_medium=cpc&utm_source=bing&utm_term=dollar%20shave%20club%20app'),
-	$author$project$Main$tmBodyText,
+	$author$project$Main$dscBody,
 	_List_fromArray(
 		['SwiftUI', 'UIKit', 'Objective-C', 'Swift', 'Xcode Instruments', 'XCTest', 'NewRelic', 'MVVM', 'Optimizely']),
 	_List_Nil);
@@ -5841,6 +5841,112 @@ var $author$project$Main$roundedButtons = A2(
 		[
 			A3($author$project$Main$roundedButton, 'Contact', 'mailto:morkrom@icloud.com', $author$project$MorkromCss$Lowlighted)
 		]));
+var $author$project$Main$tmBodyText = A2(
+	$elm$html$Html$div,
+	$author$project$MorkromCss$technologyStyleW,
+	_List_fromArray(
+		[
+			A2(
+			$elm$html$Html$p,
+			$author$project$MorkromCss$technologyStyleW,
+			_List_fromArray(
+				[
+					$elm$html$Html$text('Stability & performance lead:')
+				])),
+			A2(
+			$elm$html$Html$ul,
+			$author$project$MorkromCss$technologyULStyle,
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$li,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Reduce app load time by over 1 second')
+						])),
+					A2(
+					$elm$html$Html$li,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Eliminate app memory leaks')
+						])),
+					A2(
+					$elm$html$Html$li,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Own UI performance.')
+						]))
+				])),
+			A2(
+			$elm$html$Html$p,
+			$author$project$MorkromCss$technologyStyleW,
+			_List_fromArray(
+				[
+					$elm$html$Html$text('Features:')
+				])),
+			A2(
+			$elm$html$Html$ul,
+			$author$project$MorkromCss$technologyULStyle,
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$li,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Ads with Instacart')
+						])),
+					A2(
+					$elm$html$Html$li,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('\"Fresh\" vertical main contributor')
+						])),
+					A2(
+					$elm$html$Html$li,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Ai chat bot')
+						])),
+					A2(
+					$elm$html$Html$li,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Ownership of home screen')
+						])),
+					A2(
+					$elm$html$Html$li,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Shopping List feature set')
+						]))
+				])),
+			A2(
+			$elm$html$Html$p,
+			$author$project$MorkromCss$technologyStyleW,
+			_List_fromArray(
+				[
+					$elm$html$Html$text('Main contributor: Webby winner “Sahara” product release ( 6% increase in sales). Contribute to every section: Autoship, quiz, PLP, PDP, review orders, cart. Deliver weekly for a growing platform of over a million users. Modernize legacy sections. Increase UI & Unit coverage from 0 to 40%.')
+				]))
+		]));
+var $author$project$Main$thriveMarketExp = A5(
+	$author$project$Main$expBox,
+	'5 yr',
+	A2($author$project$Main$linkedExperience, 'Senior iOS Engineer (Performance, Features, Verticals, Specialist)⇗', 'https://thrivemarket.com'),
+	$author$project$Main$tmBodyText,
+	_List_fromArray(
+		['SwiftUI', 'UIKit', 'Objective-C', 'Swift', 'Xcode Instruments', 'XCTest', 'NewRelic', 'MVVM', 'Optimizely']),
+	_List_fromArray(
+		[
+			A2($author$project$Main$referenceQuote, 'Michael’s promotion to Senior Engineer is long overdue and well-deserved', '- Karan Shah, iOS Supervisor')
+		]));
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
 var $author$project$MorkromCss$titleTextStyle = _List_fromArray(
 	[
@@ -5897,7 +6003,7 @@ var $author$project$Main$exp = A2(
 					$elm$html$Html$div,
 					$author$project$MorkromCss$blockContents,
 					_List_fromArray(
-						[$author$project$Main$fitplanExp, $author$project$Main$dscExp]))
+						[$author$project$Main$thriveMarketExp, $author$project$Main$fitplanExp, $author$project$Main$dscExp]))
 				]))));
 var $author$project$Main$AppleseGalleryMsg = function (a) {
 	return {$: 'AppleseGalleryMsg', a: a};
