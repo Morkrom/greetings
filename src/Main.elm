@@ -328,7 +328,8 @@ exp =
         (titleText "Xp" "\"Experience is the teachers of all things.\""
             ++ [ roundedButtons ]
             ++ [ div blockContents
-                    [ fitplanExp
+                    [ thriveMarketExp
+                    , fitplanExp
                     , dscExp
                     ]
                ]
@@ -337,12 +338,12 @@ exp =
 
 dscExp : Html Msg
 dscExp =
-    expBox "5 yr"
+    expBox "3 yr"
         (linkedExperience
             "iOS Engineer⇗"
             "https://us.dollarshaveclub.com/products/8-starter-set?msclkid=b67490363df21e150010f9958400022a&nb_bmt=bp&nb_ci=&nb_fii=&nb_li_ms=&nb_lp_ms=99438&nb_mt=e&nb_oii=80608343601429&nb_pc=&nb_pi=&nb_qs=dollar%20shave%20club%20app&nbt=nb%3Amicrosoft%3Ao%3A638331319%3A1289728440961403%3A80608147400984&utm_campaign=US%20%7C%20BOF%20%7C%20Search%20%7C%20OD%20%2B%20Sub%20%7C%20Brand%20%7C%20Evergreen&utm_content=Name%20%7C%20Starter%20Set%20%7C%20All&utm_medium=cpc&utm_source=bing&utm_term=dollar%20shave%20club%20app"
         )
-        tmBodyText
+        dscBody
         [ "SwiftUI", "UIKit", "Objective-C", "Swift", "Xcode Instruments", "XCTest", "NewRelic", "MVVM", "Optimizely" ]
         []
 
@@ -361,8 +362,51 @@ fitplanExp =
         ]
 
 
+thriveMarketExp : Html Msg
+thriveMarketExp =
+    expBox "5 yr"
+        (linkedExperience
+            "Senior iOS Engineer (Performance, Features, Verticals, Specialist)⇗"
+            "https://thrivemarket.com"
+        )
+        tmBodyText
+        [ "SwiftUI", "UIKit", "Objective-C", "Swift", "Xcode Instruments", "XCTest", "NewRelic", "MVVM", "Optimizely" ]
+        [ referenceQuote "Michael’s promotion to Senior Engineer is long overdue and well-deserved"
+            "- Karan Shah, iOS Supervisor"
+        ]
+
+
 tmBodyText : Html Msg
 tmBodyText =
+    div technologyStyleW
+        [ p technologyStyleW
+            [ text
+                "Stability & performance lead:"
+            ]
+        , ul technologyULStyle
+            [ li [] [ text "Reduce app load time by over 1 second" ]
+            , li [] [ text "Eliminate app memory leaks" ]
+            , li [] [ text "Own UI performance." ]
+            ]
+        , p technologyStyleW
+            [ text
+                "Features:"
+            ]
+        , ul technologyULStyle
+            [ li [] [ text "Ads with Instacart" ]
+            , li [] [ text "\"Fresh\" vertical main contributor" ]
+            , li [] [ text "Ai chat bot" ]
+            , li [] [ text "Ownership of home screen" ]
+            , li [] [ text "Shopping List feature set" ]
+            ]
+        , p technologyStyleW
+            [ text "Main contributor: Webby winner “Sahara” product release ( 6% increase in sales). Contribute to every section: Autoship, quiz, PLP, PDP, review orders, cart. Deliver weekly for a growing platform of over a million users. Modernize legacy sections. Increase UI & Unit coverage from 0 to 40%."
+            ]
+        ]
+
+
+dscBody : Html Msg
+dscBody =
     div technologyStyleW
         [ p technologyStyleW
             [ text "Main contributor: Webby winner product release. Own alerts, settings. Contribute re write project to Swift. With my departure we had roughly 70,000 users. Modernize legacy sections to Swift. Increase UI & Unit coverage to 40%."
